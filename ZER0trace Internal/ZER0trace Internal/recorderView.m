@@ -155,7 +155,7 @@
 }
 
 -(void)uploadFile:(NSURL*)url withName:(NSString*)name{
-    [self saveScanData];
+    
     FIRStorage *storage = [FIRStorage storage];
     FIRStorageReference *storageRef = [storage reference];
     // Create a reference to the file you want to upload
@@ -166,6 +166,7 @@
         if (error != nil) {
             // Uh-oh, an error occurred!
         } else {
+            [self saveScanData:metadata.downloadURL];
         }
     }];
     FIRStorageHandle observer = [uploadTask observeStatus:FIRStorageTaskStatusProgress
@@ -181,7 +182,7 @@
                                                   }];
 }
 
--(void)saveScanData {
+-(void)saveScanData:(NSURL*)downloadURL{
     NSMutableArray *driveSerials = [[NSMutableArray alloc] init];
     NSMutableArray *driveTimes = [[NSMutableArray alloc] init];
     for (int a = 0; a < scannedDrives.count; a++) {
@@ -194,6 +195,7 @@
         if (error) {
             return;
         }
+        record[@"videoURL"] = downloadURL.absoluteString;
         record[@"driveSerials"] = driveSerials;
         record[@"driveTimes"] = driveTimes;
         [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
