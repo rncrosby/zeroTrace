@@ -5,5 +5,6 @@ target 'ZER0trace Internal' do
 	pod 'LLSimpleCamera', '~> 4.1'
 	pod 'Firebase/Core'
 	pod 'Firebase/Storage'
+	pod 'QRCodeReaderViewController', '~> 4.0.2'
 
 end

@@ -6,16 +6,17 @@
 //  Copyright © 2017 fully toasted. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "recorderView.h"
 
-@interface ViewController ()
+@interface recorderView ()
 
 @end
 
-@implementation ViewController
+@implementation recorderView
 
 
 - (void)viewDidLoad {
+    saveProgress = 0;
     scannedDrives = [[NSMutableArray alloc] init];
     isRecording = false;
     [References cornerRadius:recordButton radius:recordButton.frame.size.width/2];
@@ -24,15 +25,18 @@
     [References borderColor:simulateScan color:[UIColor grayColor]];
     [References cornerRadius:simulateScan radius:simulateScan.frame.size.width/2];
     [self prepareCamera];
-    [jobName becomeFirstResponder];
     [super viewDidLoad];
     NSError *error = nil;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSURL *documentsURL = [NSURL fileURLWithPath:documentsDirectory];
     for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:&error]) {
         [[NSFileManager defaultManager] removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:file] error:&error];
     }
+    NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MM_dd_yyy"];
+    NSString *dateString = [formatter stringFromDate:[NSDate date]];
+    jobName.text = [NSString stringWithFormat:@"%@-%@",[_jobRecord valueForKey:@"client"],dateString];
+    [self getRecord];
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -99,6 +103,7 @@
             [UIView animateWithDuration:0.3 animations:^(){
                 [References borderColor:recordButton color:[UIColor whiteColor]];
                 completeView.alpha = 1;
+                [self.view bringSubviewToFront:completeView];
                 [References cornerRadius:recordButton radius:recordButton.frame.size.width/2];
             }];
         }];
@@ -141,7 +146,7 @@
     static NSString *identifier = @"Cell";
     
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-    driveObject *drive = scannedDrives[indexPath.row];
+    driveObject *drive = scannedDrives[scannedDrives.count-indexPath.row-1];
     UILabel *serial = (UILabel *)[cell viewWithTag:1];
     UILabel *time = (UILabel *)[cell viewWithTag:2];
     serial.text = drive.serial;
@@ -150,6 +155,7 @@
 }
 
 -(void)uploadFile:(NSURL*)url withName:(NSString*)name{
+    [self saveScanData];
     FIRStorage *storage = [FIRStorage storage];
     FIRStorageReference *storageRef = [storage reference];
     // Create a reference to the file you want to upload
@@ -166,9 +172,63 @@
                                                   handler:^(FIRStorageTaskSnapshot *snapshot) {
                                                       [completeProgress setProgress:snapshot.progress.fractionCompleted animated:YES];
                                                       if (snapshot.progress.fractionCompleted == 1) {
+                                                          saveProgress = saveProgress + 1;
                                                           completeTitle.text = @"Destruction Saved";
+                                                          if (saveProgress == 2) {
+                                                              [References fadeIn:confirmDestructionButton];
+                                                          }
                                                       }
                                                   }];
 }
 
+-(void)saveScanData {
+    NSMutableArray *driveSerials = [[NSMutableArray alloc] init];
+    NSMutableArray *driveTimes = [[NSMutableArray alloc] init];
+    for (int a = 0; a < scannedDrives.count; a++) {
+        driveObject *drive = scannedDrives[a];
+        [driveSerials addObject:drive.serial];
+        [driveTimes addObject:drive.time];
+    }
+    [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:newJobRecord completionHandler:^(CKRecord *record, NSError *error) {
+        
+        if (error) {
+            return;
+        }
+        record[@"driveSerials"] = driveSerials;
+        record[@"driveTimes"] = driveTimes;
+        [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
+            if (error) {
+                NSLog(@"%@",error.localizedDescription);
+            } else {
+                saveProgress = saveProgress+1;
+                if (saveProgress == 2) {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        [References fadeIn:confirmDestructionButton];
+                    });
+                }
+            }
+        }];
+    }];
+    
+}
+
+
+-(void)getRecord{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"code = '%@'",[_jobRecord valueForKey:@"code"]]];
+    CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
+    
+    [[CKContainer defaultContainer].publicCloudDatabase performQuery:query
+                                                        inZoneWithID:nil
+                                                   completionHandler:^(NSArray *results, NSError *error) {
+                                                       if (results.count > 0) {
+                                                           CKRecord *rec = results[0];
+                                                           newJobRecord = rec.recordID;
+                                                       } else {
+                                                           NSLog(@"error");
+                                                       }
+                                                   }];
+}
+- (IBAction)confirmDestruction:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 @end

@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DE868725B18AE240E550C5515AE66BC4"
-               BuildableName = "libGTMSessionFetcher.a"
-               BlueprintName = "GTMSessionFetcher"
+               BlueprintIdentifier = "26D91DC4C357AE6C21A79788DEFD774D"
+               BuildableName = "libQRCodeReaderViewController.a"
+               BlueprintName = "QRCodeReaderViewController"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,9 +47,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DE868725B18AE240E550C5515AE66BC4"
-            BuildableName = "libGTMSessionFetcher.a"
-            BlueprintName = "GTMSessionFetcher"
+            BlueprintIdentifier = "26D91DC4C357AE6C21A79788DEFD774D"
+            BuildableName = "libQRCodeReaderViewController.a"
+            BlueprintName = "QRCodeReaderViewController"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

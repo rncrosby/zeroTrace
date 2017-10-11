@@ -29,11 +29,13 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - QRCodeReaderViewController (4.0.2)
 
 DEPENDENCIES:
   - Firebase/Core
   - Firebase/Storage
   - LLSimpleCamera (~> 4.1)
+  - QRCodeReaderViewController (~> 4.0.2)
 
 SPEC CHECKSUMS:
   Firebase: ebebf41db7f10e0c7668b6eaaa857fbe599aa478
@@ -45,7 +47,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5ad62e8200fa00ed011fe5e08d27fef72c5b1429
   LLSimpleCamera: ed7813ce4827ff3e34c6af159c99b5b56e54d1c6
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  QRCodeReaderViewController: e8f27d035b3e72b1d4b1c61ff66458287e3be0ff
 
-PODFILE CHECKSUM: 53dcfe43ff8ddbbde6afddbd451ed0b2336f0f6d
+PODFILE CHECKSUM: d62bcc8dcd961f81b1b442b46ac4c368b48c8f7c
 
 COCOAPODS: 1.3.1

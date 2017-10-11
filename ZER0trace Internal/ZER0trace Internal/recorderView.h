@@ -11,8 +11,11 @@
 #import <FirebaseStorage/FirebaseStorage.h>
 #import <LLSimpleCamera/LLSimpleCamera.h>
 #import "driveObject.h"
+#import <CloudKit/CloudKit.h>
 
-@interface ViewController : UIViewController <UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate> {
+@interface recorderView : UIViewController <UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate> {
+    CKRecordID *newJobRecord;
+    int saveProgress;
     NSMutableArray *scannedDrives;
     int driveCount,recorderTimeInt;
     NSTimer *recorderTime;
@@ -24,17 +27,23 @@
     __weak IBOutlet UIButton *simulateScan;
     __weak IBOutlet UILabel *timeLabel;
     __weak IBOutlet UICollectionView *drivesCollectionView;
-    __weak IBOutlet UITextField *jobName;
+    __weak IBOutlet UILabel *jobName;
+    
     __weak IBOutlet UIScrollView *completeView;
     __weak IBOutlet UILabel *completeTitle;
     __weak IBOutlet UIProgressView *completeProgress;
     __weak IBOutlet UILabel *signatureCard;
     __weak IBOutlet UILabel *clientCode;
     NSString *clientCodeText;
+    __weak IBOutlet UIView *signatureView;
+    __weak IBOutlet UIButton *confirmDestructionButton;
+    
 }
 - (IBAction)toggleRecording:(id)sender;
 - (IBAction)simulateScan:(id)sender;
-
+@property (nonatomic, assign) CKRecord *jobRecord;
+@property (nonatomic, assign) NSString *recordID;
+- (IBAction)confirmDestruction:(id)sender;
 
 @end
 

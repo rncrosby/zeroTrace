@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		AB9547A1AF4A6E553AB4829D /* libPods-ZER0trace Internal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32AEB1BC68F645F14213C830 /* libPods-ZER0trace Internal.a */; };
 		AD3807331F8C034B007BB8DF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3807321F8C034B007BB8DF /* AppDelegate.m */; };
-		AD3807361F8C034B007BB8DF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3807351F8C034B007BB8DF /* ViewController.m */; };
+		AD3807361F8C034B007BB8DF /* recorderView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3807351F8C034B007BB8DF /* recorderView.m */; };
 		AD3807391F8C034B007BB8DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD3807371F8C034B007BB8DF /* Main.storyboard */; };
 		AD38073B1F8C034B007BB8DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD38073A1F8C034B007BB8DF /* Assets.xcassets */; };
 		AD38073E1F8C034B007BB8DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD38073C1F8C034B007BB8DF /* LaunchScreen.storyboard */; };
@@ -18,6 +18,10 @@
 		AD4099F41F8C0ED300AB03EC /* References.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4099F21F8C0ED300AB03EC /* References.m */; };
 		AD4099F91F8C178400AB03EC /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD4099F81F8C178400AB03EC /* CloudKit.framework */; };
 		AD4099FC1F8C1E0300AB03EC /* driveObject.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4099FB1F8C1E0300AB03EC /* driveObject.m */; };
+		AD79BDA41F8C3BB30025CD6B /* dark.png in Resources */ = {isa = PBXBuildFile; fileRef = AD79BDA21F8C3BAC0025CD6B /* dark.png */; };
+		AD79BDA51F8C3BB30025CD6B /* light.png in Resources */ = {isa = PBXBuildFile; fileRef = AD79BDA31F8C3BAC0025CD6B /* light.png */; };
+		AD94B4471F8C38710050F34B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD94B4461F8C38710050F34B /* QuartzCore.framework */; };
+		ADC51BFA1F8C3C6C002DC9D6 /* homeView.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC51BF91F8C3C6C002DC9D6 /* homeView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,8 +31,8 @@
 		AD38072E1F8C034B007BB8DF /* ZER0trace Internal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ZER0trace Internal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD3807311F8C034B007BB8DF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		AD3807321F8C034B007BB8DF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		AD3807341F8C034B007BB8DF /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		AD3807351F8C034B007BB8DF /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		AD3807341F8C034B007BB8DF /* recorderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = recorderView.h; sourceTree = "<group>"; };
+		AD3807351F8C034B007BB8DF /* recorderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = recorderView.m; sourceTree = "<group>"; };
 		AD3807381F8C034B007BB8DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AD38073A1F8C034B007BB8DF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AD38073D1F8C034B007BB8DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -41,6 +45,11 @@
 		AD4099F81F8C178400AB03EC /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		AD4099FA1F8C1E0300AB03EC /* driveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = driveObject.h; sourceTree = "<group>"; };
 		AD4099FB1F8C1E0300AB03EC /* driveObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = driveObject.m; sourceTree = "<group>"; };
+		AD79BDA21F8C3BAC0025CD6B /* dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dark.png; sourceTree = "<group>"; };
+		AD79BDA31F8C3BAC0025CD6B /* light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = light.png; sourceTree = "<group>"; };
+		AD94B4461F8C38710050F34B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		ADC51BF81F8C3C6C002DC9D6 /* homeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = homeView.h; sourceTree = "<group>"; };
+		ADC51BF91F8C3C6C002DC9D6 /* homeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = homeView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD94B4471F8C38710050F34B /* QuartzCore.framework in Frameworks */,
 				AB9547A1AF4A6E553AB4829D /* libPods-ZER0trace Internal.a in Frameworks */,
 				AD4099F91F8C178400AB03EC /* CloudKit.framework in Frameworks */,
 			);
@@ -68,6 +78,7 @@
 		99A8A86E4C36B5BE7BD226D9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AD94B4461F8C38710050F34B /* QuartzCore.framework */,
 				AD4099F81F8C178400AB03EC /* CloudKit.framework */,
 				32AEB1BC68F645F14213C830 /* libPods-ZER0trace Internal.a */,
 			);
@@ -95,6 +106,8 @@
 		AD3807301F8C034B007BB8DF /* ZER0trace Internal */ = {
 			isa = PBXGroup;
 			children = (
+				AD79BDA21F8C3BAC0025CD6B /* dark.png */,
+				AD79BDA31F8C3BAC0025CD6B /* light.png */,
 				AD4099F51F8C177F00AB03EC /* ZER0trace Internal.entitlements */,
 				AD4099FA1F8C1E0300AB03EC /* driveObject.h */,
 				AD4099FB1F8C1E0300AB03EC /* driveObject.m */,
@@ -102,14 +115,16 @@
 				AD4099F21F8C0ED300AB03EC /* References.m */,
 				AD3807311F8C034B007BB8DF /* AppDelegate.h */,
 				AD3807321F8C034B007BB8DF /* AppDelegate.m */,
-				AD3807341F8C034B007BB8DF /* ViewController.h */,
-				AD3807351F8C034B007BB8DF /* ViewController.m */,
+				AD3807341F8C034B007BB8DF /* recorderView.h */,
+				AD3807351F8C034B007BB8DF /* recorderView.m */,
 				AD3807371F8C034B007BB8DF /* Main.storyboard */,
 				AD38073A1F8C034B007BB8DF /* Assets.xcassets */,
 				AD38073C1F8C034B007BB8DF /* LaunchScreen.storyboard */,
 				AD38073F1F8C034B007BB8DF /* Info.plist */,
 				AD4099EA1F8C086400AB03EC /* GoogleService-Info.plist */,
 				AD3807401F8C034B007BB8DF /* main.m */,
+				ADC51BF81F8C3C6C002DC9D6 /* homeView.h */,
+				ADC51BF91F8C3C6C002DC9D6 /* homeView.m */,
 			);
 			path = "ZER0trace Internal";
 			sourceTree = "<group>";
@@ -182,6 +197,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD79BDA41F8C3BB30025CD6B /* dark.png in Resources */,
+				AD79BDA51F8C3BB30025CD6B /* light.png in Resources */,
 				AD4099ED1F8C0BBB00AB03EC /* GoogleService-Info.plist in Resources */,
 				AD38073E1F8C034B007BB8DF /* LaunchScreen.storyboard in Resources */,
 				AD38073B1F8C034B007BB8DF /* Assets.xcassets in Resources */,
@@ -248,10 +265,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD4099FC1F8C1E0300AB03EC /* driveObject.m in Sources */,
-				AD3807361F8C034B007BB8DF /* ViewController.m in Sources */,
+				AD3807361F8C034B007BB8DF /* recorderView.m in Sources */,
 				AD4099F41F8C0ED300AB03EC /* References.m in Sources */,
 				AD3807411F8C034B007BB8DF /* main.m in Sources */,
 				AD3807331F8C034B007BB8DF /* AppDelegate.m in Sources */,
+				ADC51BFA1F8C3C6C002DC9D6 /* homeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
