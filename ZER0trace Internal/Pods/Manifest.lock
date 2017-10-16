@@ -1,4 +1,24 @@
 PODS:
+  - AFNetworking (3.1.0):
+    - AFNetworking/NSURLSession (= 3.1.0)
+    - AFNetworking/Reachability (= 3.1.0)
+    - AFNetworking/Security (= 3.1.0)
+    - AFNetworking/Serialization (= 3.1.0)
+    - AFNetworking/UIKit (= 3.1.0)
+  - AFNetworking/NSURLSession (3.1.0):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.1.0)
+  - AFNetworking/Security (3.1.0)
+  - AFNetworking/Serialization (3.1.0)
+  - AFNetworking/UIKit (3.1.0):
+    - AFNetworking/NSURLSession
+  - CTPersistance (1.3.7)
+  - CTVideoPlayerView (1.3.7):
+    - AFNetworking
+    - CTPersistance
+    - HandyFrame
   - Firebase/Core (4.1.0):
     - FirebaseAnalytics (= 4.0.3)
     - FirebaseCore (= 4.0.5)
@@ -23,6 +43,7 @@ PODS:
   - GoogleToolboxForMac/NSData+zlib (2.1.1):
     - GoogleToolboxForMac/Defines (= 2.1.1)
   - GTMSessionFetcher/Core (1.1.11)
+  - HandyFrame (1.1.3)
   - LLSimpleCamera (4.2.0)
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
@@ -32,12 +53,16 @@ PODS:
   - QRCodeReaderViewController (4.0.2)
 
 DEPENDENCIES:
+  - CTVideoPlayerView
   - Firebase/Core
   - Firebase/Storage
   - LLSimpleCamera (~> 4.1)
   - QRCodeReaderViewController (~> 4.0.2)
 
 SPEC CHECKSUMS:
+  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  CTPersistance: 014b70669d11034848459bef8e3798eb8af9a985
+  CTVideoPlayerView: 00408d908a577f0bbfe17b9d5a96e5964d55b1c8
   Firebase: ebebf41db7f10e0c7668b6eaaa857fbe599aa478
   FirebaseAnalytics: 76f754d37ca5b04f36856729b6af3ca0152d1069
   FirebaseCore: 7d876ea97a830cbe62ba7fbbe7670c833a324ba0
@@ -45,10 +70,11 @@ SPEC CHECKSUMS:
   FirebaseStorage: 661fc1f8d4131891d256b62e82a45ace8b3f0c3b
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   GTMSessionFetcher: 5ad62e8200fa00ed011fe5e08d27fef72c5b1429
+  HandyFrame: 5fef3c197c383332d7d5c838b3f7a85ce2f8f9cc
   LLSimpleCamera: ed7813ce4827ff3e34c6af159c99b5b56e54d1c6
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   QRCodeReaderViewController: e8f27d035b3e72b1d4b1c61ff66458287e3be0ff
 
-PODFILE CHECKSUM: d62bcc8dcd961f81b1b442b46ac4c368b48c8f7c
+PODFILE CHECKSUM: b728934c5c9cdcf9a3ab593b31a7fc2f8c627946
 
 COCOAPODS: 1.3.1

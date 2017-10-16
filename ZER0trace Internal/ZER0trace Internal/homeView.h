@@ -7,23 +7,27 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "pastJobView.h"
 #import <QRCodeReaderViewController/QRCodeReaderViewController.h>
 #import <QRCodeReaderViewController/QRCodeReader.h>
 #import <CloudKit/CloudKit.h>
 #import "References.h"
 #import "recorderView.h"
+#import "jobObject.h"
 
-@interface homeView : UIViewController <QRCodeReaderDelegate,UITextFieldDelegate> {
+@interface homeView : UIViewController <QRCodeReaderDelegate,UITextFieldDelegate,UICollectionViewDelegate,UICollectionViewDataSource> {
     QRCodeReaderViewController *vc;
-    __weak IBOutlet UITextField *manualCode;
-    __weak IBOutlet UILabel *manualCodeInstruction;
-    __weak IBOutlet UILabel *scanCodeInstruction;
-    __weak IBOutlet UIButton *scanCode;
+    NSMutableArray *nextJobs,*completedJobs,*nextJobRecords,*completedJobsRecord,*locallySaved;
+    __weak IBOutlet UILabel *menuBar;
+    __weak IBOutlet UICollectionView *upcomingJobs;
+    __weak IBOutlet UICollectionView *recentJobs;
+    __weak IBOutlet UICollectionView *createJobs;
+    __weak IBOutlet UIScrollView *scrollView;
+    
+    
     
     
     
     
 }
-- (IBAction)scanCode:(id)sender;
-
 @end

@@ -16,6 +16,7 @@
 
 
 - (void)viewDidLoad {
+    completeView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]);
     saveProgress = 0;
     scannedDrives = [[NSMutableArray alloc] init];
     isRecording = false;
@@ -24,25 +25,15 @@
     [References borderColor:recordButton color:[UIColor whiteColor]];
     [References borderColor:simulateScan color:[UIColor grayColor]];
     [References cornerRadius:simulateScan radius:simulateScan.frame.size.width/2];
+    [References lightCardShadow:cancel];
     [self prepareCamera];
     [super viewDidLoad];
-    NSError *error = nil;
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:&error]) {
-        [[NSFileManager defaultManager] removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:file] error:&error];
-    }
     NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MM_dd_yyy"];
     NSString *dateString = [formatter stringFromDate:[NSDate date]];
     jobName.text = [NSString stringWithFormat:@"%@-%@",[_jobRecord valueForKey:@"client"],dateString];
     [self getRecord];
     // Do any additional setup after loading the view, typically from a nib.
-}
-
--(bool)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    return TRUE;
 }
 
 -(void)prepareCamera {
@@ -87,6 +78,7 @@
             [References cornerRadius:recordButton radius:4.0];
             [References borderColor:recordButton color:[UIColor grayColor]];
         }];
+        [barcode becomeFirstResponder];
         isRecording = TRUE;
         [References fadeButtonColor:recordButton color:[UIColor whiteColor]];
     } else {
@@ -198,6 +190,7 @@
         record[@"videoURL"] = downloadURL.absoluteString;
         record[@"driveSerials"] = driveSerials;
         record[@"driveTimes"] = driveTimes;
+        record[@"dateCompleted"] = [NSDate date];
         [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
             if (error) {
                 NSLog(@"%@",error.localizedDescription);
@@ -214,6 +207,14 @@
     
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    driveObject *drive = [[driveObject alloc] initWithType:textField.text andTime:recorderTimeInt];
+    [scannedDrives addObject:drive];
+    drivesScanned.text = [NSString stringWithFormat:@"%lu Drives Scanned",(unsigned long)scannedDrives.count];
+    [drivesCollectionView reloadData];
+    [textField setText:@""];
+    return YES;
+}
 
 -(void)getRecord{
     NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"code = '%@'",[_jobRecord valueForKey:@"code"]]];
@@ -231,6 +232,10 @@
                                                    }];
 }
 - (IBAction)confirmDestruction:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)cancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end

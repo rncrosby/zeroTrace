@@ -21,6 +21,7 @@
     NSTimer *recorderTime;
     NSURL *outputURL;
     bool isRecording;
+    __weak IBOutlet UITextField *barcode;
     LLSimpleCamera *recorder;
     __weak IBOutlet UIButton *recordButton;
     __weak IBOutlet UILabel *drivesScanned;
@@ -37,6 +38,7 @@
     NSString *clientCodeText;
     __weak IBOutlet UIView *signatureView;
     __weak IBOutlet UIButton *confirmDestructionButton;
+    __weak IBOutlet UIButton *cancel;
     
 }
 - (IBAction)toggleRecording:(id)sender;
@@ -44,6 +46,7 @@
 @property (nonatomic, assign) CKRecord *jobRecord;
 @property (nonatomic, assign) NSString *recordID;
 - (IBAction)confirmDestruction:(id)sender;
+- (IBAction)cancel:(id)sender;
 
 @end
 

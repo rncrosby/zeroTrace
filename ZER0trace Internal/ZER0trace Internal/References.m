@@ -307,7 +307,7 @@
 }
 
 +(void)createLine:(UIView*)superview  xPos:(int)xPos yPos:(int)yPos inFront:(bool)inFront{
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(xPos, yPos, 1000, 1)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(xPos, yPos, 2000, 1)];
     [view setBackgroundColor:[UIColor blackColor]];
     view.alpha = 0.1f;
     [superview addSubview:view];
