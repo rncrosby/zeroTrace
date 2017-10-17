@@ -62,7 +62,7 @@
 
 -(void)getClientJobs {
     jobs = [[NSMutableArray alloc] init];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"client = 'oracle'"]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"code = '41699'"]];
     CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
     CKContainer *container = [CKContainer containerWithIdentifier:@"iCloud.com.fullytoasted.ZER0trace-Internal"];
     [container.publicCloudDatabase performQuery:query
@@ -73,6 +73,7 @@
                                                            NSArray *driveTimes = [record objectForKey:@"driveTimes"];
                                                            NSArray *driveSerials = [record objectForKey:@"driveSerials"];
                                                            NSURL *videoURL = [NSURL URLWithString:[record valueForKey:@"videoURL"]];
+                                                           NSLog(@"%@",videoURL.absoluteString);
                                                            jobObject *job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:[NSDate date]];
                                                            [jobs addObject:job];
                                                        }

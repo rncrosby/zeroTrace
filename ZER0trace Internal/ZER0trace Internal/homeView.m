@@ -220,30 +220,7 @@
         textField.placeholder = @"Job Name";
         textField.secureTextEntry = NO;
     }];
-    UIAlertAction *createAndScan = [UIAlertAction actionWithTitle:@"Create and Scan" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        NSString *jobTitle = [[alertController textFields][0] text];
-        CKRecord *record = [[CKRecord alloc] initWithRecordType:@"Job"];
-        record[@"client"] = jobTitle;
-        record[@"code"] = [References randomIntWithLength:5];
-        [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
-            if (!error) {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-                    recorderView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"recorderView"];
-                    controller.jobRecord = record;
-                    //menu is only an example
-                    [self presentViewController:controller animated:YES completion:nil];
-                    // Update the UI on the main thread.
-                });
-            } else {
-                NSLog(@"%@",error.localizedDescription);
-            }
-            
-        }];
-        //compare the current password and do action here
-        
-    }];
-    UIAlertAction *create = [UIAlertAction actionWithTitle:@"Just Create" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *create = [UIAlertAction actionWithTitle:@"Create" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *jobTitle = [[alertController textFields][0] text];
         CKRecord *record = [[CKRecord alloc] initWithRecordType:@"Job"];
         record[@"client"] = jobTitle;
@@ -264,7 +241,6 @@
         //compare the current password and do action here
         
     }];
-    [alertController addAction:createAndScan];
     [alertController addAction:create];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
     }];

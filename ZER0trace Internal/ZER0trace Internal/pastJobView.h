@@ -14,8 +14,15 @@
 @interface pastJobView : UIViewController {
     CTVideoView *videoView;
     __weak IBOutlet UIView *videoPlayer;
+    __weak IBOutlet UILabel *date;
+    __weak IBOutlet UILabel *driveCount;
+    __weak IBOutlet UIImageView *signatureImage;
+    __weak IBOutlet UIButton *shareButton;
+    __weak IBOutlet UIButton *closeButton;
 }
 @property (nonatomic) AVPlayer *avPlayer;
 @property (nonatomic, assign) jobObject *job;
+- (IBAction)close:(id)sender;
+- (IBAction)share:(id)sender;
 
 @end

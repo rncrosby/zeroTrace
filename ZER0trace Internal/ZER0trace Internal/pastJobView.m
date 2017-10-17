@@ -22,11 +22,17 @@
     [videoView setIsMuted:YES];
     videoView.videoUrl = [NSURL URLWithString:_job.videoURL]; // mp4 playable
     [videoView prepare];
-//    [NSTimer scheduledTimerWithTimeInterval:1.0f
-//                                     target:self selector:@selector(videoProgressManager) userInfo:nil repeats:YES];
+    NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"EEEE"];
+    NSString *weekday = [formatter stringFromDate:_job.dateCompleted];
+    [formatter setDateFormat:@"MMMM, d"];
+    NSString *month = [formatter stringFromDate:_job.dateCompleted];
+    date.text = [NSString stringWithFormat:@"%@,\n%@",weekday,month];
+    driveCount.text = [NSString stringWithFormat:@"%lu Drives",(unsigned long)_job.driveTimes.count];
     [References cornerRadius:videoPlayer radius:7.0f];
-    //[References cornerRadius:table radius:7.0f];
-    //[References lightCardShadow:videoPlayer];
+    [References cornerRadius:signatureImage radius:7.0f];
+    [References cornerRadius:shareButton radius:7.0f];
+    [References cornerRadius:closeButton radius:7.0f];
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }
@@ -38,4 +44,11 @@
 
 
 
+- (IBAction)close:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)share:(id)sender {
+    [References fullScreenToast:@"Coming Soon" inView:self withSuccess:NO andClose:NO];
+}
 @end

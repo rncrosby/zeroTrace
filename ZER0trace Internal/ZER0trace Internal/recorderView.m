@@ -146,6 +146,26 @@
     return cell;
 }
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    driveObject *drive = scannedDrives[scannedDrives.count-indexPath.row-1];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:drive.serial message:@"Deleting this serial is irreversible. Are you sure you want to continue?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Delete Serial" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self removeSerialAtIndex:(int)indexPath.row];
+    }];
+    [alertController addAction:confirmAction];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [alertController addAction:cancelAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)removeSerialAtIndex:(int)index {
+    [scannedDrives removeObjectAtIndex:scannedDrives.count-index-1];
+    drivesScanned.text = [NSString stringWithFormat:@"%lu Drives Scanned",(unsigned long)scannedDrives.count];
+    [drivesCollectionView reloadData];
+}
+
 -(void)uploadFile:(NSURL*)url withName:(NSString*)name{
     
     FIRStorage *storage = [FIRStorage storage];
