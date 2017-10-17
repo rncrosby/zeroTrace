@@ -228,10 +228,10 @@
         [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
             if (!error) {
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    [References toastMessage:@"Job Created" andView:self andClose:NO];
-                    [nextJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andCode:[record valueForKey:@"code"] andURL:nil andDate:nil andSerials:nil andTimes:nil]];
+                    [nextJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andCode:[record valueForKey:@"code"] andURL:nil andDate:nil andSerials:nil andTimes:nil andSignature:nil]];
                     [nextJobRecords addObject:record];
                     [upcomingJobs reloadData];
+                    [self setVisibility];
                 });
             } else {
                 NSLog(@"%@",error.localizedDescription);
@@ -261,6 +261,12 @@
 }
 
 -(void)getUpcoming {
+    [nextJobs removeAllObjects];
+    [completedJobs removeAllObjects];
+    [nextJobRecords removeAllObjects];
+    [completedJobs removeAllObjects];
+    upcomingJobs.hidden = YES;
+    recentJobs.hidden = YES;
     locallySaved = [[NSMutableArray alloc] init];
     NSError *error = nil;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -284,26 +290,47 @@
                                                                if ([record valueForKey:@"videoURL"]) {
                                                                    NSArray *driveTimes = [record objectForKey:@"driveTimes"];
                                                                    NSArray *driveSerials = [record objectForKey:@"driveSerials"];
-                                                                   [completedJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andCode:[record valueForKey:@"code"] andURL:[record valueForKey:@"videoURL"] andDate:[record objectForKey:@"dateCompleted"] andSerials:driveSerials andTimes:driveTimes]];
+                                                                   NSData *signature = [record objectForKey:@"signatureData"];
+                                                                   [completedJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andCode:[record valueForKey:@"code"] andURL:[record valueForKey:@"videoURL"] andDate:[record objectForKey:@"dateCompleted"] andSerials:driveSerials andTimes:driveTimes andSignature:signature]];
                                                                    [completedJobsRecord addObject:record];
                                                                } else {
-                                                                   [nextJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andCode:[record valueForKey:@"code"] andURL:nil andDate:nil andSerials:nil andTimes:nil]];
+                                                                   [nextJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andCode:[record valueForKey:@"code"] andURL:nil andDate:nil andSerials:nil andTimes:nil andSignature:nil]];
                                                                    [nextJobRecords addObject:record];
                                                                }
                                                            }
                                                            dispatch_sync(dispatch_get_main_queue(), ^{
                                                                [upcomingJobs reloadData];
                                                                [recentJobs reloadData];
+                                                               [self setVisibility];
                                                                // Update the UI on the main thread.
                                                            });
                                                            
                                                        } else {
                                                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                                               [References toastMessage:@"Error" andView:self andClose:NO];
+                                                               
+                                                               [self setVisibility];
                                                                // Update the UI on the main thread.
                                                            });
-                                                           
                                                        }
                                                    }];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [self getUpcoming];
+}
+
+-(void)setVisibility {
+    if (nextJobs.count < 1) {
+        [References fadeLabelText:noUpcomingJobs newText:@"No Upcoming Jobs"];
+    } else {
+        [References fadeOut:noUpcomingJobs];
+        [References fadeIn:upcomingJobs];
+    }
+    if (completedJobs.count < 1) {
+        [References fadeLabelText:noPastJobs newText:@"No Recent Jobs"];
+    } else {
+        [References fadeOut:noPastJobs];
+        [References fadeIn:recentJobs];
+    }
 }
 @end

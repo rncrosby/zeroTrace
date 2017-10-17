@@ -50,6 +50,7 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - PPSSignatureView (0.1.2)
   - QRCodeReaderViewController (4.0.2)
 
 DEPENDENCIES:
@@ -57,6 +58,7 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Storage
   - LLSimpleCamera (~> 4.1)
+  - PPSSignatureView
   - QRCodeReaderViewController (~> 4.0.2)
 
 SPEC CHECKSUMS:
@@ -73,8 +75,9 @@ SPEC CHECKSUMS:
   HandyFrame: 5fef3c197c383332d7d5c838b3f7a85ce2f8f9cc
   LLSimpleCamera: ed7813ce4827ff3e34c6af159c99b5b56e54d1c6
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  PPSSignatureView: 746f1fc186dea15c248bc99cc64182f93af131b9
   QRCodeReaderViewController: e8f27d035b3e72b1d4b1c61ff66458287e3be0ff
 
-PODFILE CHECKSUM: b728934c5c9cdcf9a3ab593b31a7fc2f8c627946
+PODFILE CHECKSUM: 97ee6f7e3bc669eceb7a11d66226c91e377a37b1
 
 COCOAPODS: 1.3.1

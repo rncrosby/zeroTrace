@@ -14,8 +14,9 @@
 @property (nonatomic, strong) NSDate *dateCompleted;
 @property (nonatomic, strong) NSString* videoURL;
 @property (nonatomic, strong) NSArray* driveSerials;
+@property (nonatomic, strong) NSData* signature;
 @property (nonatomic, strong) NSArray* driveTimes;
 
--(instancetype)initWithType:(NSString*)client andCode:(NSString*)code andURL:(NSString*)videoURL andDate:(NSDate*)date andSerials:(NSArray*)serials andTimes:(NSArray*)times;
+-(instancetype)initWithType:(NSString*)client andCode:(NSString*)code andURL:(NSString*)videoURL andDate:(NSDate*)date andSerials:(NSArray*)serials andTimes:(NSArray*)times andSignature:(NSData*)signature;
 
 @end

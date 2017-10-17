@@ -27,12 +27,13 @@
     NSString *weekday = [formatter stringFromDate:_job.dateCompleted];
     [formatter setDateFormat:@"MMMM, d"];
     NSString *month = [formatter stringFromDate:_job.dateCompleted];
-    date.text = [NSString stringWithFormat:@"%@,\n%@",weekday,month];
+    date.text = [NSString stringWithFormat:@"%@\n%@",weekday,month];
     driveCount.text = [NSString stringWithFormat:@"%lu Drives",(unsigned long)_job.driveTimes.count];
     [References cornerRadius:videoPlayer radius:7.0f];
     [References cornerRadius:signatureImage radius:7.0f];
     [References cornerRadius:shareButton radius:7.0f];
     [References cornerRadius:closeButton radius:7.0f];
+    [signatureImage setImage:[UIImage imageWithData:_job.signature]];
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }

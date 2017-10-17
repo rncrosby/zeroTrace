@@ -202,6 +202,20 @@
                                             <outlet property="delegate" destination="H82-MJ-fmV" id="w8a-r4-VHM"/>
                                         </connections>
                                     </collectionView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="One Moment" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DDY-z9-CSV">
+                                        <rect key="frame" x="0.0" y="727" width="1024" height="225"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="50"/>
+                                        <color key="textColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="One Moment" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gik-np-1mq">
+                                        <rect key="frame" x="0.0" y="442" width="1024" height="225"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="50"/>
+                                        <color key="textColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="116" maxX="0.0" maxY="0.0"/>
                             </scrollView>
@@ -223,6 +237,8 @@
                     <connections>
                         <outlet property="createJobs" destination="EKc-0V-hNS" id="ncw-d0-Sbc"/>
                         <outlet property="menuBar" destination="fHo-aF-udj" id="1z7-iU-34l"/>
+                        <outlet property="noPastJobs" destination="DDY-z9-CSV" id="IYC-xQ-eca"/>
+                        <outlet property="noUpcomingJobs" destination="gik-np-1mq" id="3Xd-GG-Yl1"/>
                         <outlet property="recentJobs" destination="MXl-xK-hOo" id="v2i-o6-1lh"/>
                         <outlet property="scrollView" destination="0cU-YB-cdk" id="jLF-is-Ypx"/>
                         <outlet property="upcomingJobs" destination="APS-2I-4mq" id="05f-gW-yft"/>
@@ -336,8 +352,8 @@ October 8</string>
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="Pwk-xm-84p">
-                                <rect key="frame" x="1024" y="20" width="1024" height="748"/>
+                            <scrollView hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="Pwk-xm-84p">
+                                <rect key="frame" x="0.0" y="20" width="1024" height="748"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Uploading Destruction" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8E9-ss-E8C">
@@ -389,7 +405,7 @@ October 8</string>
                                         <color key="textColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" misplaced="YES" id="SAj-3K-MO1">
+                                    <view contentMode="scaleToFill" misplaced="YES" id="SAj-3K-MO1" customClass="SignatureDrawView">
                                         <rect key="frame" x="278" y="452" width="468" height="117"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -540,7 +556,7 @@ October 8</string>
                         <outlet property="jobName" destination="jaG-JT-sS0" id="DZS-d1-K4f"/>
                         <outlet property="recordButton" destination="id5-hb-sfG" id="Abk-U5-ROu"/>
                         <outlet property="signatureCard" destination="bO1-MV-Wht" id="Ok3-CW-oFq"/>
-                        <outlet property="signatureView" destination="SAj-3K-MO1" id="FYa-ap-lUG"/>
+                        <outlet property="signatureView" destination="SAj-3K-MO1" id="4n2-SJ-3J1"/>
                         <outlet property="simulateScan" destination="8Tc-qo-NDC" id="slB-Sd-n6S"/>
                         <outlet property="timeLabel" destination="G6u-3J-zkN" id="oEE-HG-uWg"/>
                     </connections>

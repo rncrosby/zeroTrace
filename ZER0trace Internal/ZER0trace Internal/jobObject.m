@@ -10,7 +10,7 @@
 
 @implementation jobObject
 
--(instancetype)initWithType:(NSString*)client andCode:(NSString*)code andURL:(NSString*)videoURL andDate:(NSDate*)date andSerials:(NSArray*)serials andTimes:(NSArray*)times{
+-(instancetype)initWithType:(NSString*)client andCode:(NSString*)code andURL:(NSString*)videoURL andDate:(NSDate*)date andSerials:(NSArray*)serials andTimes:(NSArray*)times andSignature:(NSData*)signature{
     self = [super init];
     if(self)
     {
@@ -20,6 +20,7 @@
         self.dateCompleted = date;
         self.driveSerials = serials;
         self.driveTimes = times;
+        self.signature = signature;
         
     }
     return self;

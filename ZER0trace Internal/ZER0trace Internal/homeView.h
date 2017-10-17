@@ -23,6 +23,8 @@
     __weak IBOutlet UICollectionView *recentJobs;
     __weak IBOutlet UICollectionView *createJobs;
     __weak IBOutlet UIScrollView *scrollView;
+    __weak IBOutlet UILabel *noUpcomingJobs;
+    __weak IBOutlet UILabel *noPastJobs;
     
     
     

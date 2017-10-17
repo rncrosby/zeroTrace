@@ -12,6 +12,8 @@
 #import <LLSimpleCamera/LLSimpleCamera.h>
 #import "driveObject.h"
 #import <CloudKit/CloudKit.h>
+#import "SignatureDrawView.h"
+
 
 @interface recorderView : UIViewController <UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate> {
     CKRecordID *newJobRecord;
@@ -36,9 +38,9 @@
     __weak IBOutlet UILabel *signatureCard;
     __weak IBOutlet UILabel *clientCode;
     NSString *clientCodeText;
-    __weak IBOutlet UIView *signatureView;
     __weak IBOutlet UIButton *confirmDestructionButton;
     __weak IBOutlet UIButton *cancel;
+    __weak IBOutlet SignatureDrawView *signatureView;
     
 }
 - (IBAction)toggleRecording:(id)sender;

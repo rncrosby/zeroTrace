@@ -252,7 +252,36 @@
                                                    }];
 }
 - (IBAction)confirmDestruction:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [References fadeLabelText:completeTitle newText:@"Finishing Up..."];
+    UIGraphicsBeginImageContext(signatureView.bounds.size);
+    [[signatureView.layer presentationLayer] renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    NSData *postData = UIImageJPEGRepresentation(viewImage, 1.0);
+    [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:newJobRecord completionHandler:^(CKRecord *record, NSError *error) {
+        
+        if (error) {
+            return;
+        }
+        record[@"signatureData"] = postData;
+        [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
+            if (error) {
+                NSLog(@"%@",error.localizedDescription);
+            } else {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        [References fadeLabelText:completeTitle newText:@"All Done"];
+                        double delayInSeconds = 1.0;
+                        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                            
+                            [self dismissViewControllerAnimated:YES completion:nil];
+                        });
+                        // Update the UI on the main thread.
+                    });
+            }
+        }];
+    }];
+
 }
 
 - (IBAction)cancel:(id)sender {
