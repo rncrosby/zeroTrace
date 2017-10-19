@@ -1,0 +1,56 @@
+p {
+  font-family: 'Roboto', sans-serif;
+
+}
+.container {
+    margin: auto;
+    width: 80%;
+}
+.left {
+    width: 50%;
+    background: grey;
+    float: left;
+}
+.right {
+    margin-left: 50%;
+    width: 50%;
+    color: white;
+    background: white;
+}
+table {
+    font-family: 'Roboto', sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+#timebutton {
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  background-color: black;
+  border: 0;
+  width: 30;
+  height: auto;
+}
+
+td, th {
+  width: 10px;
+    text-align: left;
+    padding: 8px;
+}
+.client {
+  text-align: center;
+  padding-top: 25;
+  padding-bottom: 25;
+  width: auto;
+  margin: auto;
+}
+p.jobTitle {
+  background-color: black;
+  color: white;
+  font-weight: 700;
+  font-size: 36;
+  display:inline;
+}
+tr {
+    background-color: white;
+    width: auto;
+}

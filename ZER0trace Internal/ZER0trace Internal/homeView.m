@@ -221,10 +221,12 @@
         textField.secureTextEntry = NO;
     }];
     UIAlertAction *create = [UIAlertAction actionWithTitle:@"Create" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSString *code = [References randomIntWithLength:5];
         NSString *jobTitle = [[alertController textFields][0] text];
-        CKRecord *record = [[CKRecord alloc] initWithRecordType:@"Job"];
+        CKRecord *record = [[CKRecord alloc] initWithRecordType:@"Job" recordID:[[CKRecordID alloc] initWithRecordName:code]];
+        
         record[@"client"] = jobTitle;
-        record[@"code"] = [References randomIntWithLength:5];
+        record[@"code"] = code;
         [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
             if (!error) {
                 dispatch_sync(dispatch_get_main_queue(), ^{
@@ -285,6 +287,7 @@
                                                         inZoneWithID:nil
                                                    completionHandler:^(NSArray *results, NSError *error) {
                                                        if (results.count > 0) {
+                                                           NSLog(@"%i",results.count);
                                                            for (int a = 0; a < results.count; a++) {
                                                                CKRecord *record = results[a];
                                                                if ([record valueForKey:@"videoURL"]) {
@@ -313,10 +316,6 @@
                                                            });
                                                        }
                                                    }];
-}
-
--(void)viewDidAppear:(BOOL)animated {
-    [self getUpcoming];
 }
 
 -(void)setVisibility {
