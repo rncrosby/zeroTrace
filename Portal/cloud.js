@@ -11,15 +11,19 @@ window.addEventListener('cloudkitloaded', function() {
 
 		var container = CloudKit.getDefaultContainer();
 		var publicDatabase = container.publicCloudDatabase;
+		var full = window.location.href.split("?");
+		var code = full[1].split("=");
 		// GET JOBS
-		publicDatabase.fetchRecords('12345').then(function(response) {
+		publicDatabase.fetchRecords(code[1]).then(function(response) {
 		if (response.hasErrors) {
 				// Insert error handling
 				alert("Something Went Wrong");
 		} else {
 					var fetchedRecord = response.records[0];
-					var jobTitles = fetchedRecord['fields']['allJobs']['value'];
+					console.log
+					var jobTitles = fetchedRecord['fields']['allJobDates']['value'];
 					var jobCodes = fetchedRecord['fields']['allJobCodes']['value'];
+					initialVideo(jobCodes[0]);
 					for (var i = 0; i < jobTitles.length; i++) {
 						var driveObject = document.createElement("div");
 						var line = document.createElement("div");
@@ -28,17 +32,16 @@ window.addEventListener('cloudkitloaded', function() {
 						var btn = document.createElement("button");
 						btn.id = "jobButton";
 						btn.setAttribute("code", jobCodes[i]);
-						btn.addEventListener("click", skimToTime);
+						btn.addEventListener("click", getJob);
 						var txt = document.createTextNode(jobTitles[i]);
 						btn.appendChild(txt);
 						driveObject.appendChild(btn);
 						var container = document.getElementById('navBar');
 						var subtext = document.createElement("p");
 						subtext.id = "jobDate";
-						var node = document.createTextNode("Wednesday, October 8");
+						var node = document.createTextNode(jobCodes[i]);
 						subtext.appendChild(node);
 						container.appendChild(driveObject);
-
 						container.appendChild(subtext);
 						container.appendChild(line);
 						// var btn = document.createElement("button");
@@ -50,60 +53,112 @@ window.addEventListener('cloudkitloaded', function() {
 	});
 	// FINISH GET JOBS
 	// START GET CURRENTJOB
-	var full = window.location.href.split("?");
-	var code = full[1].split("=");
-		publicDatabase.fetchRecords(code[1]).then(function(response) {
+	});
+	function getJob(event) {
+		video.pause();
+		var button = event.target;
+		var code = button.getAttribute("code");
+		var container = CloudKit.getDefaultContainer();
+		var publicDatabase = container.publicCloudDatabase;
+		publicDatabase.fetchRecords(code).then(function(response) {
 		if (response.hasErrors) {
 				// Insert error handling
 				alert("No Video Found");
 		} else {
+
+					var myNode = document.getElementById("container");
+					myNode.innerHTML = '';
 					var fetchedRecord = response.records[0];
-					console.log(fetchedRecord);
-					var serials = fetchedRecord['fields']['driveSerials']['value'];
-					var times = fetchedRecord['fields']['driveTimes']['value'];
-					for (var i = 0; i < serials.length; i++) {
-						var driveObject = document.createElement("div");
-						driveObject.id = "driveObject";
-						var btn = document.createElement("button");
-						btn.id = "timebutton";
-						btn.setAttribute("time", times[i]);
-						btn.addEventListener("click", skimToTime);
-						var txt = document.createTextNode(serials[i]);
-						btn.appendChild(txt);
-						driveObject.appendChild(btn);
-						var container = document.getElementById('container');
-						container.appendChild(driveObject);
-						// var table = document.getElementById("serials");
-						// var tr = document.createElement("tr");
-						// var td = document.createElement("td");
-						// var txt = document.createTextNode(serials[i]);
-						// var tdTime = document.createElement("td");
-						// var txtTime = document.createTextNode(times[i]);
-						// var btn = document.createElement("button");
-						// btn.id = "timebutton";
-						// btn.setAttribute("time", times[i]);
-						// btn.addEventListener("click", skimToTime);
-						// btn.appendChild(txtTime);
-						// td.appendChild(txt);
-						// tr.appendChild(td);
-						// tdTime.appendChild(btn);
-						// tr.appendChild(tdTime);
-						// table.appendChild(tr);
+					if (fetchedRecord['fields']['driveSerials']) {
+						var serials = fetchedRecord['fields']['driveSerials']['value'];
+						var times = fetchedRecord['fields']['driveTimes']['value'];
+						for (var i = 0; i < serials.length; i++) {
+							var driveObject = document.createElement("div");
+							driveObject.id = "driveObject";
+							var btn = document.createElement("button");
+							btn.id = "timebutton";
+							btn.setAttribute("time", times[i]);
+							btn.addEventListener("click", skimToTime);
+							var txt = document.createTextNode(serials[i]);
+							btn.appendChild(txt);
+							driveObject.appendChild(btn);
+							var container = document.getElementById('container');
+							container.appendChild(driveObject);
+						}
+						var date = fetchedRecord['fields']['jobDate']['value'];
+						document.getElementById("DATE").innerHTML = date;
+						document.getElementById("DRIVECOUNT").innerHTML = serials.length + " Drives";
+						document.getElementById("jobTitle").innerHTML = fetchedRecord['fields']['code']['value'];
+						var video = document.getElementById('video');
+						video.setAttribute('src', fetchedRecord['fields']['videoURL']['value']);
+						video.currentTime = 0;
+						video.addEventListener("canplaythrough", function() {
+  					video.play();
+					}, false);
+					} else {
+						alert("this job has not occured yet");
 					}
-					var seconds = fetchedRecord['fields']['dateCompleted']['value'];
-					document.getElementById("DRIVECOUNT").innerHTML = serials.length + " Drives";
-					//document.getElementById("jobTitle").innerHTML = fetchedRecord['fields']['client']['value'];
-					var video = document.getElementById('video');
-					var source = document.createElement('source');
-					source.setAttribute('src', fetchedRecord['fields']['videoURL']['value']);
-					video.appendChild(source);
-					video.play();
+
 		}
 	});
-	});
-
+	}
 	function skimToTime(event) {
 		var button = event.target;
 		var time = button.getAttribute("time");
 		document.getElementById("video").currentTime = time;
+	}
+	function validateForm(theForm) {
+		if (theForm.code.value.length < 5 || theForm.code.value.length > 5) {
+			alert("something isn't right with your code")
+		} else {
+			window.location.href = "player.html?code="+theForm.code.value;
+		}
+    return false;
+	}
+	function initialVideo(code) {
+		var container = CloudKit.getDefaultContainer();
+		var publicDatabase = container.publicCloudDatabase;
+		publicDatabase.fetchRecords(code).then(function(response) {
+		if (response.hasErrors) {
+				// Insert error handling
+				alert("No Video Found");
+		} else {
+
+					var myNode = document.getElementById("container");
+					myNode.innerHTML = '';
+					var fetchedRecord = response.records[0];
+					if (fetchedRecord['fields']['driveSerials']) {
+						var serials = fetchedRecord['fields']['driveSerials']['value'];
+						var times = fetchedRecord['fields']['driveTimes']['value'];
+						for (var i = 0; i < serials.length; i++) {
+							var driveObject = document.createElement("div");
+							driveObject.id = "driveObject";
+							var btn = document.createElement("button");
+							btn.id = "timebutton";
+							btn.setAttribute("time", times[i]);
+							btn.addEventListener("click", skimToTime);
+							var txt = document.createTextNode(serials[i]);
+							btn.appendChild(txt);
+							driveObject.appendChild(btn);
+							var container = document.getElementById('container');
+							container.appendChild(driveObject);
+						}
+						var driveSpacer = document.createElement("div");
+						driveSpacer.id = "driveSpacer";
+						var container = document.getElementById('container');
+						container.appendChild(driveSpacer);
+						var date = fetchedRecord['fields']['jobDate']['value'];
+						document.getElementById("DATE").innerHTML = date;
+						document.getElementById("DRIVECOUNT").innerHTML = serials.length + " Drives";
+						document.getElementById("jobTitle").innerHTML = fetchedRecord['fields']['code']['value'];
+						var video = document.getElementById('video');
+						video.setAttribute('src', fetchedRecord['fields']['videoURL']['value']);
+						video.currentTime = 0;
+						video.play();
+					} else {
+						alert("this job has not occured yet");
+					}
+
+		}
+	});
 	}

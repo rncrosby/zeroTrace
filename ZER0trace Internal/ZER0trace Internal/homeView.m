@@ -217,28 +217,51 @@
 -(void)newJob {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Client Name" message:nil preferredStyle:UIAlertControllerStyleAlert];
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = @"Job Name";
+        textField.placeholder = @"Client Code";
+        textField.keyboardType = UIKeyboardTypeNumberPad;
         textField.secureTextEntry = NO;
     }];
     UIAlertAction *create = [UIAlertAction actionWithTitle:@"Create" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *code = [References randomIntWithLength:5];
-        NSString *jobTitle = [[alertController textFields][0] text];
-        CKRecord *record = [[CKRecord alloc] initWithRecordType:@"Job" recordID:[[CKRecordID alloc] initWithRecordName:code]];
-        
-        record[@"client"] = jobTitle;
-        record[@"code"] = code;
-        [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
-            if (!error) {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    [nextJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andCode:[record valueForKey:@"code"] andURL:nil andDate:nil andSerials:nil andTimes:nil andSignature:nil]];
-                    [nextJobRecords addObject:record];
-                    [upcomingJobs reloadData];
-                    [self setVisibility];
-                });
-            } else {
-                NSLog(@"%@",error.localizedDescription);
-            }
+        NSString *clientCode = [[alertController textFields][0] text];
+        NSString __block *clientName = @"";
+        CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:clientCode];
+        [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:recordID completionHandler:^(CKRecord *record, NSError *error) {
             
+            if (error) {
+                return;
+            }
+            clientName = [record valueForKey:@"clientName"];
+            NSMutableArray *allJobCodes = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobCodes"]];
+        
+            [allJobCodes addObject:code];
+            NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"EEEE, MMMM d"];
+            NSMutableArray *allJobDates = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobDates"]];
+            [allJobDates addObject:[formatter stringFromDate:[NSDate date]]];
+            record[@"allJobCodes"] = allJobCodes;
+            record[@"allJobDates"] = allJobDates;
+            [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
+                NSLog(@"%@",error.localizedDescription);
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    CKRecord *record = [[CKRecord alloc] initWithRecordType:@"Job" recordID:[[CKRecordID alloc] initWithRecordName:code]];
+                    record[@"client"] = clientName;
+                    record[@"code"] = code;
+                    [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
+                        if (!error) {
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                [nextJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andCode:[record valueForKey:@"code"] andURL:nil andDate:nil andSerials:nil andTimes:nil andSignature:nil]];
+                                [nextJobRecords addObject:record];
+                                [upcomingJobs reloadData];
+                                [self setVisibility];
+                            });
+                        } else {
+                            NSLog(@"%@",error.localizedDescription);
+                        }
+
+                    }];
+                    });
+            }];
         }];
         //compare the current password and do action here
         
