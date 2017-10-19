@@ -6,25 +6,28 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="client"><p class="jobTitle" id="jobTitle"></p></div>
-  <section class="container">
-    <div class="left">
-      <div id="player">
-      <video id="video" width="100%" height="auto" controls></video>
-      </div>
-    </div>
-    <div class="right">
-      <table id="serials">
-  <tr>
-    <th>Serial</th>
-    <th>Timestamp</th>
-  </tr>
+  <div class="navBar" id="navBar">
+    <center><img src="https://www.csra.com/sites/default/files/oracle_logo.png" alt="Company" style="margin-top:110px;padding-bottom:25px;"><br>
+    </center>
 
-</table>
+  </div>
+  <div class="client"><p class="jobTitle" id="jobTitle">Job Title</p></div>
+<div id="player">
+  <video id="video" width="50%" height="auto" controls style="margin-left:25%;padding-bottom: 25;"></video>
+  </div>
+
+<div style="margin-left:23%;width:77%;height:100px;overflow-x:auto;">
+<div class="container" id="container"></div>
+</div>
+
+<div style="margin-left:25%;width:75%;margin-top:40;">
+  <p class="description">Date</p>
+  <p class="value" id="DATE">Wednesday, October 14</p>
+  <p class="description">Drive Count</p>
+  <p class="value" id="DRIVECOUNT"></p>
 
 
-    </div>
-</section>
 
+</div>
 </body>
 </html>
