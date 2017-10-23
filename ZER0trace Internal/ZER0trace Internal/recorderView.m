@@ -16,12 +16,20 @@
 
 
 - (void)viewDidLoad {
+    statusBar.backgroundColor = [UIColor clearColor];
+    [References blurView:statusBar];
+    [References cornerRadius:statusBar radius:24.0f];
+    [References blurView:drivesCollectionBlur];
+    [References cornerRadius:drivesCollectionBlur radius:16.0f];
+    clientCode.text = [_jobRecord valueForKey:@"code"];
+    beforeRecording = true;
     completeView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]);
+    [References fadeIn:completeView];
     saveProgress = 0;
     scannedDrives = [[NSMutableArray alloc] init];
     isRecording = false;
     [References cornerRadius:recordButton radius:recordButton.frame.size.width/2];
-    [References cornerRadius:signatureCard radius:5.0f];
+    //[References cornerRadius:signatureCard radius:5.0f];
     [References borderColor:recordButton color:[UIColor whiteColor]];
     [References borderColor:simulateScan color:[UIColor grayColor]];
     [References cornerRadius:simulateScan radius:simulateScan.frame.size.width/2];
@@ -32,8 +40,51 @@
     [formatter setDateFormat:@"MM_dd_yyy"];
     NSString *dateString = [formatter stringFromDate:[NSDate date]];
     jobName.text = [NSString stringWithFormat:@"%@-%@",[_jobRecord valueForKey:@"client"],dateString];
-    [self getRecord];
     // Do any additional setup after loading the view, typically from a nib.
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
+}
+
+-(BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
+- (void) keyboardWillShow:(NSNotification *)notification
+{
+    NSDictionary* userInfo = [notification userInfo];
+    CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboard = [self.view convertRect:keyboardFrame fromView:self.view.window];
+    NSLog(@"%f",keyboard.size.height);
+    if (keyboard.size.height > 100) {
+        [barcode resignFirstResponder];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Scanner Connected" message:@"Use the settings app to pair a scanner" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *continueRecording = [UIAlertAction actionWithTitle:@"Proceed Using Simulator" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            [References fadeIn:simulateScan];
+            [self startRecording];
+        }];
+        UIAlertAction *settings = [UIAlertAction actionWithTitle:@"Open Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"App-prefs:root=Bluetooth"]];
+        }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel Job" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            [self cancel:self];
+        }];
+        [alert addAction:continueRecording];
+        [alert addAction:settings];
+        [alert addAction:cancel];
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        // scanner connected
+        [References moveUp:simulateScan yChange:keyboard.size.height-8];
+        [References moveUp:recordButton yChange:keyboard.size.height-8];
+        [References moveUp:drivesCollectionBlur yChange:keyboard.size.height-8];
+        [References moveUp:drivesCollectionView yChange:keyboard.size.height-8];
+        [barcode becomeFirstResponder];
+        [self startRecording];
+    }
 }
 
 -(void)prepareCamera {
@@ -60,38 +111,52 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)startRecording {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSURL *documentsURL = [NSURL fileURLWithPath:documentsDirectory];
+    outputURL = [[documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%@",jobName.text]] URLByAppendingPathExtension:@"mov"];
+    [recorder startRecordingWithOutputUrl:outputURL];
+    recorderTime = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                    target:self
+                                                  selector:@selector(incrementTime)
+                                                  userInfo:nil
+                                                   repeats:YES];
+    recorderTimeInt = 0;
+    [UIView animateWithDuration:0.3 animations:^(){
+        [References cornerRadius:recordButton radius:16.0];
+        [References borderColor:recordButton color:[UIColor whiteColor]];
+    }];
+    isRecording = TRUE;
+    [References fadeButtonColor:recordButton color:[[UIColor whiteColor] colorWithAlphaComponent:0.6f]];
+}
+
 
 - (IBAction)toggleRecording:(id)sender {
     if (isRecording == FALSE) {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        NSURL *documentsURL = [NSURL fileURLWithPath:documentsDirectory];
-        outputURL = [[documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%@",jobName.text]] URLByAppendingPathExtension:@"mov"];
-        [recorder startRecordingWithOutputUrl:outputURL];
-        recorderTime = [NSTimer scheduledTimerWithTimeInterval:1.0
-                                                            target:self
-                                                          selector:@selector(incrementTime)
-                                                          userInfo:nil
-                                                           repeats:YES];
-        recorderTimeInt = 0;
-        [UIView animateWithDuration:0.3 animations:^(){
-            [References cornerRadius:recordButton radius:4.0];
-            [References borderColor:recordButton color:[UIColor grayColor]];
-        }];
         [barcode becomeFirstResponder];
-        isRecording = TRUE;
-        [References fadeButtonColor:recordButton color:[UIColor whiteColor]];
     } else {
+        [completeProgress setProgress:0];
+        cancel.hidden = YES;
+        destructionButton.hidden = YES;
+        completeTitle.text = @"Saving Destruction";
+        [destructionButton setTitle:@"Complete Destruction" forState:UIControlStateNormal];
+        [completeSubtitle setText:@""];
+        [References moveUp:signatureView yChange:34];
+        [References moveUp:cancel yChange:34];
+        [References moveUp:destructionButton yChange:34];
+        [References moveUp:signatureCard yChange:34];
+        signatureSub.hidden = YES;
+        [signatureView setUserInteractionEnabled:NO];
         [recorder stopRecording:^(LLSimpleCamera *camera, NSURL *outputURLVideo, NSError *error){
             [self uploadFile:outputURLVideo withName:[NSString stringWithFormat:@"%@.mov",jobName.text]];
-            clientCodeText = [[References randomStringWithLength:5] uppercaseString];
-            clientCode.text = clientCodeText;
+            clientCode.text = [_jobRecord valueForKey:@"code"];
             isRecording = FALSE;
             [recorderTime invalidate];
             completeView.alpha = 0;
             completeView.hidden = NO;
             
-            [References fadeButtonColor:recordButton color:[References colorFromHexString:@"#EE2B2A"]];
+            [References fadeButtonColor:recordButton color:[[References colorFromHexString:@"#EE2B2A"] colorWithAlphaComponent:0.6f]];
             [UIView animateWithDuration:0.3 animations:^(){
                 [References borderColor:recordButton color:[UIColor whiteColor]];
                 completeView.alpha = 1;
@@ -181,7 +246,7 @@
             [self saveScanData:metadata.downloadURL];
         }
     }];
-    FIRStorageHandle observer = [uploadTask observeStatus:FIRStorageTaskStatusProgress
+    [uploadTask observeStatus:FIRStorageTaskStatusProgress
                                                   handler:^(FIRStorageTaskSnapshot *snapshot) {
                                                       [completeProgress setProgress:snapshot.progress.fractionCompleted animated:YES];
                                                       if (snapshot.progress.fractionCompleted == 1) {
@@ -202,15 +267,20 @@
         [driveSerials addObject:drive.serial];
         [driveTimes addObject:drive.time];
     }
-    [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:newJobRecord completionHandler:^(CKRecord *record, NSError *error) {
+    [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:[[CKRecordID alloc]initWithRecordName:[_jobRecord valueForKey:@"code"]] completionHandler:^(CKRecord *record, NSError *error) {
         
         if (error) {
             return;
         }
+        record[@"signatueURL"] = signatureURL.absoluteString;
+        record[@"signatureData"] = signatureData;
         record[@"videoURL"] = downloadURL.absoluteString;
         record[@"driveSerials"] = driveSerials;
         record[@"driveTimes"] = driveTimes;
         record[@"dateCompleted"] = [NSDate date];
+        NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"EEEE, MMMM d"];
+        record[@"jobDate"] = [formatter stringFromDate:[NSDate date]];
         [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
             if (error) {
                 NSLog(@"%@",error.localizedDescription);
@@ -236,51 +306,56 @@
     return YES;
 }
 
--(void)getRecord{
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"code = '%@'",[_jobRecord valueForKey:@"code"]]];
-    CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
-    
-    [[CKContainer defaultContainer].publicCloudDatabase performQuery:query
-                                                        inZoneWithID:nil
-                                                   completionHandler:^(NSArray *results, NSError *error) {
-                                                       if (results.count > 0) {
-                                                           CKRecord *rec = results[0];
-                                                           newJobRecord = rec.recordID;
+- (IBAction)confirmDestruction:(id)sender {
+    if (beforeRecording == true) {
+        [References fadeLabelText:completeTitle newText:@"Preparing..."];
+        UIGraphicsBeginImageContext(signatureView.bounds.size);
+        [[signatureView.layer presentationLayer] renderInContext:UIGraphicsGetCurrentContext()];
+        signatureImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        signatureData = UIImageJPEGRepresentation(signatureImage, 1.0);
+        FIRStorage *storage = [FIRStorage storage];
+        FIRStorageReference *storageRef = [storage reference];
+        // Create a reference to the file you want to upload
+        FIRStorageMetadata *metadata = [[FIRStorageMetadata alloc] init];
+        metadata.contentType = @"image/jpeg";
+        // Create a reference to the file you want to upload
+        FIRStorageReference *riversRef = [storageRef child:[NSString stringWithFormat:@"images/%@.jpg",[References randomStringWithLength:16]]];
+        
+        // Upload the file to the path "images/rivers.jpg"
+        FIRStorageUploadTask *uploadTask = [riversRef putData:signatureData
+                                                     metadata:metadata
+                                                   completion:^(FIRStorageMetadata *metadata,
+                                                                NSError *error) {
+                                                       if (error != nil) {
+                                                           // Uh-oh, an error occurred!
                                                        } else {
-                                                           NSLog(@"error");
+                                                           // Metadata contains file metadata such as size, content-type, and download URL.
+                                                           signatureURL = metadata.downloadURL;
                                                        }
                                                    }];
-}
-- (IBAction)confirmDestruction:(id)sender {
-    [References fadeLabelText:completeTitle newText:@"Finishing Up..."];
-    UIGraphicsBeginImageContext(signatureView.bounds.size);
-    [[signatureView.layer presentationLayer] renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    NSData *postData = UIImageJPEGRepresentation(viewImage, 1.0);
-    [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:newJobRecord completionHandler:^(CKRecord *record, NSError *error) {
-        
-        if (error) {
-            return;
-        }
-        record[@"signatureData"] = postData;
-        [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
-            if (error) {
-                NSLog(@"%@",error.localizedDescription);
-            } else {
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        [References fadeLabelText:completeTitle newText:@"All Done"];
-                        double delayInSeconds = 1.0;
-                        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                            
-                            [self dismissViewControllerAnimated:YES completion:nil];
-                        });
-                        // Update the UI on the main thread.
-                    });
-            }
-        }];
-    }];
+        [uploadTask observeStatus:FIRStorageTaskStatusProgress
+                                                      handler:^(FIRStorageTaskSnapshot *snapshot) {
+                                                          NSLog(@"%f",snapshot.progress.fractionCompleted);
+                                                          [completeProgress setProgress:snapshot.progress.fractionCompleted animated:YES];
+                                                          if (snapshot.progress.fractionCompleted > 0.50) {
+                                                              [References fadeLabelText:completeTitle newText:@"Ready"];
+                                                              dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                                                  //Here your non-main thread.
+                                                                  [NSThread sleepForTimeInterval:1.0f];
+                                                                  dispatch_async(dispatch_get_main_queue(), ^{
+                                                                      //Here you returns to main thread.
+                                                                      [References fadeOut:completeView];
+                                                                      beforeRecording = false;
+                                                                      
+                                                                  });
+                                                              });
+                                                          }
+                                                      }];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+   
 
 }
 

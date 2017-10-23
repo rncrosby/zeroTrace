@@ -15,6 +15,9 @@
 @implementation homeView
 
 - (void)viewDidLoad {
+    [createJobs setBackgroundColor:[UIColor clearColor]];
+    [recentJobs setBackgroundColor:[UIColor clearColor]];
+    [upcomingJobs setBackgroundColor:[UIColor clearColor]];
     [References blurView:menuBar];
     [References createLine:self.view xPos:0 yPos:menuBar.frame.size.height inFront:YES];
     scrollView.contentSize = CGSizeMake([References screenWidth], recentJobs.frame.origin.y+recentJobs.frame.size.height+16);
@@ -66,6 +69,12 @@
     // Do any additional setup after loading the view.
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+    if ([References screenWidth] > 1024) {
+        [References toastMessage:@"ZER0trace is not optimized for this iPad. Please use a 9.7\" device." andView:self andClose:NO];
+    }
+}
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if (collectionView.tag == 1) {
         // upcoming
@@ -78,6 +87,10 @@
         return 3;
     }
    
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 
@@ -173,7 +186,9 @@
             [self presentViewController:alertController animated:YES completion:nil];
         }
         if (indexPath.row == 2) {
-            [self newJob];
+                [self newJob:@"Client Code"];
+                // Update the UI on the main thread.
+            
         }
     }
 }
@@ -206,7 +221,7 @@
                                                            
                                                        } else {
                                                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                                               [References toastMessage:@"Error" andView:self andClose:NO];
+                                                               [References toastMessage:@"Job Not Found" andView:self andClose:NO];
                                                                // Update the UI on the main thread.
                                                            });
                                                            
@@ -214,8 +229,8 @@
                                                    }];
 }
 
--(void)newJob {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Client Name" message:nil preferredStyle:UIAlertControllerStyleAlert];
+-(void)newJob:(NSString *)title{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:@"Enter the clients code" preferredStyle:UIAlertControllerStyleAlert];
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         textField.placeholder = @"Client Code";
         textField.keyboardType = UIKeyboardTypeNumberPad;
@@ -223,12 +238,15 @@
     }];
     UIAlertAction *create = [UIAlertAction actionWithTitle:@"Create" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *code = [References randomIntWithLength:5];
+        
         NSString *clientCode = [[alertController textFields][0] text];
         NSString __block *clientName = @"";
         CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:clientCode];
         [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:recordID completionHandler:^(CKRecord *record, NSError *error) {
-            
             if (error) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                [self newJob:@"No Client Found"];
+                });
                 return;
             }
             clientName = [record valueForKey:@"clientName"];
@@ -269,6 +287,10 @@
     [alertController addAction:create];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
     }];
+    UIAlertAction *searchAction = [UIAlertAction actionWithTitle:@"See List of Codes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [References toastMessage:@"Coming Soon" andView:self andClose:NO];
+    }];
+    [alertController addAction:searchAction];
     [alertController addAction:cancelAction];
     [self presentViewController:alertController animated:YES completion:nil];
 }
@@ -309,8 +331,21 @@
     [[CKContainer defaultContainer].publicCloudDatabase performQuery:query
                                                         inZoneWithID:nil
                                                    completionHandler:^(NSArray *results, NSError *error) {
+                                                       if (error) {
+                                                           UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable To Connect" message:@"This is usually caused by not being signed in to iCloud" preferredStyle:UIAlertControllerStyleAlert];
+                                                           UIAlertAction *settings = [UIAlertAction actionWithTitle:@"Open Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                                                               
+                                                               [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"App-prefs:"]];
+                                                           }];
+                                                           UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action){
+                                                               
+                                                           }];
+                                                           [alert addAction:settings];
+                                                           [alert addAction:cancel];
+                                                           [self presentViewController:alert animated:YES completion:nil];
+                                                       }
                                                        if (results.count > 0) {
-                                                           NSLog(@"%i",results.count);
+                                                           
                                                            for (int a = 0; a < results.count; a++) {
                                                                CKRecord *record = results[a];
                                                                if ([record valueForKey:@"videoURL"]) {
@@ -343,16 +378,21 @@
 
 -(void)setVisibility {
     if (nextJobs.count < 1) {
+        [References fadeIn:noUpcomingJobs];
         [References fadeLabelText:noUpcomingJobs newText:@"No Upcoming Jobs"];
     } else {
         [References fadeOut:noUpcomingJobs];
         [References fadeIn:upcomingJobs];
     }
     if (completedJobs.count < 1) {
+        [References fadeIn:noPastJobs];
         [References fadeLabelText:noPastJobs newText:@"No Recent Jobs"];
     } else {
         [References fadeOut:noPastJobs];
         [References fadeIn:recentJobs];
     }
+}
+- (IBAction)refreshButton:(id)sender {
+    [self getUpcoming];
 }
 @end

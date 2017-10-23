@@ -1,0 +1,52 @@
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+  <script type="text/javascript" src="cloud.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <title>ZER0trace Client Portal</title>
+</head>
+<body>
+  <div class="navBar" id="navBar">
+    <center><a href="index.html"><img src="logo.png" alt="Company" style="margin-top:110px;padding-bottom:25px;"></a><br>
+      <p class="footerText" style="color:#212121;">Have a code?</p>
+
+      <form onsubmit="return validateForm(this);">
+        <input type="text" name="code" autocomplete="off" placeholder="Code" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Code'"><br>
+    <input type="submit" value="Continue"></form>
+    <div id="line"></div>
+      <p class="footerText" style="color:#212121;">Returning Customer?</p>
+
+      <form onsubmit="return validateFormSignIn(this);">
+        <input type="text" name="username" autocomplete="off" placeholder="Username" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Username'"><br>
+    <input type="password" name="code" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Password'" autocomplete="off" placeholder="Password" i><br>
+    <input type="submit" value="Continue"></form>
+    <div id="line"></div>
+    <p class="footerText" style="color:#212121;">New Here?</p>
+    <form onsubmit="return validateFormSignUp(this);">
+      <input type="text" name="username" autocomplete="off" placeholder="Username" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Username'"><br>
+      <input type="text" name="phone" autocomplete="off" placeholder="Phone" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Phone'"><br>
+      <input type="text" name="email" autocomplete="off" placeholder="Email" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Email'"><br>
+      <input type="password" name="passwordA" autocomplete="off" placeholder="Password" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Password'"><br>
+  <input type="password" name="passwordB" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Re-enter Password'" autocomplete="off" placeholder="Re-enter Password" i><br>
+  <input type="submit" value="Register"></form>
+    </center>
+<div class="navBarFooter"><a href="#"><p class="footerText">ZER0trace LLC</p></a></div>
+  </div>
+  <div class="client" style="margin-left:25%;">
+    <p id="navLinks"><a class="navLinks" href="ewaste.html">E-WASTE RECYCLING</a>&nbsp&nbsp&nbsp<a class="navLinks-current"  href="">DATA DESTRUCTION</a>&nbsp&nbsp&nbsp<a class="navLinks"  href="#">CERTIFICATION</a>&nbsp&nbsp&nbsp<a class="navLinks"  href="#">MOBILE</a>
+      <img src="data.jpeg" style="width:97%;height:auto;"/>
+            <!-- <div id="line" style="background-color:#212121;width:97%;"></div> -->
+            <!-- <br>
+
+      <p class="heading">Secure Logistics</p><br><br>
+      <p class="subtext">Strict guidelines for packaging, collection and transport of your assets ensure a secure chain of custody.<br>Multiple security options are available to meet specific client requirements.</p>
+      <div id="line" style="width:97%;"></div><br>
+      <p class="heading">Technology Processing</p><br><br>
+      <p class="subtext">We receive, audit and securely process retired assets, customer returns, and defective goods in our state-of the-art processing facilities.<br>Services include intelligent repair, testing and software installation based on current market drivers to maximize ultimate re-marketing value.</p>
+      <div id="line" style="width:97%;"></div><br>
+      <p class="heading">Reutilization and Maximized Recovery Value</p><br><br>
+      <p class="subtext">Extend the productivity and useful life of technology through redeployment, remarketing, employee sale and charitable donation programs.<br>Re-marketing expertise across multiple technologies and platforms, deployed across multiple geographies, ensures highest velocity and financial return related to the resale of equipment on secondary markets</p> -->
+
+  </div>
+</body>
+</html>

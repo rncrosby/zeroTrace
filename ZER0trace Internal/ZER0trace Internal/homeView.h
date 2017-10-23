@@ -14,6 +14,7 @@
 #import "References.h"
 #import "recorderView.h"
 #import "jobObject.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface homeView : UIViewController <QRCodeReaderDelegate,UITextFieldDelegate,UICollectionViewDelegate,UICollectionViewDataSource> {
     QRCodeReaderViewController *vc;
@@ -26,10 +27,12 @@
     __weak IBOutlet UILabel *noUpcomingJobs;
     __weak IBOutlet UILabel *noPastJobs;
     
-    
-    
-    
-    
-    
 }
+
+
+
+- (IBAction)refreshButton:(id)sender;
+
+
+
 @end

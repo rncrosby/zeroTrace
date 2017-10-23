@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		AB9547A1AF4A6E553AB4829D /* libPods-ZER0trace Internal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32AEB1BC68F645F14213C830 /* libPods-ZER0trace Internal.a */; };
+		AD176F261F9D6C71003119CD /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = AD176F251F9D6B36003119CD /* refresh.png */; };
+		AD176F291F9D900C003119CD /* refresh-light.png in Resources */ = {isa = PBXBuildFile; fileRef = AD176F281F9D8FF7003119CD /* refresh-light.png */; };
 		AD3807331F8C034B007BB8DF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3807321F8C034B007BB8DF /* AppDelegate.m */; };
 		AD3807361F8C034B007BB8DF /* recorderView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3807351F8C034B007BB8DF /* recorderView.m */; };
 		AD3807391F8C034B007BB8DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD3807371F8C034B007BB8DF /* Main.storyboard */; };
@@ -38,6 +40,9 @@
 		32AEB1BC68F645F14213C830 /* libPods-ZER0trace Internal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZER0trace Internal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8490910D84911839F5B0373B /* Pods-ZER0trace Internal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZER0trace Internal.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZER0trace Internal/Pods-ZER0trace Internal.release.xcconfig"; sourceTree = "<group>"; };
 		8FC8E944BE8F38F09F335EA7 /* Pods-ZER0trace Internal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZER0trace Internal.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZER0trace Internal/Pods-ZER0trace Internal.debug.xcconfig"; sourceTree = "<group>"; };
+		AD176F251F9D6B36003119CD /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
+		AD176F271F9D7694003119CD /* AppIcon.appiconset */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppIcon.appiconset; sourceTree = "<group>"; };
+		AD176F281F9D8FF7003119CD /* refresh-light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh-light.png"; sourceTree = "<group>"; };
 		AD38072E1F8C034B007BB8DF /* ZER0trace Internal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ZER0trace Internal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD3807311F8C034B007BB8DF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		AD3807321F8C034B007BB8DF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -168,6 +173,9 @@
 		ADB4DC971F95572300245CCA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				AD176F271F9D7694003119CD /* AppIcon.appiconset */,
+				AD176F251F9D6B36003119CD /* refresh.png */,
+				AD176F281F9D8FF7003119CD /* refresh-light.png */,
 				ADB4DC901F954D6D00245CCA /* code.png */,
 				ADB4DC8F1F954D6D00245CCA /* plus.png */,
 				ADB4DC911F954D6E00245CCA /* text.png */,
@@ -245,6 +253,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD176F291F9D900C003119CD /* refresh-light.png in Resources */,
+				AD176F261F9D6C71003119CD /* refresh.png in Resources */,
 				ADB4DC961F9551A200245CCA /* light.png in Resources */,
 				ADB4DC921F954D7500245CCA /* code.png in Resources */,
 				ADB4DC931F954D7500245CCA /* plus.png in Resources */,

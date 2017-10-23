@@ -16,6 +16,7 @@
 
 
 @interface recorderView : UIViewController <UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate> {
+    bool beforeRecording;
     CKRecordID *newJobRecord;
     int saveProgress;
     NSMutableArray *scannedDrives;
@@ -29,21 +30,29 @@
     __weak IBOutlet UILabel *drivesScanned;
     __weak IBOutlet UIButton *simulateScan;
     __weak IBOutlet UILabel *timeLabel;
+    __weak IBOutlet UILabel *drivesCollectionBlur;
     __weak IBOutlet UICollectionView *drivesCollectionView;
     __weak IBOutlet UILabel *jobName;
     
     __weak IBOutlet UIScrollView *completeView;
     __weak IBOutlet UILabel *completeTitle;
+    __weak IBOutlet UILabel *completeSubtitle;
     __weak IBOutlet UIProgressView *completeProgress;
     __weak IBOutlet UILabel *signatureCard;
     __weak IBOutlet UILabel *clientCode;
-    NSString *clientCodeText;
+    __weak IBOutlet UILabel *signatureSub;
     __weak IBOutlet UIButton *confirmDestructionButton;
     __weak IBOutlet UIButton *cancel;
     __weak IBOutlet SignatureDrawView *signatureView;
-    
+    NSData *signatureData;
+    UIImage *signatureImage;
+    NSURL *signatureURL;
+    __weak IBOutlet UIButton *destructionButton;
+    __weak IBOutlet UILabel *statusBar;
 }
 - (IBAction)toggleRecording:(id)sender;
+
+
 - (IBAction)simulateScan:(id)sender;
 @property (nonatomic, assign) CKRecord *jobRecord;
 @property (nonatomic, assign) NSString *recordID;
