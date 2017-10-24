@@ -34,6 +34,7 @@
 		ADB4DC9F1F95797900245CCA /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB4DC9E1F95797900245CCA /* AVKit.framework */; };
 		ADB4DCA11F95798C00245CCA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB4DCA01F95798C00245CCA /* AVFoundation.framework */; };
 		ADC51BFA1F8C3C6C002DC9D6 /* homeView.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC51BF91F8C3C6C002DC9D6 /* homeView.m */; };
+		ADCFD2601F9EBD6900215AC9 /* manualJobViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCFD25F1F9EBD6900215AC9 /* manualJobViewViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +79,8 @@
 		ADB4DCA01F95798C00245CCA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		ADC51BF81F8C3C6C002DC9D6 /* homeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = homeView.h; sourceTree = "<group>"; };
 		ADC51BF91F8C3C6C002DC9D6 /* homeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = homeView.m; sourceTree = "<group>"; };
+		ADCFD25E1F9EBD6900215AC9 /* manualJobViewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = manualJobViewViewController.h; sourceTree = "<group>"; };
+		ADCFD25F1F9EBD6900215AC9 /* manualJobViewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = manualJobViewViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +169,8 @@
 				ADB4DC9C1F95766D00245CCA /* pastJobView.m */,
 				ADA3BDEA1F969BFF00B34AB2 /* SignatureDrawView.h */,
 				ADA3BDEB1F969BFF00B34AB2 /* SignatureDrawView.m */,
+				ADCFD25E1F9EBD6900215AC9 /* manualJobViewViewController.h */,
+				ADCFD25F1F9EBD6900215AC9 /* manualJobViewViewController.m */,
 			);
 			path = "ZER0trace Internal";
 			sourceTree = "<group>";
@@ -330,6 +335,7 @@
 				AD4099F41F8C0ED300AB03EC /* References.m in Sources */,
 				ADA3BDEC1F969BFF00B34AB2 /* SignatureDrawView.m in Sources */,
 				ADB4DC9A1F95574800245CCA /* jobObject.m in Sources */,
+				ADCFD2601F9EBD6900215AC9 /* manualJobViewViewController.m in Sources */,
 				AD3807411F8C034B007BB8DF /* main.m in Sources */,
 				AD3807331F8C034B007BB8DF /* AppDelegate.m in Sources */,
 				ADB4DC9D1F95766D00245CCA /* pastJobView.m in Sources */,

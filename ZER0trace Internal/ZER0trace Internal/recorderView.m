@@ -22,6 +22,7 @@
     [References blurView:drivesCollectionBlur];
     [References cornerRadius:drivesCollectionBlur radius:16.0f];
     clientCode.text = [_jobRecord valueForKey:@"code"];
+    code = [_jobRecord valueForKey:@"code"];
     beforeRecording = true;
     completeView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]);
     [References fadeIn:completeView];

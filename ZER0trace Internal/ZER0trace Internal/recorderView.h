@@ -33,7 +33,7 @@
     __weak IBOutlet UILabel *drivesCollectionBlur;
     __weak IBOutlet UICollectionView *drivesCollectionView;
     __weak IBOutlet UILabel *jobName;
-    
+    NSString *code;
     __weak IBOutlet UIScrollView *completeView;
     __weak IBOutlet UILabel *completeTitle;
     __weak IBOutlet UILabel *completeSubtitle;

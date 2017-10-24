@@ -15,6 +15,7 @@
 #import "recorderView.h"
 #import "jobObject.h"
 #import <QuartzCore/QuartzCore.h>
+#import "manualJobViewViewController.h"
 
 @interface homeView : UIViewController <QRCodeReaderDelegate,UITextFieldDelegate,UICollectionViewDelegate,UICollectionViewDataSource> {
     QRCodeReaderViewController *vc;
@@ -26,6 +27,7 @@
     __weak IBOutlet UIScrollView *scrollView;
     __weak IBOutlet UILabel *noUpcomingJobs;
     __weak IBOutlet UILabel *noPastJobs;
+    __weak IBOutlet UITextField *scannerCheck;
     
 }
 

@@ -65,7 +65,13 @@
         }];
     }];
     [self getUpcoming];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getUpcoming) name:@"refreshJobs" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    scannerCheck.inputView.alpha = 0;
+    [scannerCheck becomeFirstResponder];
     // Do any additional setup after loading the view.
 }
 
@@ -73,6 +79,21 @@
     if ([References screenWidth] > 1024) {
         [References toastMessage:@"ZER0trace is not optimized for this iPad. Please use a 9.7\" device." andView:self andClose:NO];
     }
+}
+
+- (void) keyboardWillShow:(NSNotification *)notification
+{
+    NSDictionary* userInfo = [notification userInfo];
+    CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboard = [self.view convertRect:keyboardFrame fromView:self.view.window];
+    NSLog(@"%f",keyboard.size.height);
+    if (keyboard.size.height > 100) {
+        
+        [scannerCheck setText:@"No Scanner Found"];
+    } else {
+        [scannerCheck setText:@"Scanner Connected"];
+    }
+    [scannerCheck resignFirstResponder];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -170,23 +191,28 @@
             [self presentViewController:vc animated:YES completion:nil];
         }
         if (indexPath.row == 1) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Enter Code" message:@"Code is 5 characters long" preferredStyle:UIAlertControllerStyleAlert];
-            [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-                textField.placeholder = @"00000";
-                textField.textAlignment = NSTextAlignmentCenter;
-            }];
-            UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Next" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self manualCode:[[alertController textFields][0] text]];
-            }];
-            [alertController addAction:confirmAction];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            [alertController addAction:cancelAction];
-            [self presentViewController:alertController animated:YES completion:nil];
+            [References toastMessage:@"Not Activated" andView:self andClose:NO];
+//            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Enter Code" message:@"Code is 5 characters long" preferredStyle:UIAlertControllerStyleAlert];
+//            [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+//                textField.placeholder = @"00000";
+//                textField.textAlignment = NSTextAlignmentCenter;
+//            }];
+//            UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Next" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                [self manualCode:[[alertController textFields][0] text]];
+//            }];
+//            [alertController addAction:confirmAction];
+//            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//
+//            }];
+//            [alertController addAction:cancelAction];
+//            [self presentViewController:alertController animated:YES completion:nil];
         }
         if (indexPath.row == 2) {
-                [self newJob:@"Client Code"];
+            UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+            manualJobViewViewController *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"manualJobViewViewController"];
+            controller.modalPresentationStyle = UIModalPresentationFormSheet;
+            //menu is only an example
+            [self presentViewController:controller animated:YES completion:nil];
                 // Update the UI on the main thread.
             
         }
@@ -328,11 +354,12 @@
     completedJobsRecord = [[NSMutableArray alloc] init];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"TRUEPREDICATE"]];
     CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
+    //query.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc]initWithKey:@"creationDate" ascending:true]];
     [[CKContainer defaultContainer].publicCloudDatabase performQuery:query
                                                         inZoneWithID:nil
                                                    completionHandler:^(NSArray *results, NSError *error) {
                                                        if (error) {
-                                                           UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable To Connect" message:@"This is usually caused by not being signed in to iCloud" preferredStyle:UIAlertControllerStyleAlert];
+                                                           UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable To Connect" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
                                                            UIAlertAction *settings = [UIAlertAction actionWithTitle:@"Open Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
                                                                
                                                                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"App-prefs:"]];
@@ -395,4 +422,6 @@
 - (IBAction)refreshButton:(id)sender {
     [self getUpcoming];
 }
+
+
 @end
