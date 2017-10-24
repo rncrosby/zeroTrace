@@ -33,6 +33,7 @@
 		ADB4DC9D1F95766D00245CCA /* pastJobView.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB4DC9C1F95766D00245CCA /* pastJobView.m */; };
 		ADB4DC9F1F95797900245CCA /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB4DC9E1F95797900245CCA /* AVKit.framework */; };
 		ADB4DCA11F95798C00245CCA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADB4DCA01F95798C00245CCA /* AVFoundation.framework */; };
+		ADB6F7C41F9F1938001A499C /* backspace.png in Resources */ = {isa = PBXBuildFile; fileRef = ADB6F7C31F9F1937001A499C /* backspace.png */; };
 		ADC51BFA1F8C3C6C002DC9D6 /* homeView.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC51BF91F8C3C6C002DC9D6 /* homeView.m */; };
 		ADCFD2601F9EBD6900215AC9 /* manualJobViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCFD25F1F9EBD6900215AC9 /* manualJobViewViewController.m */; };
 /* End PBXBuildFile section */
@@ -77,6 +78,7 @@
 		ADB4DC9C1F95766D00245CCA /* pastJobView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = pastJobView.m; sourceTree = "<group>"; };
 		ADB4DC9E1F95797900245CCA /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		ADB4DCA01F95798C00245CCA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		ADB6F7C31F9F1937001A499C /* backspace.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backspace.png; sourceTree = "<group>"; };
 		ADC51BF81F8C3C6C002DC9D6 /* homeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = homeView.h; sourceTree = "<group>"; };
 		ADC51BF91F8C3C6C002DC9D6 /* homeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = homeView.m; sourceTree = "<group>"; };
 		ADCFD25E1F9EBD6900215AC9 /* manualJobViewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = manualJobViewViewController.h; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 		ADB4DC971F95572300245CCA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				ADB6F7C31F9F1937001A499C /* backspace.png */,
 				AD176F271F9D7694003119CD /* AppIcon.appiconset */,
 				AD176F251F9D6B36003119CD /* refresh.png */,
 				AD176F281F9D8FF7003119CD /* refresh-light.png */,
@@ -263,6 +266,7 @@
 				ADB4DC961F9551A200245CCA /* light.png in Resources */,
 				ADB4DC921F954D7500245CCA /* code.png in Resources */,
 				ADB4DC931F954D7500245CCA /* plus.png in Resources */,
+				ADB6F7C41F9F1938001A499C /* backspace.png in Resources */,
 				ADB4DC941F954D7500245CCA /* text.png in Resources */,
 				AD79BDA41F8C3BB30025CD6B /* dark.png in Resources */,
 				AD4099ED1F8C0BBB00AB03EC /* GoogleService-Info.plist in Resources */,

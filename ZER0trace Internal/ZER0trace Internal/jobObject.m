@@ -10,10 +10,11 @@
 
 @implementation jobObject
 
--(instancetype)initWithType:(NSString*)client andCode:(NSString*)code andURL:(NSString*)videoURL andDate:(NSDate*)date andSerials:(NSArray*)serials andTimes:(NSArray*)times andSignature:(NSData*)signature{
+-(instancetype)initWithType:(NSString*)client andClientCode:(NSString*)clientCode andCode:(NSString*)code andURL:(NSString*)videoURL andDate:(NSDate*)date andSerials:(NSArray*)serials andTimes:(NSArray*)times andSignature:(NSData*)signature{
     self = [super init];
     if(self)
     {
+        self.clientCode = clientCode;
         self.client = client;
         self.code = code;
         self.videoURL = videoURL;

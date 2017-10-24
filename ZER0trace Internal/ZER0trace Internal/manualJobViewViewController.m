@@ -17,6 +17,8 @@
 @synthesize delegate;
 
 - (void)viewDidLoad {
+    [References tintUIButton:backspace color:[UIColor darkTextColor]];
+    [References cornerRadius:clientList radius:7.0];
     code = @"";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -40,11 +42,6 @@
     if ([code length] > 0) {
         code = [code substringToIndex:[code length] - 1];
         codeView.text = code;
-        if (code.length == 0) {
-            codeView.text = @"-----";
-        }
-    } else {
-        codeView.text = @"-----";
     }
 }
 
@@ -77,6 +74,7 @@
                     CKRecord *newJobRecord = [[CKRecord alloc] initWithRecordType:@"Job" recordID:[[CKRecordID alloc] initWithRecordName:newCode]];
                     newJobRecord[@"client"] = clientName;
                     newJobRecord[@"code"] = newCode;
+                    newJobRecord[@"clientCode"] = code;
                     [[CKContainer defaultContainer].publicCloudDatabase saveRecord:newJobRecord completionHandler:^(CKRecord *record, NSError *error) {
                         if (!error) {
                             dispatch_sync(dispatch_get_main_queue(), ^{
@@ -100,5 +98,9 @@
 
 - (IBAction)cancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)clientList:(id)sender {
+    [References toastMessage:@"Not Activated" andView:self andClose:NO];
 }
 @end

@@ -19,6 +19,7 @@
     statusBar.backgroundColor = [UIColor clearColor];
     [References blurView:statusBar];
     [References cornerRadius:statusBar radius:24.0f];
+    [References blurView:statusBarReal];
     [References blurView:drivesCollectionBlur];
     [References cornerRadius:drivesCollectionBlur radius:16.0f];
     clientCode.text = [_jobRecord valueForKey:@"code"];
@@ -47,10 +48,6 @@
                                                  name:UIKeyboardDidShowNotification
                                                object:nil];
     
-}
-
--(BOOL)prefersStatusBarHidden {
-    return YES;
 }
 
 - (void) keyboardWillShow:(NSNotification *)notification
@@ -209,6 +206,16 @@
     UILabel *time = (UILabel *)[cell viewWithTag:2];
     serial.text = drive.serial;
     time.text = [self timeFormatted:drive.time.intValue];
+    if (scannedDrives.count > 1) {
+        if (indexPath.row == 0 || indexPath.row == scannedDrives.count-2) {
+            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(cell.frame.size.width-1, 8, 1, cell.frame.size.height-16)];
+            [view setBackgroundColor:[UIColor whiteColor]];
+            view.alpha = 0.5f;
+            [cell addSubview:view];
+            [cell bringSubviewToFront:view];
+        }
+    }
+    
     return cell;
 }
 
@@ -354,7 +361,9 @@
                                                           }
                                                       }];
     } else {
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self dismissViewControllerAnimated:YES completion:^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshJobs" object:nil userInfo:nil];
+        }];
     }
    
 

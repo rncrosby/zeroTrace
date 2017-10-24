@@ -15,6 +15,7 @@
 @implementation homeView
 
 - (void)viewDidLoad {
+    
     [createJobs setBackgroundColor:[UIColor clearColor]];
     [recentJobs setBackgroundColor:[UIColor clearColor]];
     [upcomingJobs setBackgroundColor:[UIColor clearColor]];
@@ -64,15 +65,35 @@
                                                            }];
         }];
     }];
-    [self getUpcoming];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getUpcoming) name:@"refreshJobs" object:nil];
+    [self getUpcoming:NO];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createdNewJob) name:@"refreshJobs" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardDidShowNotification
                                                object:nil];
-    scannerCheck.inputView.alpha = 0;
-    [scannerCheck becomeFirstResponder];
+    [References createLine:self.view xPos:0 yPos:menuBar.frame.size.height inFront:YES];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        alert = [UIAlertController alertControllerWithTitle:@"Connecting"
+                                                    message:@"Looking for Scanner..."
+                                             preferredStyle:UIAlertControllerStyleAlert];
+        [self presentViewController:alert animated:YES completion:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [scannerCheck becomeFirstResponder];
+        });
+    });
+    
     // Do any additional setup after loading the view.
+}
+
+-(void)createdNewJob {
+    refreshingJobs = [UIAlertController alertControllerWithTitle:@"Publishing New Job"
+                                                message:@"One Second..."
+                                         preferredStyle:UIAlertControllerStyleAlert];
+    [self presentViewController:refreshingJobs animated:YES completion:nil];
+    [self setVisibility];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [self getUpcoming:YES];
+    });
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -83,17 +104,21 @@
 
 - (void) keyboardWillShow:(NSNotification *)notification
 {
+    
     NSDictionary* userInfo = [notification userInfo];
     CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboard = [self.view convertRect:keyboardFrame fromView:self.view.window];
     NSLog(@"%f",keyboard.size.height);
     if (keyboard.size.height > 100) {
-        
-        [scannerCheck setText:@"No Scanner Found"];
+        [checkScannerButton setTitle:@"No Scanner Found" forState:UIControlStateNormal];
     } else {
-        [scannerCheck setText:@"Scanner Connected"];
+         [checkScannerButton setTitle:@"Scanner Connected" forState:UIControlStateNormal];
     }
+    
     [scannerCheck resignFirstResponder];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    });
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -124,9 +149,17 @@
         jobObject *job = nextJobs[indexPath.row];
         UILabel *client = (UILabel *)[cell viewWithTag:2];
         UILabel *code = (UILabel *)[cell viewWithTag:3];
+        UIButton *deleteJob = (UIButton*)[cell viewWithTag:11];
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:deleteJob.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(24.0, 24.0)];
+        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+        maskLayer.frame = self.view.bounds;
+        maskLayer.path  = maskPath.CGPath;
+        deleteJob.layer.mask = maskLayer;
         client.text = job.client;
         code.text = job.code;
         [References cornerRadius:card radius:24.0f];
+        deleteJob.tag = (int)indexPath.row;
+        [deleteJob addTarget:self action:@selector(handleDeleteButton:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
     } else if (collectionView.tag == 2){
         // past
@@ -294,7 +327,7 @@
                     [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
                         if (!error) {
                             dispatch_sync(dispatch_get_main_queue(), ^{
-                                [nextJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andCode:[record valueForKey:@"code"] andURL:nil andDate:nil andSerials:nil andTimes:nil andSignature:nil]];
+                                [nextJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andClientCode:[record valueForKey:@"clientCode"] andCode:[record valueForKey:@"code"] andURL:nil andDate:nil andSerials:nil andTimes:nil andSignature:nil]];
                                 [nextJobRecords addObject:record];
                                 [upcomingJobs reloadData];
                                 [self setVisibility];
@@ -333,7 +366,7 @@
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
--(void)getUpcoming {
+-(void)getUpcoming:(BOOL)isNewJob{
     [nextJobs removeAllObjects];
     [completedJobs removeAllObjects];
     [nextJobRecords removeAllObjects];
@@ -354,7 +387,7 @@
     completedJobsRecord = [[NSMutableArray alloc] init];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"TRUEPREDICATE"]];
     CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
-    //query.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc]initWithKey:@"creationDate" ascending:true]];
+    query.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc]initWithKey:@"creationDate" ascending:false]];
     [[CKContainer defaultContainer].publicCloudDatabase performQuery:query
                                                         inZoneWithID:nil
                                                    completionHandler:^(NSArray *results, NSError *error) {
@@ -379,10 +412,10 @@
                                                                    NSArray *driveTimes = [record objectForKey:@"driveTimes"];
                                                                    NSArray *driveSerials = [record objectForKey:@"driveSerials"];
                                                                    NSData *signature = [record objectForKey:@"signatureData"];
-                                                                   [completedJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andCode:[record valueForKey:@"code"] andURL:[record valueForKey:@"videoURL"] andDate:[record objectForKey:@"dateCompleted"] andSerials:driveSerials andTimes:driveTimes andSignature:signature]];
+                                                                   [completedJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"]  andClientCode:[record valueForKey:@"clientCode"] andCode:[record valueForKey:@"code"] andURL:[record valueForKey:@"videoURL"] andDate:[record objectForKey:@"dateCompleted"] andSerials:driveSerials andTimes:driveTimes andSignature:signature]];
                                                                    [completedJobsRecord addObject:record];
                                                                } else {
-                                                                   [nextJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andCode:[record valueForKey:@"code"] andURL:nil andDate:nil andSerials:nil andTimes:nil andSignature:nil]];
+                                                                   [nextJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andClientCode:[record valueForKey:@"clientCode"] andCode:[record valueForKey:@"code"] andURL:nil andDate:nil andSerials:nil andTimes:nil andSignature:nil]];
                                                                    [nextJobRecords addObject:record];
                                                                }
                                                            }
@@ -401,6 +434,10 @@
                                                            });
                                                        }
                                                    }];
+    if (isNewJob == YES) {
+         [refreshingJobs dismissViewControllerAnimated:YES completion:nil];
+    }
+   
 }
 
 -(void)setVisibility {
@@ -419,9 +456,68 @@
         [References fadeIn:recentJobs];
     }
 }
-- (IBAction)refreshButton:(id)sender {
-    [self getUpcoming];
+- (IBAction)checkScanner:(id)sender {
+    alert = [UIAlertController alertControllerWithTitle:@"Connecting"
+                                                message:@"Looking for Scanner..."
+                                         preferredStyle:UIAlertControllerStyleAlert];
+    [self presentViewController:alert animated:YES completion:nil];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [scannerCheck becomeFirstResponder];
+    });
 }
 
+- (IBAction)refreshButton:(id)sender {
+    [self getUpcoming:NO];
+}
 
+-(void)handleDeleteButton:(id)sender {
+    UIButton *button = (UIButton*)sender;
+    [self deleteJobAtIndex:(int)button.tag];
+}
+
+-(void)deleteJobAtIndex:(int)indexInArray{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Confirm Cancellation of Job" message:@"This action is irreversible" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Cancel Job" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            deletingJob = [UIAlertController alertControllerWithTitle:@"Cancelling Job"
+                                                              message:@"One Second..."
+                                                       preferredStyle:UIAlertControllerStyleAlert];
+            [self presentViewController:deletingJob animated:YES completion:nil];
+            jobObject *job = nextJobs[indexInArray];
+            CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:job.clientCode];
+            [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:recordID completionHandler:^(CKRecord *record, NSError *error) {
+                if (error) {
+                    return;
+                }
+                NSMutableArray *jobCodes = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobCodes"]];
+                NSMutableArray *jobDates = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobDates"]];
+                for (int a = 0; a < jobCodes.count; a++) {
+                    if ([jobCodes[a] isEqualToString:job.code]) {
+                        [jobCodes removeObjectAtIndex:a];
+                        [jobDates removeObjectAtIndex:a];
+                        break;
+                    }
+                }
+                record[@"allJobCodes"] = jobCodes;
+                record[@"allJobDates"] = jobDates;
+                [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:job.code];
+                        [[CKContainer defaultContainer].publicCloudDatabase deleteRecordWithID:recordID completionHandler:^(CKRecordID *recordID, NSError *error) {
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                [deletingJob dismissViewControllerAnimated:YES completion:nil];
+                                [self getUpcoming:NO];
+                            });
+                        }];
+                        // Update the UI on the main thread.
+                    });
+                }];
+            }];
+        }];
+    [alertController addAction:confirmAction];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Back" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [alertController addAction:cancelAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
 @end

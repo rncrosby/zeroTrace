@@ -10,6 +10,7 @@
 
 @interface jobObject : NSObject
 @property (nonatomic, strong) NSString* client;
+@property (nonatomic, strong) NSString* clientCode;
 @property (nonatomic, strong) NSString* code;
 @property (nonatomic, strong) NSDate *dateCompleted;
 @property (nonatomic, strong) NSString* videoURL;
@@ -17,6 +18,6 @@
 @property (nonatomic, strong) NSData* signature;
 @property (nonatomic, strong) NSArray* driveTimes;
 
--(instancetype)initWithType:(NSString*)client andCode:(NSString*)code andURL:(NSString*)videoURL andDate:(NSDate*)date andSerials:(NSArray*)serials andTimes:(NSArray*)times andSignature:(NSData*)signature;
+-(instancetype)initWithType:(NSString*)client andClientCode:(NSString*)clientCode andCode:(NSString*)code andURL:(NSString*)videoURL andDate:(NSDate*)date andSerials:(NSArray*)serials andTimes:(NSArray*)times andSignature:(NSData*)signature;
 
 @end

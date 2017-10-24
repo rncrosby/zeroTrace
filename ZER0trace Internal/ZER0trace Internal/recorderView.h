@@ -17,6 +17,7 @@
 
 @interface recorderView : UIViewController <UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate> {
     bool beforeRecording;
+    __weak IBOutlet UILabel *statusBarReal;
     CKRecordID *newJobRecord;
     int saveProgress;
     NSMutableArray *scannedDrives;

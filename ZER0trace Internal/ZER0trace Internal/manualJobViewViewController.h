@@ -17,11 +17,14 @@
     __weak IBOutlet UILabel *codeView;
     CKRecord *newRecord;
     jobObject *newJob;
+    __weak IBOutlet UIButton *backspace;
+    __weak IBOutlet UIButton *clientList;
 }
 @property(nonatomic,assign)id delegate;
 - (IBAction)append:(id)sender;
 - (IBAction)deleteKey:(id)sender;
 - (IBAction)next:(id)sender;
 - (IBAction)cancel:(id)sender;
+- (IBAction)clientList:(id)sender;
 
 @end

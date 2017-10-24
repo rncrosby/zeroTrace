@@ -18,6 +18,7 @@
 #import "manualJobViewViewController.h"
 
 @interface homeView : UIViewController <QRCodeReaderDelegate,UITextFieldDelegate,UICollectionViewDelegate,UICollectionViewDataSource> {
+    UIAlertController *alert,*deletingJob,*refreshingJobs;
     QRCodeReaderViewController *vc;
     NSMutableArray *nextJobs,*completedJobs,*nextJobRecords,*completedJobsRecord,*locallySaved;
     __weak IBOutlet UILabel *menuBar;
@@ -25,12 +26,15 @@
     __weak IBOutlet UICollectionView *recentJobs;
     __weak IBOutlet UICollectionView *createJobs;
     __weak IBOutlet UIScrollView *scrollView;
+    __weak IBOutlet UIProgressView *beginningProgress;
     __weak IBOutlet UILabel *noUpcomingJobs;
     __weak IBOutlet UILabel *noPastJobs;
     __weak IBOutlet UITextField *scannerCheck;
+    __weak IBOutlet UIButton *checkScannerButton;
     
 }
 
+- (IBAction)checkScanner:(id)sender;
 
 
 - (IBAction)refreshButton:(id)sender;
