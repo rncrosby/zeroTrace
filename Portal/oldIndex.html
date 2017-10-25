@@ -1,0 +1,52 @@
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+  <script type="text/javascript" src="cloud.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <title>ZER0trace Client Portal</title>
+</head>
+<body>
+  <div class="navBar" id="navBar">
+    <center><a href=""><img src="logo.png" alt="Company" style="margin-top:110px;padding-bottom:25px;"></a><br>
+      <p class="footerText" style="color:#212121;">Have a code?</p>
+
+      <form onsubmit="return validateForm(this);">
+        <input type="text" name="code" autocomplete="off" placeholder="Code" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Code'"><br>
+    <input type="submit" value="Continue"></form>
+    <div id="line"></div>
+      <p class="footerText" style="color:#212121;">Returning Customer?</p>
+
+      <form onsubmit="return validateFormSignIn(this);">
+        <input type="text" name="username" autocomplete="off" placeholder="Username" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Username'"><br>
+    <input type="password" name="code" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Password'" autocomplete="off" placeholder="Password" i><br>
+    <input type="submit" value="Continue"></form>
+    <div id="line"></div>
+    <p class="footerText" style="color:#212121;">New Here?</p>
+    <form onsubmit="return validateFormSignUp(this);">
+      <input type="text" name="username" autocomplete="off" placeholder="Username" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Username'"><br>
+      <input type="text" name="phone" autocomplete="off" placeholder="Phone" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Phone'"><br>
+      <input type="text" name="email" autocomplete="off" placeholder="Email" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Email'"><br>
+      <input type="password" name="passwordA" autocomplete="off" placeholder="Password" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Password'"><br>
+  <input type="password" name="passwordB" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Re-enter Password'" autocomplete="off" placeholder="Re-enter Password" i><br>
+  <input type="submit" value="Register"></form>
+    </center>
+<div class="navBarFooter"><a href="#"><p class="footerText">ZER0trace LLC</p></a></div>
+  </div>
+  <div class="client" style="margin-left:25%;">
+    <p id="navLinks"><a class="navLinks" href="ewaste.html">E-WASTE RECYCLING</a>&nbsp&nbsp&nbsp<a class="navLinks"  href="data.html">DATA DESTRUCTION</a>&nbsp&nbsp&nbsp<a class="navLinks"  href="#">CERTIFICATION</a>&nbsp&nbsp&nbsp<a class="navLinks"  href="#">MOBILE</a>
+      <img src="bg.jpeg" style="width:97%;height:auto;"/>
+            <!-- <div id="line" style="background-color:#212121;width:97%;"></div> -->
+            <br>
+
+      <p class="heading">Who We Are</p><br><br>
+      <p class="subtext">ZER0trace, based in Emeryville, CA, was established through a partnership of technical experts and business owners from successful Bay Area and Pacific Northwest IT Infrastructure and Asset Disposition companies, To create a safe secure way for companies to destroy or satanize sensitive data. Together, the ZER0trace team boasts well over 30 years direct experience with data destruction, IT infrastructure and asset management. We’ve put that experience to work and developed an industry leading operations model that is 100% secure, compliant with all regulations, standards, and the industries best practices<br><br>ZER0trace is a NAID member and we are actively pursuing AAA certification with the electronic disposition endorsement. We have state of the art plant-based and mobile erasure and physical destruction systems as well as strategic agreements in place with peer data destruction vendors throughout the U.S and internationally to provide a single point of contact to transparently manage all of your destruction needs regardless of location. We have a demonstrable record of success with projects ranging in size from a few drives up to entire data center decommissions.</p>
+      <br>
+      <img src="bg2.jpeg" style="width:97%;height:auto;border-radius: 15px;"/><br><br>
+<!-- <div id="line" style="background-color:#212121;width:97%;"></div> -->
+<br>
+      <p class="heading">Our Methodology</p><br><br>
+      <p class="subtext">ZER0trace utilizes the National Institute of Standards and Technology (NIST) Special Publication 800- 88, Revision 1, Guidelines for Media Sanitization as the primary framework for our service offering. NIST developed the guideline in accordance with its statutory responsibilities under the Federal Information Security Management Act of 2002 (FISMA), 44 U.S.C. § 3541 et seq., Public Law 107-347. NIST is responsible for developing information security standards and guidelines for use by the private industry as well as the public sector, including minimum requirements for Federal information systems, but does not apply to national security systems.<br><br>We like new technology as much as anyone and we use a lot of it in ITAD. While so much energy is put into new technology, we focus on what happens to old IT assets. More specifically, putting the systems and processes in place to safely destroy the private and sensitive information contained in your technology assets. We understand that taking an “out of sight out of mind” approach is risky and dangerous on too many levels. We partner with organizations that are serious about proper IT disposal and protecting their company’s data “DNA” that exists in its hardware until destructed.</p>
+  </div>
+  
+</body>
+</html>

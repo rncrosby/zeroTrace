@@ -24,6 +24,7 @@
     int driveCount,recorderTimeInt;
     NSTimer *recorderTime;
     NSURL *outputURL;
+    NSURL *compressedOutURL;
     bool isRecording;
     __weak IBOutlet UITextField *barcode;
     LLSimpleCamera *recorder;

@@ -2,32 +2,38 @@
 <head>
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
   <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js"></script>
+  <script src="https://content.jwplatform.com/libraries/ZZo1zmQF.js"> </script>
   <script type="text/javascript" src="cloud.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <script>prepareiCloud();</script>
   <div class="navBar" id="navBar">
-    <center><img src="https://www.csra.com/sites/default/files/oracle_logo.png" alt="Company" style="margin-top:110px;padding-bottom:25px;"><br>
-    </center>
-
-  </div>
-  <div class="client"><p class="jobTitle" id="jobTitle">Job Title</p></div>
-<div id="player">
-  <video id="video" width="50%" height="auto" controls style="margin-left:25%;padding-bottom: 25;"></video>
+    <div class="NewJobButton"><p class="newJob" onclick="newJob();">Create</p></div>
+    <br><p id="Title">Jobs</p>
+    <div id="line"></div>
+<div class="navBarFooter"><a href="index.html"><p class="footerText">Sign Out</p></a></div>
   </div>
 
-<div style="margin-left:23%;width:77%;height:100px;overflow-x:auto;">
+<div id="player" style="margin-left:25%;padding-top:25px;">
+  <div id="myElement" style="padding-left:25%;margin-left:25%;padding-bottom:0;margin-top:25px;background-color:rgba(0,0,0,0.0)"></div>
+  <!-- <video id="video" width="60%" height="auto" controls style="margin-left:25%;padding-bottom: 0;margin-top:25px;"></video><br> -->
+  </div>
+
+<div style="margin-left:23%;width:77%;height:100px;overflow-x:auto;padding-top:25px;">
 <div class="container" id="container"></div>
 </div>
-
-<div style="margin-left:25%;width:75%;margin-top:40;">
+<div style="margin-left:25%;width:75%;margin-top:25;">
+  <p class="description">Code</p>
+  <p class="value" id="CODE"></p>
   <p class="description">Date</p>
   <p class="value" id="DATE"></p>
   <p class="description">Drive Count</p>
   <p class="value" id="DRIVECOUNT"></p>
-
-
-
+  <p class="description">Signature</p>
+  <img class="signature" id="signature"></img>
 </div>
+<div id="snackbar">This Job Has Not Occured Yet.</div>
+
 </body>
 </html>

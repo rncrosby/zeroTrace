@@ -1,11 +1,12 @@
-window.addEventListener('cloudkitloaded', function() {
-	  console.log("listening for cloudkitloaded");
+var isComplete = 0;
+	function prepareiCloud() {
+		console.log("Preparing iCloud");
 	  // 2
 		CloudKit.configure({
 				containers: [{
 					containerIdentifier: 'iCloud.com.fullytoasted.ZER0trace-Internal',
 					apiToken: '2d86e7c79d5ca11b06592a0c703cdfcb3869512c75629ae151d96f924a0fb696',
-					environment: 'development'
+					environment: 'production'
 				}]
 			});
 
@@ -20,9 +21,9 @@ window.addEventListener('cloudkitloaded', function() {
 				alert("Something Went Wrong");
 		} else {
 					var fetchedRecord = response.records[0];
-					console.log
 					var jobTitles = fetchedRecord['fields']['allJobDates']['value'];
 					var jobCodes = fetchedRecord['fields']['allJobCodes']['value'];
+					var jobCompletion = fetchedRecord['fields']['allJobCompletion']['value'];
 					initialVideo(jobCodes[0]);
 					for (var i = 0; i < jobTitles.length; i++) {
 						var driveObject = document.createElement("div");
@@ -40,6 +41,15 @@ window.addEventListener('cloudkitloaded', function() {
 						var subtext = document.createElement("p");
 						subtext.id = "jobDate";
 						var node = document.createTextNode(jobCodes[i]);
+						if (jobCompletion[i] == 1) {
+							var jobStatus = document.createElement("div");
+							jobStatus.id = "jobComplete";
+							container.appendChild(jobStatus);
+						} else {
+							var jobStatus = document.createElement("div");
+							jobStatus.id = "jobPending";
+							container.appendChild(jobStatus);
+						}
 						subtext.appendChild(node);
 						container.appendChild(driveObject);
 						container.appendChild(subtext);
@@ -53,9 +63,8 @@ window.addEventListener('cloudkitloaded', function() {
 	});
 	// FINISH GET JOBS
 	// START GET CURRENTJOB
-	});
+	}
 	function getJob(event) {
-		video.pause();
 		var button = event.target;
 		var code = button.getAttribute("code");
 		var container = CloudKit.getDefaultContainer();
@@ -66,10 +75,11 @@ window.addEventListener('cloudkitloaded', function() {
 				alert("No Video Found");
 		} else {
 
-					var myNode = document.getElementById("container");
-					myNode.innerHTML = '';
+
 					var fetchedRecord = response.records[0];
 					if (fetchedRecord['fields']['driveSerials']) {
+						var myNode = document.getElementById("container");
+						myNode.innerHTML = '';
 						var serials = fetchedRecord['fields']['driveSerials']['value'];
 						var times = fetchedRecord['fields']['driveTimes']['value'];
 						for (var i = 0; i < serials.length; i++) {
@@ -85,18 +95,30 @@ window.addEventListener('cloudkitloaded', function() {
 							var container = document.getElementById('container');
 							container.appendChild(driveObject);
 						}
+						var driveSpacer = document.createElement("div");
+						driveSpacer.id = "driveSpacer";
+						var container = document.getElementById('container');
+						container.appendChild(driveSpacer);
 						var date = fetchedRecord['fields']['jobDate']['value'];
 						document.getElementById("DATE").innerHTML = date;
 						document.getElementById("DRIVECOUNT").innerHTML = serials.length + " Drives";
-						document.getElementById("jobTitle").innerHTML = fetchedRecord['fields']['code']['value'];
-						var video = document.getElementById('video');
-						video.setAttribute('src', fetchedRecord['fields']['videoURL']['value']);
-						video.currentTime = 0;
-						video.addEventListener("canplaythrough", function() {
-  					video.play();
-					}, false);
+						document.getElementById("CODE").innerHTML = fetchedRecord['fields']['code']['value'];
+						var signature = document.getElementById('signature');
+						signature.setAttribute('src', fetchedRecord['fields']['signatueURL']['value'])
+						var playerInstance = jwplayer("myElement");
+						playerInstance.setup({
+						    file: fetchedRecord['fields']['videoURL']['value'],
+						    mediaid: "xxxxYYYY",
+						    width: "60%",
+								"skin": {
+									"name" : "myskin"
+								}
+						});
 					} else {
-						alert("this job has not occured yet");
+						var x = document.getElementById("snackbar")
+						document.getElementById("snackbar").innerHTML = "This Job Has Not Occured Yet";
+						x.className = "show";
+						setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 					}
 
 		}
@@ -105,13 +127,27 @@ window.addEventListener('cloudkitloaded', function() {
 	function skimToTime(event) {
 		var button = event.target;
 		var time = button.getAttribute("time");
-		document.getElementById("video").currentTime = time;
+		var playerInstance = jwplayer("myElement");
+		playerInstance.seek(time);
+	}
+	function validateFormSignUp(theForm) {
+		alert("Coming Soon");
+		return false;
+	}
+	function validateFormSignIn(theForm) {
+		alert("Coming Soon");
+		return false;
 	}
 	function validateForm(theForm) {
 		if (theForm.code.value.length < 5 || theForm.code.value.length > 5) {
-			alert("something isn't right with your code")
+			document.getElementById("Title").innerHTML = "Something's Wrong";
 		} else {
-			window.location.href = "player.html?code="+theForm.code.value;
+			if (theForm.code.value == "99999") {
+				window.location.href = "player.html?code="+theForm.code.value;
+			} else {
+				document.getElementById("Title").innerHTML = "Not Activated";
+			}
+
 		}
     return false;
 	}
@@ -150,15 +186,35 @@ window.addEventListener('cloudkitloaded', function() {
 						var date = fetchedRecord['fields']['jobDate']['value'];
 						document.getElementById("DATE").innerHTML = date;
 						document.getElementById("DRIVECOUNT").innerHTML = serials.length + " Drives";
-						document.getElementById("jobTitle").innerHTML = fetchedRecord['fields']['code']['value'];
-						var video = document.getElementById('video');
-						video.setAttribute('src', fetchedRecord['fields']['videoURL']['value']);
-						video.currentTime = 0;
-						video.play();
+						document.getElementById("CODE").innerHTML = fetchedRecord['fields']['code']['value'];
+						var signature = document.getElementById('signature');
+						signature.setAttribute('src', fetchedRecord['fields']['signatueURL']['value'])
+						var playerInstance = jwplayer("myElement");
+						playerInstance.setup({
+						    file: fetchedRecord['fields']['videoURL']['value'],
+						    width: "60%",
+								"skin": {
+									"name" : "myskin"
+								}
+						});
+						// var video = document.getElementById('video');
+						// //video.setAttribute('src', fetchedRecord['fields']['videoURL']['value']);
+						// video.currentTime = 0;
+						// video.play();
 					} else {
-						alert("this job has not occured yet");
+						var x = document.getElementById("snackbar")
+						document.getElementById("snackbar").innerHTML = "This Job Has Not Occured Yet";
+						x.className = "show";
+						setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 					}
 
 		}
 	});
+	}
+
+	function newJob() {
+		var x = document.getElementById("snackbar")
+		document.getElementById("snackbar").innerHTML = "Not Activated";
+		x.className = "show";
+		setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 	}

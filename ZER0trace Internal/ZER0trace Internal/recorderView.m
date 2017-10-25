@@ -95,7 +95,7 @@
     recorder =  [[LLSimpleCamera alloc] initWithVideoEnabled:YES];
     
     // camera with precise quality, position and video parameters.
-    recorder = [[LLSimpleCamera alloc] initWithQuality:AVCaptureSessionPresetHigh
+    recorder = [[LLSimpleCamera alloc] initWithQuality:AVCaptureSessionPreset1280x720
                                               position:LLCameraPositionRear
                                           videoEnabled:YES];
     [recorder start];
@@ -114,6 +114,7 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSURL *documentsURL = [NSURL fileURLWithPath:documentsDirectory];
     outputURL = [[documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%@",jobName.text]] URLByAppendingPathExtension:@"mov"];
+    compressedOutURL = documentsURL;
     [recorder startRecordingWithOutputUrl:outputURL];
     recorderTime = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                     target:self
@@ -240,31 +241,43 @@
 }
 
 -(void)uploadFile:(NSURL*)url withName:(NSString*)name{
+        FIRStorage *storage = [FIRStorage storage];
+        FIRStorageReference *storageRef = [storage reference];
+        // Create a reference to the file you want to upload
+        FIRStorageReference *riversRef = [storageRef child:[NSString stringWithFormat:@"recordings/%@.mov",name]];
+        
+        // Upload the file to the path "images/rivers.jpg"
+        FIRStorageUploadTask *uploadTask = [riversRef putFile:url metadata:nil completion:^(FIRStorageMetadata *metadata, NSError *error) {
+            if (error != nil) {
+                // Uh-oh, an error occurred!
+            } else {
+                [self saveScanData:metadata.downloadURL];
+            }
+        }];
+        [uploadTask observeStatus:FIRStorageTaskStatusProgress
+                          handler:^(FIRStorageTaskSnapshot *snapshot) {
+                              [completeProgress setProgress:snapshot.progress.fractionCompleted animated:YES];
+                              if (snapshot.progress.fractionCompleted == 1) {
+                                  saveProgress = saveProgress + 1;
+                                  completeTitle.text = @"Destruction Saved";
+                                  if (saveProgress == 2) {
+                                      [References fadeIn:confirmDestructionButton];
+                                  }
+                              }
+                          }];
+//    NSString *randomURL = [References randomStringWithLength:16];
+//    compressedOutURL = [compressedOutURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.mov",randomURL]];
+//    [self convertVideoToLowQuailtyWithInputURL:url outputURL:compressedOutURL handler:^(AVAssetExportSession *exportSession)
+//     {
+//         if (exportSession.status == AVAssetExportSessionStatusCompleted)
+//
+//         else
+//         {
+//             NSLog(exportSession.error.localizedDescription);
+//
+//         }
+//     }];
     
-    FIRStorage *storage = [FIRStorage storage];
-    FIRStorageReference *storageRef = [storage reference];
-    // Create a reference to the file you want to upload
-    FIRStorageReference *riversRef = [storageRef child:[NSString stringWithFormat:@"recordings/%@",name]];
-    
-    // Upload the file to the path "images/rivers.jpg"
-    FIRStorageUploadTask *uploadTask = [riversRef putFile:url metadata:nil completion:^(FIRStorageMetadata *metadata, NSError *error) {
-        if (error != nil) {
-            // Uh-oh, an error occurred!
-        } else {
-            [self saveScanData:metadata.downloadURL];
-        }
-    }];
-    [uploadTask observeStatus:FIRStorageTaskStatusProgress
-                                                  handler:^(FIRStorageTaskSnapshot *snapshot) {
-                                                      [completeProgress setProgress:snapshot.progress.fractionCompleted animated:YES];
-                                                      if (snapshot.progress.fractionCompleted == 1) {
-                                                          saveProgress = saveProgress + 1;
-                                                          completeTitle.text = @"Destruction Saved";
-                                                          if (saveProgress == 2) {
-                                                              [References fadeIn:confirmDestructionButton];
-                                                          }
-                                                      }
-                                                  }];
 }
 
 -(void)saveScanData:(NSURL*)downloadURL{
@@ -367,6 +380,21 @@
     }
    
 
+}
+
+- (void)convertVideoToLowQuailtyWithInputURL:(NSURL*)inputURL
+                                   outputURL:(NSURL*)outputURL
+                                     handler:(void (^)(AVAssetExportSession*))handler
+{
+    [[NSFileManager defaultManager] removeItemAtURL:outputURL error:nil];
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:inputURL options:nil];
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset1280x720];
+    exportSession.outputURL = outputURL;
+    exportSession.outputFileType = AVFileTypeQuickTimeMovie;
+    [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
+     {
+         handler(exportSession);
+     }];
 }
 
 - (IBAction)cancel:(id)sender {

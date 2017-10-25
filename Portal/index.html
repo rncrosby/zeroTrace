@@ -1,24 +1,24 @@
 <html>
 <head>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
   <script type="text/javascript" src="cloud.js"></script>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="indexStyle.css">
   <title>ZER0trace Client Portal</title>
 </head>
 <body>
-  <div class="navBar" id="navBar">
-    <center><img src="logo.png" alt="Company" style="margin-top:110px;padding-bottom:25px;"><br>
-      <center>
-      <form onsubmit="return validateForm(this);">
-    <input type="text" name="code" onfocus="this.value = ''" autocomplete="off" value="0000"><br>
-    <input type="submit">
-    </center>
-    </center>
-<div class="navBarFooter"><a href="#"><p class="footerText">Robert Crosby and John Fournier</p></a></div>
+  <center><img class="logo" width="250px" height="auto" src="logo.png"/></center>
+<div class="enterCode">
+  <center>
+    <p id="Title">Client Code</p>
+    <p id="subTitle">Please enter your client code to continue</p>
+    <form onsubmit="return validateForm(this);">
+      <input type="text" name="code" autocomplete="off" placeholder="00000" onfocus="this.placeholder = ''" onfocusout="this.placeholder = '00000'"><br>
+  <input type="submit" value="Continue"></form>
+  </center>
+</div>
+  <div class="newHere">
+    <center><a class="forgotCode" href="#">Forgot Code?</a></center>
   </div>
-  <div class="client">
-    <p class="jobTitle" id="jobTitle">Welcome to ZER0trace</p>
-    <p class="welcomeHelper">Returning Customer</p>
-  </div>
+
 </body>
 </html>
