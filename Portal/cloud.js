@@ -1,5 +1,4 @@
-var isComplete = 0;
-	function prepareiCloud() {
+function prepareiCloud() {
 		console.log("Preparing iCloud");
 	  // 2
 		CloudKit.configure({
@@ -211,7 +210,6 @@ var isComplete = 0;
 		}
 	});
 	}
-
 	function newJob() {
 		var x = document.getElementById("snackbar")
 		document.getElementById("snackbar").innerHTML = "Not Activated";

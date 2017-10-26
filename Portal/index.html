@@ -6,6 +6,12 @@
   <title>ZER0trace Client Portal</title>
 </head>
 <body>
+  <script>
+  var iOSDevice = !!navigator.platform.match(/iPhone|iPod|iPad/);
+  if (iOSDevice == true) {
+    window.location.href = "codeM.html";
+  }
+  </script>
   <center><img class="logo" width="250px" height="auto" src="logo.png"/></center>
 <div class="enterCode">
   <center>
