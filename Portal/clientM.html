@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+    <script type="text/javascript" src="mobileCloud.js"></script>
+    <link rel="stylesheet" href="clientM.css">
+      <script src="https://content.jwplatform.com/libraries/ZZo1zmQF.js"> </script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>ZER0trace Client Portal</title>
+  </head>
+  <body>
+    <script>
+    if (window.sessionStorage.getItem("signedIn") == "true") {
+      var code = window.sessionStorage.getItem("code");
+      window.location.href = "clientPortalM.html?code=" + code.toString();
+    }
+    </script>
+    <center><div class="card">
+      <p id="cardHead">Client Name</p>
+      <p id="cardSubHead">Start with your company's nameto get<br>access to all your destruction history.</p>
+      <form onsubmit="return checkClient(this);" method="get" action="">
+        <input type="text" name="clientName" autocomplete="off" placeholder="ZER0trace" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'ZER0trace'"><br>
+        <input type="password" name="password" autocomplete="off" placeholder="password" onfocus="this.placeholder = ''" onfocusout="this.password = 'password'"><br>
+    <input type="submit" value="Continue"></form>
+    </div>
+    <a href="codeM.html" id="clientLogin"><p id="clientEntry">One Time Code</p></a>
+  </center>
+
+  </body>
+</html>

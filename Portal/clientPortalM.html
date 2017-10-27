@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+    <script type="text/javascript" src="mobileCloud.js"></script>
+    <link rel="stylesheet" href="clientPortalM.css">
+      <script src="https://content.jwplatform.com/libraries/ZZo1zmQF.js"> </script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>ZER0trace Client Portal</title>
+  </head>
+  <body>
+    <script>getAllJobs();</script>
+    <div class="menuBar">
+      <p id="menuBarText">Jobs</p>
+      <a onclick="newJob();" id="share"><img id="shareIcon" src="plus.png"/></a>
+      <a onclick="handleSignout();" id="menu"><img id="menuIcon" src="close.png"/></a>
+    </div>
+    <div id="jobsContainer">
+
+    </div>
+    <div id="snackbar">This Job Has Not Occured Yet.</div>
+
+  </body>
+</html>

@@ -202,7 +202,7 @@ function prepareiCloud() {
 						// video.play();
 					} else {
 						var x = document.getElementById("snackbar")
-						document.getElementById("snackbar").innerHTML = "This Job Has Not Occured Yet";
+						x.innerHTML = "This Job Has Not Occured Yet";
 						x.className = "show";
 						setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 					}
