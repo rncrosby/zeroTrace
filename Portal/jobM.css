@@ -16,11 +16,67 @@ body {
   border-bottom-color: #E0E0E0;
 }
 
+.player {
+  left: 0;
+  top:50px;
+  position: fixed;
+  background-color: #F5F5F5;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #E0E0E0;
+}
+#footer {
+  visibility: hidden;
+  left: 0;
+  position: fixed;
+  bottom: 0;
+  height: 90px;
+  width: 100%;
+  background-color: white;
+  z-index: 100;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #E0E0E0;
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#footer.show {
+    visibility: visible; /* Show the snackbar */
+
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: Ffadein 0.5s, Ffadeout 0.5s 2.5s;
+    animation: Ffadein 0.5s, Ffadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes Ffadein {
+    from {bottom: -90px; opacity: 1;}
+    to {bottom: 0px; opacity: 1;}
+}
+
+@keyframes Ffadein {
+    from {bottom: -90px; opacity: 1;}
+    to {bottom: 0px; opacity: 1;}
+}
+
+@-webkit-keyframes Ffadeout {
+    from {bottom: 0px; opacity: 1;}
+    to {bottom: -90px; opacity: 1;}
+}
+
+@keyframes Ffadeout {
+    from {bottom: 0px; opacity: 1;}
+    to {bottom: -90px; opacity: 1;}
+}
+
 .drives {
+  z-index: -1;
+  position: absolute;
   background-color: white;
   left: 0;
-  height: 240px;
   width: 100%;
+  margin-bottom: -90px;
   overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -76,18 +132,7 @@ p#driveTime {
            user-select: none; /* Non-prefixed version, currently */
            z-index: 100;
 }
-.footer {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 100px;
-  background-color: white;
-  z-index: 100;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #E0E0E0;
-}
+
 
 .bottomLeft {
   z-index: 100;
@@ -98,7 +143,7 @@ p#driveTime {
 }
 
 .bottomCenter {
-  position: fixed;
+  margin-top: -116;
   left: 0;
   bottom: 0;
   height: 100px;
@@ -154,7 +199,19 @@ img#shareIcon {
 a#share {
   position: fixed;
   top: 12;
-  right: 16px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+}
+
+img#info {
+  width: 25px;
+  height: 25px;
+}
+a#info {
+  position: fixed;
+  top: 12;
+  right: 48px;
   width: 30px;
   height: 30px;
 }
@@ -166,27 +223,18 @@ img#menuIcon {
 a#menu {
   position: fixed;
   top: 12;
-  left: 16px;
+  left: 8px;
   width: 30px;
   height: 30px;
 }
 
-.player {
-  left: 0;
-  top:50px;
-  position: fixed;
-  width: 100%;
-  height: auto;
-  background-color: #F5F5F5;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-bottom-color: #E0E0E0;
-}
+
 
 p#menuBarText {
   margin-top: 0;
   vertical-align: text-top;
-  text-align: center;
+  text-align: left;
+  margin-left: 32px;
   width: 100%;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;

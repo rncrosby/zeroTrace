@@ -125,14 +125,24 @@ function getAllJobs() {
   						var signature = document.getElementById('signature');
   						signature.setAttribute('src', fetchedRecord['fields']['signatueURL']['value'])
   						var playerInstance = jwplayer("videoPlayer");
+							var widthNum = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+							var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+							var heightNum = widthNum/1.8;
+							width = width.toString() + "px";
+							height = heightNum.toString() + "px";
+							newHeight = heightNum + 45;
+							Mheight = newHeight.toString() + "px";
+							document.getElementById("drives").style.marginTop = Mheight;
   						playerInstance.setup({
   						    file: fetchedRecord['fields']['videoURL']['value'],
-  						    width: "100%",
+  						    width: width,
+									height: height,
   								"skin": {
   									"name" : "myskin"
   								}
   						});
-              playerInstance.setControls(true);
+
+
   					}
 					}
 
@@ -239,6 +249,12 @@ function getAllJobs() {
 	function notActivated() {
 		var x = document.getElementById("snackbar")
 		document.getElementById("snackbar").innerHTML = "Not Activated";
+		x.className = "show";
+		setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+	}
+
+	function showFooter() {
+		var x = document.getElementById("footer")
 		x.className = "show";
 		setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 	}

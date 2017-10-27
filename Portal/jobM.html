@@ -13,15 +13,14 @@
     <script>getJob();</script>
     <div class="menuBar">
       <p id="menuBarText"></p>
+      <a onclick="showFooter();" id="info"><img id="info" src="info.png"/></a>
       <a onclick="copyToClipboard();" id="share"><img id="shareIcon" src="share.png"/></a>
-      <a onclick="handleJobClose();" id="menu"><img id="menuIcon" src="close.png"/></a>
+      <a onclick="handleJobClose();" id="menu"><img id="menuIcon" src="backChevron.png"/></a>
     </div>
-    <div class="player">
+    <div class="player" id="player">
       <div id="videoPlayer"></div>
-      <div class="drives" id="drives"></div>
-
     </div>
-    <div class="footer">
+    <div class="footer" id="footer">
     <div class="bottomLeft">
       <p id="bottomTitle">Drive Count</p>
       <p id="DRIVECOUNT"></p>
@@ -35,6 +34,8 @@
       <p id="JOBID"></p>
     </div>
   </div>
+          <div class="drives" id="drives"></div>
+
     <div id="snackbar">This Job Has Not Occured Yet.</div>
   </body>
 </html>
