@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+    <script type="text/javascript" src="mobileCloud.js"></script>
+    <link rel="stylesheet" href="clientNewM.css">
+      <script src="https://content.jwplatform.com/libraries/ZZo1zmQF.js"> </script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>ZER0trace Client Portal</title>
+  </head>
+  <body>
+    <div class="menuBar">
+      <p id="menuBarText">New Job</p>
+      <a onclick="handleJobClose();" id="menu"><img id="menuIcon" src="backChevron.png"/></a>
+    </div>
+    <div id="formContainer">
+      <form onsubmit="alert("hey"); return false;" method="get" action="">
+        <p id="inputSub">Contact Full Name</p>
+        <input type="text" name="fullName" autocomplete="off" placeholder="John Appleseed" onfocus="this.placeholder = 'John Appleseed'" onfocusout="this.placeholder = 'John Appleseed'"><br>
+        <p id="inputSub" style="margin-top: -5px;">PHONE NUMBER</p>
+        <input type="tel" name="addressLine1" autocomplete="off" placeholder="(000) 000-0000" onfocus="this.placeholder = ''" onfocusout="this.placeholder = '(000) 000-0000'"><br>
+        <p id="inputSub" style="margin-top: -5px;">ADDRESS LINE 1</p>
+        <input type="text" name="addressLine1" autocomplete="off" placeholder="1 Infinite Loop" onfocus="this.placeholder = ''" onfocusout="this.placeholder = '1 Infinite Loop'"><br>
+        <p id="inputSub" style="margin-top: -5px;">ADDRESS LINE 2</p>
+        <input type="text" name="addressLine2" autocomplete="off" placeholder="Building 3" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'ZER0trace'"><br>
+        <p id="inputSub" style="margin-top: -5px;">CITY</p>
+        <input type="text" name="addressLine2" autocomplete="off" placeholder="Cupertino" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'Cupertino'"><br>
+        <p id="inputSub" style="margin-top: -5px;">STATE</p>
+        <input type="text" name="addressLine2" autocomplete="off" placeholder="California" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'California'"><br>
+        <p id="inputSub" style="margin-top: -5px;">ZIP</p>
+        <input type="text" name="addressLine2" autocomplete="off" placeholder="94605" onfocus="this.placeholder = ''" onfocusout="this.placeholder = '94605'"><br>
+</div>
+
+    </div>
+    <div id="footer">
+      <center><input type="submit" value="Request Pickup"></form></center>
+    </div>
+
+  </body>
+</html>

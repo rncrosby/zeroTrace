@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+    <script type="text/javascript" src="mobileCloud.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <link rel="stylesheet" href="registerM.css">
+      <script src="https://content.jwplatform.com/libraries/ZZo1zmQF.js"> </script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>ZER0trace Client Portal</title>
+  </head>
+  <body>
+    <script>
+    window.sessionStorage.setItem("signUp", 0);
+    </script>
+    <center><div class="card" id="card">
+      <p id="cardHead">Welcome</p>
+      <p id="cardSubHead">Start with your company's name,<br>you'll sign in with this</p>
+      <form onsubmit="return handleRegistration(this);" method="get" action="">
+        <input type="text" id="fieldEntry" name="fieldEntry" autocomplete="off" placeholder="Company Name"><br>
+    <input type="submit" value="Continue"></form>
+    </div>
+    <a href="codeM.html" id="clientLogin"><p id="clientEntry">Client Login</p></a>
+  </center>
+  </div>
+  <div id="footer">
+    <center><a href="codeM.html" id="clientLogin"><p id="clientEntry">Enter a Job Code</p></a></center>
+  </div>
+  </body>
+</html>

@@ -283,3 +283,73 @@ function getAllJobs() {
   document.body.removeChild(aux);
 
 }
+
+function handleRegistration(form) {
+	var step = window.sessionStorage.getItem("signUp");
+	var entry = form.fieldEntry.value;
+	if (step == 0) {
+		if (entry.length > 0) {
+			document.getElementById("card").style.height = 220;
+			window.sessionStorage.setItem("clientName", entry);
+			window.sessionStorage.setItem("signUp", 1);
+			document.getElementById("cardHead").innerHTML = entry;
+			document.getElementById("cardSubHead").innerHTML = "Who will be dealing with mostly?";
+			document.getElementById("fieldEntry").placeholder = "John Appleseed";
+			document.getElementById("fieldEntry").value = "";
+		}
+	} else if (step == 1) {
+		if (entry.length > 0) {
+			window.sessionStorage.setItem("contactName", entry);
+			window.sessionStorage.setItem("signUp", 2);
+			document.getElementById("cardSubHead").innerHTML = "A number we can reach you at?";
+			document.getElementById("fieldEntry").placeholder = "0000000000";
+			document.getElementById("fieldEntry").value = "";
+		}
+	} else if (step == 2) {
+		if (entry.length > 0) {
+			window.sessionStorage.setItem("phone", entry);
+			window.sessionStorage.setItem("signUp", 3);
+			document.getElementById("cardSubHead").innerHTML = "An email we can reach you at?";
+			document.getElementById("fieldEntry").placeholder = "email@email.com";
+			document.getElementById("fieldEntry").value = "";
+		}
+	} else if (step == 3) {
+		if (entry.length > 0) {
+			window.sessionStorage.setItem("email", entry);
+			window.sessionStorage.setItem("signUp", 4);
+			document.getElementById("cardHead").innerHTML = "And finally,";
+			document.getElementById("cardSubHead").innerHTML = "Create a secure password";
+			document.getElementById("fieldEntry").placeholder = "password";
+			document.getElementById("fieldEntry").type = "password";
+			document.getElementById("fieldEntry").value = "";
+		}
+	} else if (step == 4) {
+		if (entry.length > 0) {
+				var password = CryptoJS.AES.encrypt(entry, window.sessionStorage.getItem("clientName")).toString();
+				var dict = []; // create an empty array
+				dict.key1 = window.sessionStorage.getItem("clientName");
+				dict.key2 = window.sessionStorage.getItem("contactName");
+				dict.key3 = window.sessionStorage.getItem("email");
+				dict.key4 = window.sessionStorage.getItem("phone");
+				dict.key5 = password;
+				$.ajax({
+            url: 'http://0.0.0.0:8000/register',
+            data: dict,
+            type: 'POST',
+            success: function(response) {
+							console.log(response);
+							document.getElementById("cardHead").innerHTML = "All Set!";
+							document.getElementById("cardSubHead").innerHTML = "Your registration is being processed,<br>you'll recieve an email when your registration is complete.";
+            },
+            error: function(error) {
+							console.log("works");
+                console.log(error);
+            }
+        });
+
+
+		}
+	}
+
+	return false;
+}
