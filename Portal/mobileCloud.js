@@ -26,15 +26,17 @@ function getAllJobs() {
 					var jobCompletion = fetchedRecord['fields']['allJobCompletion']['value'];
 					var container = document.getElementById('jobsContainer');
 					for (var i = 0; i < jobTitles.length; i++) {
-
+						var job = document.createElement("div");
+						var positionInfo = job.getBoundingClientRect();
+						var rightMargin = positionInfo.width.toString() + "px";
 						if (jobCompletion[i] == 1) {
 							var chevron = document.createElement("img");
 							chevron.id = "chevron";
-							container.appendChild(chevron);
+							chevron.style.marginRight = rightMargin;
+							job.appendChild(chevron);
 							var jobStatus = document.createElement("div");
 							jobStatus.id = "jobComplete";
-							container.appendChild(jobStatus);
-							var job = document.createElement("div");
+							job.appendChild(jobStatus);
 							job.id = "jobObject";
 							job.setAttribute("code",jobCodes[i]);
 							job.onclick = function() {
@@ -94,16 +96,49 @@ function getAllJobs() {
   		} else {
   					var fetchedRecord = response.records[0];
 						console.log(fetchedRecord);
+						var secMHeight = "0px";
   					if (fetchedRecord['fields']['driveSerials']) {
   						var serials = fetchedRecord['fields']['driveSerials']['value'];
   						var times = fetchedRecord['fields']['driveTimes']['value'];
-  						for (var i = 0; i < serials.length; i++) {
+							var date = fetchedRecord['fields']['jobDate']['value'];
+							document.getElementById("menuBarText").innerHTML = date;
+							document.getElementById("DRIVECOUNT").innerHTML = serials.length;
+							document.getElementById("JOBID").innerHTML = fetchedRecord['fields']['code']['value'];
+							var signature = document.getElementById('signature');
+							signature.setAttribute('src', fetchedRecord['fields']['signatueURL']['value'])
+							var playerInstance = jwplayer("videoPlayer");
+							var widthNum = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+							var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+							if (width > 700) {
+								width = 700;
+								widthNum = 700;
+							}
+							var heightNum = widthNum/1.8;
+							width = width.toString() + "px";
+							height = heightNum.toString() + "px";
+							newHeight = heightNum + 450;
+							secMHeight = newHeight +450+ "px";
+							document.getElementById("driveContainer").style.marginTop = secMHeight;
+							var stringHeight = -1 * newHeight;
+							stringHeight = stringHeight + "px";
+							document.getElementById("drives").style.marginTop = stringHeight;
+  						playerInstance.setup({
+  						    file: fetchedRecord['fields']['videoURL']['value'],
+  						    width: width,
+									height: height,
+  								"skin": {
+  									"name" : "myskin"
+  								}
+  						});
+
+							for (var i = 0; i < serials.length; i++) {
                 var drive = document.createElement("div");
                 drive.id = "driveObject";
+								drive.className = "driveClass";
                 drive.setAttribute("time",times[i]);
-                drive.onclick = function() {
-                    skimToTime(this);
-                }
+								drive.onclick = function() {
+									skimToTime(this);
+								}
                 var container = document.getElementById('drives');
                 var serial = document.createElement("p");
                 serial.id = "driveSerial";
@@ -118,36 +153,13 @@ function getAllJobs() {
                 drive.appendChild(time);
                 container.appendChild(drive);
   						}
-  						var date = fetchedRecord['fields']['jobDate']['value'];
-  						document.getElementById("menuBarText").innerHTML = date;
-  						document.getElementById("DRIVECOUNT").innerHTML = serials.length;
-  						document.getElementById("JOBID").innerHTML = fetchedRecord['fields']['code']['value'];
-  						var signature = document.getElementById('signature');
-  						signature.setAttribute('src', fetchedRecord['fields']['signatueURL']['value'])
-  						var playerInstance = jwplayer("videoPlayer");
-							var widthNum = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-							var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-							var heightNum = widthNum/1.8;
-							width = width.toString() + "px";
-							height = heightNum.toString() + "px";
-							newHeight = heightNum + 45;
-							Mheight = newHeight.toString() + "px";
-							document.getElementById("drives").style.marginTop = Mheight;
-  						playerInstance.setup({
-  						    file: fetchedRecord['fields']['videoURL']['value'],
-  						    width: width,
-									height: height,
-  								"skin": {
-  									"name" : "myskin"
-  								}
-  						});
-
-
   					}
+
 					}
 
   		}
   	);
+
 	}
   function checkCode(form) {
     if (form.code.value.length < 5 || form.code.value.length > 5) {
@@ -327,29 +339,20 @@ function handleRegistration(form) {
 		if (entry.length > 0) {
 				var password = CryptoJS.AES.encrypt(entry, window.sessionStorage.getItem("clientName")).toString();
 				var dict = []; // create an empty array
-				dict.key1 = window.sessionStorage.getItem("clientName");
-				dict.key2 = window.sessionStorage.getItem("contactName");
-				dict.key3 = window.sessionStorage.getItem("email");
-				dict.key4 = window.sessionStorage.getItem("phone");
-				dict.key5 = password;
-				$.ajax({
-            url: 'http://0.0.0.0:8000/register',
-            data: dict,
-            type: 'POST',
-            success: function(response) {
-							console.log(response);
-							document.getElementById("cardHead").innerHTML = "All Set!";
-							document.getElementById("cardSubHead").innerHTML = "Your registration is being processed,<br>you'll recieve an email when your registration is complete.";
-            },
-            error: function(error) {
-							console.log("works");
-                console.log(error);
-            }
-        });
-
-
-		}
+				var clientName = window.sessionStorage.getItem("clientName");
+				var contactName = window.sessionStorage.getItem("contactName");
+				var email = window.sessionStorage.getItem("email");
+				var phone = window.sessionStorage.getItem("phone");
+				var rootRef = firebase.database().ref(clientName).set({
+					"client": clientName,
+					"contact" : contactName,
+					"email" : email,
+					"phone" : phone,
+					"pwd"	: password
+				});
+				window.location.href = "processing.html";
+			}
 	}
-
 	return false;
+
 }

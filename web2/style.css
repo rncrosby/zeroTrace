@@ -1,0 +1,340 @@
+body {
+  background-color: black;
+}
+
+.container {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.navBar {
+  z-index: 1;
+  position: fixed;
+  background-color: #212121;
+  top: 0;
+  width: 300px;
+  height: 100%;
+  left: 0;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+
+  /*-webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);*/
+}
+
+#navBar.show {
+  z-index: 1;
+  position: fixed;
+  background-color: #212121;
+  top: 0;
+  width: 300px;
+  height: 100%;
+  left: 0;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: toggleOn 0.5s;
+    animation: toggleOn 0.5s;
+}
+
+#navBar.hide {
+  z-index: 1;
+  position: fixed;
+  background-color: #212121;
+  top: 0;
+  width: 300px;
+  height: 100%;
+  left: -240px;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  transition: left 0.5s;
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: toggleOff 0.5s;
+    animation: toggleOff 0.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes toggleOff {
+    from {left: 0px; opacity: 1;}
+    to {left: -240px; opacity: 1;}
+}
+
+@keyframes toggleOff {
+  from {left: 0px; opacity: 1;}
+  to {left: -240px; opacity: 1;}
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes toggleOn {
+    from {left: -240px; opacity: 1;}
+    to {left: 0px; opacity: 1;}
+}
+
+@keyframes toggleOn {
+  from {left: -240px; opacity: 1;}
+  to {left: 0px; opacity: 1;}
+}
+
+img.navButton {
+  position: fixed;
+  top: 40px;
+  left: 240px;
+  height: auto;
+  padding: 5px 5px 5px 5px;
+  width: 30px;
+  display: inline;
+  border-radius: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+img#navButton.big {
+  position: fixed;
+  top: 40px;
+  left: 240px;
+  height: auto;
+  padding: 5px 5px 5px 5px;
+  width: 30px;
+  display: inline;
+  border-radius: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  -webkit-animation: moveLeft 0.5s;
+  animation: moveLeft 0.5s;
+}
+
+img#navButton.small {
+  position: fixed;
+  top: 40px;
+  left: 10px;
+  height: auto;
+  padding: 5px 5px 5px 5px;
+  width: 30px;
+  display: inline;
+  border-radius: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  -webkit-animation: moveRight 0.5s;
+  animation: moveRight 0.5s;
+}
+
+@-webkit-keyframes moveRight {
+    from {left: 10px; opacity: 1;}
+    to {left: 240px; opacity: 1;}
+}
+
+@keyframes moveRight {
+  from {left: 10px; opacity: 1;}
+  to {left: 240px; opacity: 1;}
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes moveLeft {
+    from {left: 240px; opacity: 1;}
+    to {left: 10px; opacity: 1;}
+}
+
+@keyframes moveLeft {
+  from {left: 240; moveLeft: 1;}
+  to {left: 10px; opacity: 1;}
+}
+
+
+
+a.navBarItem {
+  color: white;
+  line-height: 70px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 24;
+}
+a.navBarItem:hover{
+  cursor: pointer;
+  color: white;
+}
+a.pageButtonLight {
+  border-radius: 6px;
+  background-color: rgba(255,255,255,0.0);
+  border: 2px solid black; /* Green */
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  color: black;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
+  font-size: 24;
+  transition: color .25s;
+  transition: background-color .25s;
+}
+
+a.pageButtonLight:hover {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+a.pageButtonDark {
+  border-radius: 6px;
+  background-color: rgba(255,255,255,0.0);
+    border: 2px solid white; /* Green */
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
+  font-size: 24;
+  transition: color .25s;
+  transition: background-color .25s;
+}
+
+img.features {
+  margin-right: 30px;
+  background: -webkit-linear-gradient(left top, #FAFAFA , #EEEEEE);
+  background: -o-linear-gradient(bottom right, #FAFAFA, #EEEEEE);
+  background: -moz-linear-gradient(bottom right, #FAFAFA, #EEEEEE);
+  background: linear-gradient(to bottom right, #FAFAFA , #EEEEEE);
+  height: auto;
+  padding: 20px 20px 20px 20px;
+  width: 25%;
+  display: inline;
+  border-radius: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+img.navButton {
+  position: fixed;
+  top: 40px;
+  left: 240px;
+  height: auto;
+  padding: 5px 5px 5px 5px;
+  width: 30px;
+  display: inline;
+  border-radius: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+img.navButton:hover {
+}
+
+img.features:hover {
+  cursor: pointer;
+box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+
+a.clients {
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  display: inline;
+  border-radius: 15px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 34;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+a.clients:hover {
+  cursor: pointer;
+box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+a.pageButtonDark:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.pageSeperator {
+  padding-left: 350px;
+  width: 100%;
+  position: relative;
+  height: 75px;
+}
+
+a.moreInfo {
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  font-weight: 500;
+  font-size: 25;
+  line-height: 75px;
+  margin-top: 0px;
+  letter-spacing: 1;
+}
+
+a.moreInfo:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.subPage {
+  padding-left: 350px;
+  width: 100%;
+  position: relative;
+  height: auto;
+  padding-top: 25px;
+  padding-bottom: 50px;
+}
+
+p.TitleText {
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  font-weight: 700;
+  font-size: 100;
+  animation-name: fadeIn;
+}
+
+p.subTitleText {
+  font-family: 'Roboto', sans-serif;
+  margin-right: 30%;
+  color: white;
+  font-weight: 300;
+  font-size: 25;
+}
+.fullscreen-bg {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: -100;
+}
+
+.fullscreen-bg__video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-aspect-ratio: 16/9) {
+  .fullscreen-bg__video {
+    height: 300%;
+    top: -100%;
+  }
+}
+
+@media (max-aspect-ratio: 16/9) {
+  .fullscreen-bg__video {
+    width: 300%;
+    left: -100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .fullscreen-bg {
+    background: url('Ground-Zero.jpg') center center / cover no-repeat;
+  }
+
+  .fullscreen-bg__video {
+    display: none;
+  }
+}

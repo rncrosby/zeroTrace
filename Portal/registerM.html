@@ -1,5 +1,28 @@
 <html>
   <head>
+    <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyADP8PfP74I6PDAerLkZSOwukNZg1BO--M",
+    authDomain: "zer0trace-f8259.firebaseapp.com",
+    databaseURL: "https://zer0trace-f8259.firebaseio.com",
+    projectId: "zer0trace-f8259",
+    storageBucket: "zer0trace-f8259.appspot.com",
+    messagingSenderId: "80812276638"
+  };
+  var defaultApp = firebase.initializeApp(config);
+  // Initialize the default app
+
+console.log(defaultApp.name);  // "[DEFAULT]"
+// You can retrieve services via the defaultApp variable...
+var defaultStorage = defaultApp.storage();
+var defaultDatabase = defaultApp.database();
+
+// ... or you can use the equivalent shorthand notation
+defaultStorage = firebase.storage();
+defaultDatabase = firebase.database();
+</script>
     <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
     <script type="text/javascript" src="mobileCloud.js"></script>
@@ -17,7 +40,7 @@
     <center><div class="card" id="card">
       <p id="cardHead">Welcome</p>
       <p id="cardSubHead">Start with your company's name,<br>you'll sign in with this</p>
-      <form onsubmit="return handleRegistration(this);" method="get" action="">
+      <form onsubmit="return handleRegistration(this);" method="get" action="" id="regForm">
         <input type="text" id="fieldEntry" name="fieldEntry" autocomplete="off" placeholder="Company Name"><br>
     <input type="submit" value="Continue"></form>
     </div>

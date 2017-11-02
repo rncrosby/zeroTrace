@@ -4,14 +4,28 @@
     <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
     <script type="text/javascript" src="mobileCloud.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
     <link rel="stylesheet" href="jobM.css">
       <script src="https://content.jwplatform.com/libraries/ZZo1zmQF.js"> </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <title>ZER0trace Portal</title>
+    <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-database.js"></script>
+<script>
+  // Initialize Firebase
+  // TODO: Replace with your project's customized code snippet
+  var config = {
+    apiKey: "AIzaSyADP8PfP74I6PDAerLkZSOwukNZg1BO--M",
+    authDomain: "zer0trace-f8259.firebaseapp.com",
+    databaseURL: "https://zer0trace-f8259.firebaseio.com/",
+  };
+  firebase.initializeApp(config);
+</script>
   </head>
   <body>
     <script>getJob();</script>
-    <div class="menuBar">
+<div class="menuBar">
       <p id="menuBarText"></p>
       <a onclick="showFooter();" id="info"><img id="info" src="info.png"/></a>
       <a onclick="copyToClipboard();" id="share"><img id="shareIcon" src="share.png"/></a>
@@ -19,23 +33,25 @@
     </div>
     <div class="player" id="player">
       <div id="videoPlayer"></div>
-    </div>
-    <div class="footer" id="footer">
-    <div class="bottomLeft">
-      <p id="bottomTitle">Drive Count</p>
-      <p id="DRIVECOUNT"></p>
-    </div>
-    <div class="bottomCenter">
-      <p id="bottomTitle">Signature</p>
-      <center><img id="signature"></img><center>
-    </div>
-    <div class="bottomRight">
-      <p id="bottomTitle">Job ID</p>
-      <p id="JOBID"></p>
-    </div>
-  </div>
-          <div class="drives" id="drives"></div>
 
+    </div>
+    <div id="driveContainer">
+    <div class="drives" id="drives"></div>
+  </div>
+          <div class="footer" id="footer">
+          <div class="bottomLeft">
+            <p id="bottomTitle">Drive Count</p>
+            <p id="DRIVECOUNT"></p>
+          </div>
+          <div class="bottomCenter">
+            <p id="bottomTitle">Signature</p>
+            <center><img id="signature"></img><center>
+          </div>
+          <div class="bottomRight">
+            <p id="bottomTitle">Job ID</p>
+            <p id="JOBID"></p>
+          </div>
+          </div>
     <div id="snackbar">This Job Has Not Occured Yet.</div>
   </body>
 </html>
