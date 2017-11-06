@@ -11,135 +11,92 @@ body {
   overflow-x: hidden;
   overflow-y: scroll;
 }
-.navBar {
-  z-index: 1;
+
+img#social {
   position: fixed;
-  background-color: #212121;
-  top: 0;
-  width: 300px;
-  height: 100%;
-  left: 0;
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-
-  /*-webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);*/
+  z-index: 100;
+  top: 25px;
+  width: 20px;
+  height: 20px;
+  padding: 10px 10px 10px 10px;
+  border-radius: 10px;
 }
 
-#navBar.show {
-  z-index: 1;
+img#social:hover {
+  cursor: pointer;
+  top: 27px;
+}
+
+img#logo {
+  cursor: pointer;
   position: fixed;
-  background-color: #212121;
-  top: 0;
-  width: 300px;
-  height: 100%;
-  left: 0;
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: toggleOn 0.5s;
-    animation: toggleOn 0.5s;
-}
-
-#navBar.hide {
-  z-index: 1;
-  position: fixed;
-  background-color: #212121;
-  top: 0;
-  width: 300px;
-  height: 100%;
-  left: -240px;
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-  transition: left 0.5s;
-/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: toggleOff 0.5s;
-    animation: toggleOff 0.5s;
-}
-
-/* Animations to fade the snackbar in and out */
-@-webkit-keyframes toggleOff {
-    from {left: 0px; opacity: 1;}
-    to {left: -240px; opacity: 1;}
-}
-
-@keyframes toggleOff {
-  from {left: 0px; opacity: 1;}
-  to {left: -240px; opacity: 1;}
-}
-
-/* Animations to fade the snackbar in and out */
-@-webkit-keyframes toggleOn {
-    from {left: -240px; opacity: 1;}
-    to {left: 0px; opacity: 1;}
-}
-
-@keyframes toggleOn {
-  from {left: -240px; opacity: 1;}
-  to {left: 0px; opacity: 1;}
-}
-
-img.navButton {
-  position: fixed;
-  top: 40px;
-  left: 240px;
-  height: auto;
-  padding: 5px 5px 5px 5px;
-  width: 30px;
+  top: 0px;
+  padding-top: 16px;
+  padding-bottom: 5px;
+  padding-left: 100px;
+  padding-right: 150%;
+  left: 0px;
+  width: 200px;
+  height: 66.125px;
   display: inline;
-  border-radius: 15px;
+  z-index: 5;
+  background-color: black;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
-img#navButton.big {
+a.navBarLinks {
   position: fixed;
-  top: 40px;
-  left: 240px;
-  height: auto;
-  padding: 5px 5px 5px 5px;
-  width: 30px;
+  left: 382px;
+  height: 87.125px;
+  margin-top:0px;
+  top: 0px;
   display: inline;
-  border-radius: 15px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  -webkit-animation: moveLeft 0.5s;
-  animation: moveLeft 0.5s;
+  padding-left: 5px;
+  padding-right: 0px;
+  z-index: 100;
+  color: white;
+  line-height: 87.125px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 25;
+  text-decoration: none;
 }
 
-img#navButton.small {
+a.navBarLinks:hover {
+  color: #D50000;
+  cursor: pointer;
+}
+a.navBarClient:hover {
+  cursor: pointer;
+  background-color: #D50000;
+}
+
+a.navBarClient {
+  border-left: solid 1px rgba(255,255,255,0.3);
   position: fixed;
-  top: 40px;
-  left: 10px;
-  height: auto;
-  padding: 5px 5px 5px 5px;
-  width: 30px;
+  right: 0px;
+  height: 87.125px;
+  margin-top:0px;
+  text-align: center;
+  top: 0px;
   display: inline;
-  border-radius: 15px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  -webkit-animation: moveRight 0.5s;
-  animation: moveRight 0.5s;
+  width: 200px;
+  z-index: 100;
+  color: white;
+  line-height: 87.125px;
+  /*background: -webkit-linear-gradient(left top, #FF1744 , #D50000);
+    background: -o-linear-gradient(bottom right, #FF1744, #D50000);
+    background: -moz-linear-gradient(bottom right, #FF1744, #D50000);
+    background: linear-gradient(to bottom right, #FF1744 , #D50000);*/
+    background-color: black;
+    padding-left: 25px;
+    padding-right: 25px;
+    display: inline;
+    /*border-radius: 15px;*/
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 25;
 }
-
-@-webkit-keyframes moveRight {
-    from {left: 10px; opacity: 1;}
-    to {left: 240px; opacity: 1;}
-}
-
-@keyframes moveRight {
-  from {left: 10px; opacity: 1;}
-  to {left: 240px; opacity: 1;}
-}
-
-/* Animations to fade the snackbar in and out */
-@-webkit-keyframes moveLeft {
-    from {left: 240px; opacity: 1;}
-    to {left: 10px; opacity: 1;}
-}
-
-@keyframes moveLeft {
-  from {left: 240; moveLeft: 1;}
-  to {left: 10px; opacity: 1;}
-}
-
-
 
 a.navBarItem {
   color: white;
@@ -191,13 +148,14 @@ a.pageButtonDark {
 
 img.features {
   margin-right: 30px;
-  background: -webkit-linear-gradient(left top, #FAFAFA , #EEEEEE);
-  background: -o-linear-gradient(bottom right, #FAFAFA, #EEEEEE);
-  background: -moz-linear-gradient(bottom right, #FAFAFA, #EEEEEE);
-  background: linear-gradient(to bottom right, #FAFAFA , #EEEEEE);
+  background: -webkit-linear-gradient(left top, #FF1744 , #D50000);
+    background: -o-linear-gradient(bottom right, #FF1744, #D50000);
+    background: -moz-linear-gradient(bottom right, #FF1744, #D50000);
+    background: linear-gradient(to bottom right, #FF1744 , #D50000);
   height: auto;
   padding: 20px 20px 20px 20px;
   width: 25%;
+  max-width: 300px;
   display: inline;
   border-radius: 15px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
@@ -225,6 +183,9 @@ img.features:hover {
 box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
+a.clients#activeType {
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
 
 a.clients {
   padding-left: 50px;
@@ -292,7 +253,7 @@ p.TitleText {
 
 p.subTitleText {
   font-family: 'Roboto', sans-serif;
-  margin-right: 30%;
+  margin-right: ;
   color: white;
   font-weight: 300;
   font-size: 25;
@@ -337,4 +298,60 @@ p.subTitleText {
   .fullscreen-bg__video {
     display: none;
   }
+}
+
+.destructionMethodContainer#clean{
+  opacity: 1;
+  -webkit-transition: opacity 1000ms linear;
+  transition: opacity 1000ms linear;
+  background: -webkit-linear-gradient(left top, #80D8FF , #00B8D4);
+  background: -o-linear-gradient(bottom right, #80D8FF, #00B8D4);
+  background: -moz-linear-gradient(bottom right, #80D8FF, #00B8D4);
+  background: linear-gradient(to bottom right, #80D8FF , #00B8D4);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  width: 50%;
+  max-width: 1800px;
+  border-radius: 16px;
+  height: 600px;
+  margin-bottom: 200px;
+}
+
+.destructionMethodContainer#purge{
+  opacity: 1;
+  -webkit-transition: opacity 1000ms linear;
+  transition: opacity 1000ms linear;
+  background: -webkit-linear-gradient(left top, #B388FF , #3D5AFE);
+  background: -o-linear-gradient(bottom right, #B388FF, #3D5AFE);
+  background: -moz-linear-gradient(bottom right, #B388FF, #3D5AFE);
+  background: linear-gradient(to bottom right, #B388FF , #3D5AFE);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  width: 50%;
+  max-width: 1800px;
+  border-radius: 16px;
+  height: 600px;
+  margin-bottom: 200px;
+}
+
+.destructionMethodContainer#destroy{
+  opacity: 1;
+  -webkit-transition: opacity 1000ms linear;
+  transition: opacity 1000ms linear;
+  background: -webkit-linear-gradient(left top, #FF9E80 , #D50000);
+  background: -o-linear-gradient(bottom right, #FF9E80, #D50000);
+  background: -moz-linear-gradient(bottom right, #FF9E80, #D50000);
+  background: linear-gradient(to bottom right, #FF9E80 , #D50000);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  width: 50%;
+  max-width: 1800px;
+  border-radius: 16px;
+  height: 600px;
+  margin-bottom: 200px;
+}
+
+#fixedFoot {
+  position: fixed;
+  bottom: 0;
+  z-index: 100;
+  height: 100px;
+  width: 100%;
 }
