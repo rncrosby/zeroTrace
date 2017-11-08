@@ -1,0 +1,103 @@
+<html>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="script.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
+  <link rel="stylesheet" href="data.css">
+  <link rel="stylesheet" href="style.css">
+  <title>ZER0trace Data Destruction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+</head>
+<body style="background-color: black;">
+  <img id="logo" onclick="window.location.href = 'index.html';" src="logo.png"/><a class="navBarLinks" href="data.html">Data Destruction</a><a class="navBarLinks" style="left:600px;">Certification</a><a class="navBarLinks" style="left:770px;">Mobile Suite</a></a><a class="navBarClient" href="Portal/clientM.html" target="_blank">Client Portal</a>
+  <!-- <img id="social" src="twitter.png" style="right: 290px;background: red;
+background: -webkit-linear-gradient(left top, #40C4FF , #0091EA);
+background: -o-linear-gradient(bottom right, #40C4FF, #0091EA);
+background: -moz-linear-gradient(bottom right, #40C4FF, #0091EA);
+background: linear-gradient(to bottom right, #40C4FF , #0091EA);"/>
+<img id="social" src="facebook.png" style="right: 340px;background: red;
+background: -webkit-linear-gradient(left top, #448AFF , #2962FF);
+background: -o-linear-gradient(bottom right, #448AFF, #2962FF);
+background: -moz-linear-gradient(bottom right, #448AFF, #2962FF);
+background: linear-gradient(to bottom right, #448AFF , #2962FF);"/>
+<img id="social" src="phone.png" style="right: 390px;background: red;
+background: -webkit-linear-gradient(left top, #69F0AE , #00C853);
+background: -o-linear-gradient(bottom right, #69F0AE, #00C853);
+background: -moz-linear-gradient(bottom right, #69F0AE, #00C853);
+background: linear-gradient(to bottom right, #69F0AE , #00C853);"/>
+<img id="social" src="email.png" style="right: 440px;background: red;
+background: -webkit-linear-gradient(left top, #18FFFF , #00B8D4);
+background: -o-linear-gradient(bottom right, #18FFFF, #00B8D4);
+background: -moz-linear-gradient(bottom right, #18FFFF, #00B8D4);
+background: linear-gradient(to bottom right, #18FFFF , #00B8D4);"/> -->
+<div class="container" style="margin-top:75px;padding-bottom:-1000px;margin-bottom:-100px;">
+  <div class="block" id="blockA" style="z-index: 1;padding-left: 0px;">
+    <p class="title">Clear</p>
+    <p class="description">Applies logical techniques to sanitize data in all user-addressable storage locations for protection against simple noninvasive data recovery techniques.</p>
+    <p class="subtitle">When?</p>
+    <p class="description">Hardware remains relevant and in good condition; redeploy extending return on investment</p>
+    <p class="subtitle">How?</p>
+    <p class="description">Utilize standard Read/Write commands to rewrite with a new value or using a menu option to reset the device to the factory state (where rewriting is not supported).</p>
+    <a class="modifier" onclick="action('A');">See How</a>
+    <img class="blockImage" src="original.png"/>
+  </div>
+  <div class="block" id="blockB" style="background-color: #D50000;z-index: 0;padding-left: 0px;">
+    <p class="title" style="color: white;">Clear</p>
+    <p class="description"style="color: white;">Applies logical techniques to sanitize data in all user-addressable storage locations for protection against simple noninvasive data recovery techniques.</p>
+    <p class="subtitle"style="color: white;">When?</p>
+    <p class="description"style="color: white;">Hardware remains relevant and in good condition; redeploy extending return on investment</p>
+    <p class="subtitle"style="color: white;">How?</p>
+    <p class="description"style="color: white;">Utilize standard Read/Write commands to rewrite with a new value or using a menu option to reset the device to the factory state (where rewriting is not supported).</p>
+    <a class="modifier" onclick="action('A');"style="color: white;">See How</a>
+    <img class="blockImage" src="clear.png"/>
+  </div>
+  <div class="seperator" style="position: absolute; top: 650px; width:100%;height:50px;background-color: black;">
+  </div>
+  <div class="block" id="blockC" style="z-index: 1;top: 700px;">
+    <p class="title">Purge</p>
+    <p class="description">Applies physical or logical techniques that render target data recovery infeasible using state-of-the art laboratory techniques.</p>
+    <p class="subtitle">When?</p>
+    <p class="description">Hardware will be returned to lessor at end of lease OR Hardware has residual value and can be sold to offset replacement cost</p>
+    <p class="subtitle">How?</p>
+    <p class="description">Overwrite (aka wipe; erase) the storage media with new data utilizing specially developed and certified destruction software to perform 1 or more overwrite passes with various schemas.</p>
+    <a class="modifier" onclick="action('C');">See How</a>
+    <img class="blockImage" src="original.png"/>
+  </div>
+  <div class="block" id="blockD" style="background-color: #D50000;z-index: 0;top: 700px;">
+    <p class="title" style="color: white;">Purge</p>
+    <p class="description"style="color: white;">Applies physical or logical techniques that render target data recovery infeasible using state-of-the art laboratory techniques.</p>
+    <p class="subtitle"style="color: white;">When?</p>
+    <p class="description"style="color: white;">Hardware will be returned to lessor at end of lease OR Hardware has residual value and can be sold to offset replacement cost</p>
+    <p class="subtitle"style="color: white;">How?</p>
+    <p class="description"style="color: white;">Overwrite (aka wipe; erase) the storage media with new data utilizing specially developed and certified destruction software to perform 1 or more overwrite passes with various schemas.</p>
+    <a class="modifier" onclick="action('C');"style="color: white;">See How</a>
+    <img class="blockImage" src="purge.png"/>
+  </div>
+  <div class="seperator" style="position: absolute; top: 650px; width:100%;height:50px;background-color: black;">
+  </div>
+  <div class="block" id="blockE" style="z-index: 1;top: 1400px;padding-bottom:100px;">
+    <p class="title">Destroy</p>
+    <p class="description">Renders target data recovery (using state-of-the-art laboratory techniques) infeasible and results in the subsequent inability to use the media for storage of data.</p>
+    <p class="subtitle">When?</p>
+    <p class="description">Hardware is obsolete, has no further use or value or is damaged; recycle raw materials AND/OR contains extremely sensitive or classified information AND/OR is mandated by corporate/company/agency rule/policy</p>
+    <p class="subtitle">How?</p>
+    <p class="description">Degaussing with NSA EPL-D certified and calibrated equipment; shred demagnetized drives to ¾”(19mm) particles.</p>
+    <a class="modifier" onclick="action('E');">See How</a>
+    <img class="blockImage" src="original.png"/>
+  </div>
+  <div class="block" id="blockF" style="background-color: #D50000;z-index: 0;top: 1400px;padding-bottom:100px;">
+    <p class="title" style="color: white;">Destroy</p>
+    <p class="description"style="color: white;">Renders target data recovery (using state-of-the-art laboratory techniques) infeasible and results in the subsequent inability to use the media for storage of data.</p>
+    <p class="subtitle"style="color: white;">When?</p>
+    <p class="description"style="color: white;">Hardware is obsolete, has no further use or value or is damaged; recycle raw materials AND/OR contains extremely sensitive or classified information AND/OR is mandated by corporate/company/agency rule/policy</p>
+    <p class="subtitle"style="color: white;">How?</p>
+    <p class="description"style="color: white;">Degaussing with NSA EPL-D certified and calibrated equipment; shred demagnetized drives to ¾”(19mm) particles.</p>
+    <a class="modifier" onclick="action('E');"style="color: white;">See How</a>
+    <img class="blockImage" src="destroy.png"/>
+  </div>
+<br><br><br><br><br><br><br>
+</div>
+
+
+</body>
+</html>
