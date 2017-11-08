@@ -23,10 +23,10 @@ function action(block) {
       a.style.width = '0px';
     }
   }
+}
 
-  // var width = a.offsetWidth;
-  // do {
-  //   width = width - 1;
-  //   a.style.width = width + 'px';
-  // } while (width > 0);
+function openPortal() {
+  var tabOrWindow = window.open('http://www.portal-zer0trace.com/Portal/clientM.html', '_blank');
+  tabOrWindow.focus();
+
 }
