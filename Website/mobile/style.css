@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+}
+
+.section {
+  padding-left: 0;
+  z-index: -1;
+  width: 100%;
+  height: auto;
+  position: relative;
+}
+
+img.logo {
+  margin-left: 5%;
+  width: 226px;
+  height: 40px;
+  padding-top: 16.5px;
+  position: relative;
+}
+
+.foot {
+  left: 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 45px;
+  background-color: white;
+  border-top: 1px solid #E0E0E0;
+}
+
+a.footButton {
+  position: fixed;
+  bottom: 0;
+  font-family: 'Roboto', sans-serif;
+  color: #212121;
+  font-size: 16;
+  line-height: 45px;
+  font-weight: 700;
+}
+
+p.title {
+  font-family: 'Roboto', sans-serif;
+  color: #212121;
+  font-size: 33;
+  font-weight: 100;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  margin-left: 5%;
+  margin-right: 20%;
+}
+
+p.subhead {
+  font-family: 'Roboto', sans-serif;
+  color: #212121;
+  font-size: 20;
+  font-weight: 700;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  margin-left: 5%;
+  margin-right: 20%;
+}
+
+p.subtitle {
+  font-family: 'Roboto', sans-serif;
+  color: #212121;
+  font-size: 20;
+  font-weight: 400;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+a.segmentedControl {
+  z-index: 100;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 5%;
+  padding-right: 5%;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  color: #212121;
+  font-size: 20;
+  line-height: 50px;
+  text-align: center;
+  display: inline;
+}

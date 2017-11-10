@@ -33,7 +33,7 @@ img#logo {
   top: 0px;
   padding-top: 16px;
   padding-bottom: 5px;
-  padding-left: 100px;
+  padding-left: 80px;
   padding-right: 150%;
   left: 0px;
   width: 200px;
@@ -344,7 +344,7 @@ p.subTitleText {
 
 @media (max-width: 767px) {
   .fullscreen-bg {
-    background: url('Ground-Zero.jpg') center center / cover no-repeat;
+    background: url('shred.jpg') center center / cover no-repeat;
   }
 
   .fullscreen-bg__video {
