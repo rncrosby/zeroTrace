@@ -237,11 +237,8 @@ function getAllJobs() {
 					document.getElementById("cardSubHead").innerHTML = "Something isn't right withyour<br>username or password";
 			} else {
 					var fetchedRecord = response.records[0];
-					console.log(fetchedRecord);
 					var retrievedPassword = fetchedRecord['fields']['password']['value'];
-					var decryptedretrievedPassword = CryptoJS.AES.decrypt(retrievedPassword, fetchedRecord['recordName']);
-					decryptedretrievedPassword = decryptedretrievedPassword.toString(CryptoJS.enc.Utf8);
-					if (password == decryptedretrievedPassword) {
+					if (password == retrievedPassword) {
 						window.sessionStorage.setItem("signedIn", "true");
 						window.sessionStorage.setItem("code", fetchedRecord['fields']['client']['value']);
 						window.location.href = "clientPortalM.html?code=" + fetchedRecord['fields']['client']['value'];
@@ -337,7 +334,7 @@ function handleRegistration(form) {
 		}
 	} else if (step == 4) {
 		if (entry.length > 0) {
-				var password = CryptoJS.AES.encrypt(entry, window.sessionStorage.getItem("clientName")).toString();
+				// var password = CryptoJS.AES.encrypt(entry, window.sessionStorage.getItem("clientName")).toString();
 				var dict = []; // create an empty array
 				var clientName = window.sessionStorage.getItem("clientName");
 				var contactName = window.sessionStorage.getItem("contactName");
@@ -348,7 +345,7 @@ function handleRegistration(form) {
 					"contact" : contactName,
 					"email" : email,
 					"phone" : phone,
-					"pwd"	: password
+					"pwd"	: entry
 				});
 				window.location.href = "processing.html";
 			}

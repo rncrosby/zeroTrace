@@ -62,7 +62,7 @@
 
 -(void)getClientJobs {
     jobs = [[NSMutableArray alloc] init];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"code = '41699'"]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"code = '%@'",[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]]];
     CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
     CKContainer *container = [CKContainer containerWithIdentifier:@"iCloud.com.fullytoasted.ZER0trace-Internal"];
     [container.publicCloudDatabase performQuery:query

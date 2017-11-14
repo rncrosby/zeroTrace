@@ -23,6 +23,12 @@
 		AD1F56641F8EC27500C9F33F /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1F56611F8EC26200C9F33F /* play.png */; };
 		AD1F56681F8EC95A00C9F33F /* driveCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1F56661F8EC95A00C9F33F /* driveCell.m */; };
 		AD1F56691F8EC95A00C9F33F /* driveCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD1F56671F8EC95A00C9F33F /* driveCell.xib */; };
+		AD845EE31FBA61DC00F5B965 /* NSData+CommonCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = AD845EDB1FBA61DA00F5B965 /* NSData+CommonCrypto.m */; };
+		AD845EE41FBA61DC00F5B965 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = AD845EDD1FBA61DB00F5B965 /* NSString+Base64.m */; };
+		AD845EE51FBA61DC00F5B965 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = AD845EDF1FBA61DB00F5B965 /* NSData+Base64.m */; };
+		AD845EE61FBA61DC00F5B965 /* AESCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = AD845EE11FBA61DB00F5B965 /* AESCrypt.m */; };
+		AD845EEA1FBA622900F5B965 /* loginView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD845EE91FBA622900F5B965 /* loginView.m */; };
+		AD845EEE1FBA62EF00F5B965 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = AD845EED1FBA62EE00F5B965 /* logo.png */; };
 		AD92C44E1F8EA33100454285 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AD92C44D1F8EA33100454285 /* AppDelegate.m */; };
 		AD92C4541F8EA33100454285 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD92C4521F8EA33100454285 /* Main.storyboard */; };
 		AD92C4561F8EA33100454285 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD92C4551F8EA33100454285 /* Assets.xcassets */; };
@@ -55,6 +61,18 @@
 		AD1F56661F8EC95A00C9F33F /* driveCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = driveCell.m; sourceTree = "<group>"; };
 		AD1F56671F8EC95A00C9F33F /* driveCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = driveCell.xib; sourceTree = "<group>"; };
 		AD1F566A1F8ED0A700C9F33F /* fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullscreen.png; sourceTree = "<group>"; };
+		AD845EDB1FBA61DA00F5B965 /* NSData+CommonCrypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CommonCrypto.m"; sourceTree = "<group>"; };
+		AD845EDC1FBA61DA00F5B965 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
+		AD845EDD1FBA61DB00F5B965 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
+		AD845EDE1FBA61DB00F5B965 /* AESCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESCrypt.h; sourceTree = "<group>"; };
+		AD845EDF1FBA61DB00F5B965 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		AD845EE01FBA61DB00F5B965 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		AD845EE11FBA61DB00F5B965 /* AESCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AESCrypt.m; sourceTree = "<group>"; };
+		AD845EE21FBA61DB00F5B965 /* NSData+CommonCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CommonCrypto.h"; sourceTree = "<group>"; };
+		AD845EE81FBA622900F5B965 /* loginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = loginView.h; sourceTree = "<group>"; };
+		AD845EE91FBA622900F5B965 /* loginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = loginView.m; sourceTree = "<group>"; };
+		AD845EED1FBA62EE00F5B965 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = ../../Website/logo.png; sourceTree = "<group>"; };
+		AD845EEF1FBA656C00F5B965 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		AD92C4491F8EA33100454285 /* ZER0trace External.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ZER0trace External.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD92C44C1F8EA33100454285 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		AD92C44D1F8EA33100454285 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -93,6 +111,7 @@
 		6FF90382E1972151008D6ED1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AD845EEF1FBA656C00F5B965 /* Foundation.framework */,
 				AD1F565B1F8EB8AC00C9F33F /* AVFoundation.framework */,
 				AD1F56591F8EB89900C9F33F /* CoreMedia.framework */,
 				AD1F56471F8EA50B00C9F33F /* CloudKit.framework */,
@@ -109,6 +128,21 @@
 				AD1F56611F8EC26200C9F33F /* play.png */,
 			);
 			path = images;
+			sourceTree = "<group>";
+		};
+		AD845EE71FBA61E300F5B965 /* AES */ = {
+			isa = PBXGroup;
+			children = (
+				AD845EDE1FBA61DB00F5B965 /* AESCrypt.h */,
+				AD845EE11FBA61DB00F5B965 /* AESCrypt.m */,
+				AD845EE01FBA61DB00F5B965 /* NSData+Base64.h */,
+				AD845EDF1FBA61DB00F5B965 /* NSData+Base64.m */,
+				AD845EE21FBA61DB00F5B965 /* NSData+CommonCrypto.h */,
+				AD845EDB1FBA61DA00F5B965 /* NSData+CommonCrypto.m */,
+				AD845EDC1FBA61DA00F5B965 /* NSString+Base64.h */,
+				AD845EDD1FBA61DB00F5B965 /* NSString+Base64.m */,
+			);
+			path = AES;
 			sourceTree = "<group>";
 		};
 		AD92C4401F8EA33100454285 = {
@@ -132,6 +166,8 @@
 		AD92C44B1F8EA33100454285 /* ZER0trace External */ = {
 			isa = PBXGroup;
 			children = (
+				AD845EED1FBA62EE00F5B965 /* logo.png */,
+				AD845EE71FBA61E300F5B965 /* AES */,
 				AD1F56621F8EC26800C9F33F /* images */,
 				AD1F56461F8EA50500C9F33F /* ZER0trace External.entitlements */,
 				AD92C44C1F8EA33100454285 /* AppDelegate.h */,
@@ -156,6 +192,8 @@
 				AD1F56651F8EC95A00C9F33F /* driveCell.h */,
 				AD1F56661F8EC95A00C9F33F /* driveCell.m */,
 				AD1F56671F8EC95A00C9F33F /* driveCell.xib */,
+				AD845EE81FBA622900F5B965 /* loginView.h */,
+				AD845EE91FBA622900F5B965 /* loginView.m */,
 			);
 			path = "ZER0trace External";
 			sourceTree = "<group>";
@@ -234,6 +272,7 @@
 				AD1F56491F8EA58000C9F33F /* GoogleService-Info.plist in Resources */,
 				AD1F56691F8EC95A00C9F33F /* driveCell.xib in Resources */,
 				AD92C4591F8EA33100454285 /* LaunchScreen.storyboard in Resources */,
+				AD845EEE1FBA62EF00F5B965 /* logo.png in Resources */,
 				AD92C4561F8EA33100454285 /* Assets.xcassets in Resources */,
 				AD92C4541F8EA33100454285 /* Main.storyboard in Resources */,
 				AD1F56511F8EA92500C9F33F /* clientCell.xib in Resources */,
@@ -300,12 +339,17 @@
 			files = (
 				AD1F56681F8EC95A00C9F33F /* driveCell.m in Sources */,
 				AD1F564C1F8EA8AD00C9F33F /* clientView.m in Sources */,
+				AD845EE31FBA61DC00F5B965 /* NSData+CommonCrypto.m in Sources */,
+				AD845EE51FBA61DC00F5B965 /* NSData+Base64.m in Sources */,
+				AD845EE61FBA61DC00F5B965 /* AESCrypt.m in Sources */,
 				AD1F56541F8EAACA00C9F33F /* References.m in Sources */,
+				AD845EE41FBA61DC00F5B965 /* NSString+Base64.m in Sources */,
 				AD1F56581F8EB5E100C9F33F /* jobObject.m in Sources */,
 				AD1F565F1F8EB9DA00C9F33F /* jobView.m in Sources */,
 				AD92C45C1F8EA33100454285 /* main.m in Sources */,
 				AD1F56501F8EA92500C9F33F /* clientCell.m in Sources */,
 				AD92C44E1F8EA33100454285 /* AppDelegate.m in Sources */,
+				AD845EEA1FBA622900F5B965 /* loginView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
