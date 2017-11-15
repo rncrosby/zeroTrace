@@ -18,7 +18,7 @@ function getAllJobs() {
 		publicDatabase.fetchRecords(code[1]).then(function(response) {
 		if (response.hasErrors) {
 				// Insert error handling
-				alert("Something Went Wrong");
+				window.location.href = "processing.html";
 		} else {
 					var fetchedRecord = response.records[0];
 					var jobTitles = fetchedRecord['fields']['allJobDates']['value'];
@@ -219,41 +219,23 @@ function getAllJobs() {
 	function checkClient(form){
 		var username = form.clientName.value;
 		var password = form.password.value;
-		CloudKit.configure({
-				containers: [{
-					containerIdentifier: 'iCloud.com.fullytoasted.ZER0trace-Internal',
-					apiToken: 'af60d3e793d45807555d470d8a6972dc50b182a36aa0772d612c1c37ad8d16be',
-					environment: 'production'
-				}]
+		firebase.auth().signInWithEmailAndPassword(username, password).then(function(user) {
+			var userID = username.split("@");
+			firebase.database().ref(userID[0]).once('value').then(function(snapshot) {
+				var code = snapshot.val().code;
+				window.sessionStorage.setItem("signedIn", "true");
+				window.sessionStorage.setItem("code", code);
+				window.location.href = "clientPortalM.html?code=" + code;
 			});
-
-			var container = CloudKit.getDefaultContainer();
-			var publicDatabase = container.publicCloudDatabase;
-			publicDatabase.fetchRecords(username).then(function(response) {
-			if (response.hasErrors) {
-					// Insert error handling
-					console.log(response.errors);
-					document.getElementById("cardHead").innerHTML = "Try Again";
-					document.getElementById("cardSubHead").innerHTML = "Something isn't right withyour<br>username or password";
-			} else {
-					var fetchedRecord = response.records[0];
-					var retrievedPassword = fetchedRecord['fields']['password']['value'];
-					if (password == retrievedPassword) {
-						window.sessionStorage.setItem("signedIn", "true");
-						window.sessionStorage.setItem("code", fetchedRecord['fields']['client']['value']);
-						window.location.href = "clientPortalM.html?code=" + fetchedRecord['fields']['client']['value'];
-					}
-				}
-
+			}).catch(function(error) {
+		  // Handle Errors here.
+		  var errorCode = error.code;
+		  var errorMessage = error.message;
+			if (errorCode) {
+				document.getElementById("cardHead").innerHTML = "Error";
+				document.getElementById("cardSubHead").innerHTML = error.message;
 			}
-		);
-		return false;
-		// var decryptedUsername = CryptoJS.AES.decrypt(encryptedUsername, "encrypt");
-		// decryptedUsername = decryptedUsername.toString(CryptoJS.enc.Utf8);
-		// var decryptedPassword = CryptoJS.AES.decrypt(encryptedPassword, "encrypt");
-		// decryptedPassword = decryptedPassword.toString(CryptoJS.enc.Utf8);
-		// alert(username + "->" + encryptedUsername + "->" + decryptedUsername);
-		// var decrypted = CryptoJS.AES.decrypt(encrypted, "Secret Passphrase");
+		});
 	}
 	function notActivated() {
 		var x = document.getElementById("snackbar")
@@ -340,16 +322,37 @@ function handleRegistration(form) {
 				var contactName = window.sessionStorage.getItem("contactName");
 				var email = window.sessionStorage.getItem("email");
 				var phone = window.sessionStorage.getItem("phone");
-				var rootRef = firebase.database().ref(clientName).set({
+				var username = email.split("@");
+				var rootRef = firebase.database().ref(username[0]).set({
 					"client": clientName,
 					"contact" : contactName,
 					"email" : email,
 					"phone" : phone,
-					"pwd"	: entry
+					"code"	: makeid()
 				});
-				window.location.href = "processing.html";
+				firebase.auth().createUserWithEmailAndPassword(email, entry).then(function(user) {
+					window.location.href = "processing.html";
+					}).catch(function(error) {
+				  // Handle Errors here.
+				  var errorCode = error.code;
+				  var errorMessage = error.message;
+					if (errorCode) {
+						document.getElementById("cardHead").innerHTML = "Error";
+						document.getElementById("cardSubHead").innerHTML = error.message;
+					}
+				});
+
 			}
 	}
 	return false;
 
+}
+function makeid() {
+  var text = "";
+  var possible = "0123456789";
+
+  for (var i = 0; i < 5; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
 }
