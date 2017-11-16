@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "pastJobView.h"
+#import "clientManagerView.h"
+#import <FirebaseDatabase/FIRDatabaseReference.h>
 #import <QRCodeReaderViewController/QRCodeReaderViewController.h>
 #import <QRCodeReaderViewController/QRCodeReader.h>
 #import <CloudKit/CloudKit.h>
@@ -16,10 +18,13 @@
 #import "jobObject.h"
 #import <QuartzCore/QuartzCore.h>
 #import "manualJobViewViewController.h"
+#import "accountObject.h"
 
 @interface homeView : UIViewController <QRCodeReaderDelegate,UITextFieldDelegate,UICollectionViewDelegate,UICollectionViewDataSource> {
     UIAlertController *alert,*deletingJob,*refreshingJobs;
+    NSMutableArray *pendingAccounts;
     QRCodeReaderViewController *vc;
+    
     NSMutableArray *nextJobs,*completedJobs,*nextJobRecords,*completedJobsRecord,*locallySaved;
     __weak IBOutlet UILabel *menuBar;
     __weak IBOutlet UICollectionView *upcomingJobs;
@@ -31,13 +36,13 @@
     __weak IBOutlet UILabel *noPastJobs;
     __weak IBOutlet UITextField *scannerCheck;
     __weak IBOutlet UIButton *checkScannerButton;
-    
+    FIRDatabaseReference *ref;
+    __weak IBOutlet UILabel *clientCount;
+    __weak IBOutlet UIButton *clientManagerButton;
 }
-
 - (IBAction)checkScanner:(id)sender;
-
-
 - (IBAction)refreshButton:(id)sender;
+- (IBAction)clientManager:(id)sender;
 
 
 

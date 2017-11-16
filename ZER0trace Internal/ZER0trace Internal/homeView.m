@@ -15,7 +15,7 @@
 @implementation homeView
 
 - (void)viewDidLoad {
-    
+    [References cornerRadius:clientCount radius:clientCount.frame.size.width/2];
     [createJobs setBackgroundColor:[UIColor clearColor]];
     [recentJobs setBackgroundColor:[UIColor clearColor]];
     [upcomingJobs setBackgroundColor:[UIColor clearColor]];
@@ -81,7 +81,6 @@
             [scannerCheck becomeFirstResponder];
         });
     });
-    
     // Do any additional setup after loading the view.
 }
 
@@ -100,6 +99,11 @@
     if ([References screenWidth] > 1024) {
         [References toastMessage:@"ZER0trace is not optimized for this iPad. Please use a 9.7\" device." andView:self andClose:NO];
     }
+    [self getPendingAccounts];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    ref = [[FIRDatabase database] reference];
 }
 
 - (void) keyboardWillShow:(NSNotification *)notification
@@ -468,6 +472,15 @@
 
 - (IBAction)refreshButton:(id)sender {
     [self getUpcoming:NO];
+    [self getPendingAccounts];
+}
+
+- (IBAction)clientManager:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    clientManagerView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"clientManagerView"];
+    controller.modalPresentationStyle = UIModalPresentationFormSheet;
+    //menu is only an example
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 -(void)handleDeleteButton:(id)sender {
@@ -519,5 +532,36 @@
     }];
     [alertController addAction:cancelAction];
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)getPendingAccounts {
+    [pendingAccounts removeAllObjects];
+    pendingAccounts = [[NSMutableArray alloc] init];
+    [ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        NSDictionary *accounts = snapshot.value;
+        if (![[NSString stringWithFormat:@"%@",accounts] isEqualToString:@"<null>"]) {
+            [accounts enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                accountObject *account = [[accountObject alloc] initWithType:key andClient:[obj valueForKey:@"client"] andCode:[obj valueForKey:@"code"] andContactName:[obj valueForKey:@"client"] andEmail:[obj valueForKey:@"email"] andPhone:[obj valueForKey:@"phone"]];
+                [pendingAccounts addObject:account];
+                // Set stop to YES when you wanted to break the iteration.
+            }];
+            if (pendingAccounts.count < 1) {
+                clientManagerButton.enabled = false;
+                clientManagerButton.alpha = 0.5f;
+                clientCount.hidden = true;
+            } else {
+                clientManagerButton.enabled = true;
+                clientCount.hidden = false;
+                clientManagerButton.alpha = 1.0f;
+                clientCount.text = [NSString stringWithFormat:@"%lu",(unsigned long)pendingAccounts.count];
+            }
+        } else {
+            clientManagerButton.alpha = 0.5f;
+            clientManagerButton.enabled = false;
+            clientCount.hidden = true;
+        }
+
+    }];
+
 }
 @end

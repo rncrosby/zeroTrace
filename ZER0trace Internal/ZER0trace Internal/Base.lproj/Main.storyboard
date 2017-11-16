@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="H82-MJ-fmV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13770" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="H82-MJ-fmV">
     <device id="ipad9_7" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13770"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -222,6 +222,25 @@
                                         <color key="textColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="KEB-Kh-O0c">
+                                        <rect key="frame" x="719" y="107" width="285" height="46"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                        <state key="normal" title="Client Manager">
+                                            <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="clientManager:" destination="H82-MJ-fmV" eventType="touchUpInside" id="WEX-dX-TPP"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="15x-MW-Zqw">
+                                        <rect key="frame" x="993" y="104" width="23" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.70440274477005005" green="0.18128180503845215" blue="0.10175552219152451" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="116" maxX="0.0" maxY="0.0"/>
@@ -288,6 +307,8 @@
                     <connections>
                         <outlet property="beginningProgress" destination="PUI-aG-8Sm" id="BeK-5l-igV"/>
                         <outlet property="checkScannerButton" destination="feW-FC-YUZ" id="9l9-0C-Js6"/>
+                        <outlet property="clientCount" destination="15x-MW-Zqw" id="P5w-zx-RiX"/>
+                        <outlet property="clientManagerButton" destination="KEB-Kh-O0c" id="HJe-ox-unm"/>
                         <outlet property="createJobs" destination="EKc-0V-hNS" id="ncw-d0-Sbc"/>
                         <outlet property="menuBar" destination="fHo-aF-udj" id="1z7-iU-34l"/>
                         <outlet property="noPastJobs" destination="DDY-z9-CSV" id="IYC-xQ-eca"/>
@@ -301,7 +322,72 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zzg-Y3-iju" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="SAP-oI-yfm" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-84" y="-424"/>
+            <point key="canvasLocation" x="-263" y="-427"/>
+        </scene>
+        <!--Client Manager View-->
+        <scene sceneID="mI5-9D-9jM">
+            <objects>
+                <viewController storyboardIdentifier="clientManagerView" useStoryboardIdentifierAsRestorationIdentifier="YES" id="m0a-hB-867" customClass="clientManagerView" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="thK-Oy-Vxw">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="83I-aa-51D">
+                                <rect key="frame" x="10" y="611" width="93" height="46"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Close">
+                                    <color key="titleColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="close:" destination="np7-5X-gDr" eventType="touchUpInside" id="bb0-uf-z7p"/>
+                                    <action selector="closeView:" destination="m0a-hB-867" eventType="touchUpInside" id="rfv-U3-10O"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="usV-ja-ZXZ">
+                                <rect key="frame" x="229" y="611" width="136" height="46"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Create Client">
+                                    <color key="titleColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="createClient:" destination="m0a-hB-867" eventType="touchUpInside" id="eir-jj-Qte"/>
+                                    <action selector="share:" destination="np7-5X-gDr" eventType="touchUpInside" id="50T-a9-Xvt"/>
+                                </connections>
+                            </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="hDi-uc-ZEQ">
+                                <rect key="frame" x="0.0" y="54" width="375" height="549"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="separatorInset" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="m0a-hB-867" id="CJy-jo-IQF"/>
+                                    <outlet property="delegate" destination="m0a-hB-867" id="NIR-l1-jTP"/>
+                                </connections>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Client Manager" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xfl-lk-jmX">
+                                <rect key="frame" x="8" y="8" width="268" height="38"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <value key="contentSizeForViewInPopover" type="size" width="375" height="667"/>
+                    <size key="freeformSize" width="375" height="667"/>
+                    <connections>
+                        <outlet property="clientManagerTitle" destination="xfl-lk-jmX" id="HHa-zW-Zv9"/>
+                        <outlet property="clientsTable" destination="hDi-uc-ZEQ" id="F8d-Au-sWm"/>
+                        <outlet property="closeView" destination="83I-aa-51D" id="8Xt-AS-4KN"/>
+                        <outlet property="createClient" destination="usV-ja-ZXZ" id="EdK-RI-TfG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CSc-6E-u9c" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="741.5" y="-1046.5"/>
         </scene>
         <!--Past Job View-->
         <scene sceneID="xdn-E9-jQV">

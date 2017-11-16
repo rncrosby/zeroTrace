@@ -21,6 +21,10 @@
 		AD4099F91F8C178400AB03EC /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD4099F81F8C178400AB03EC /* CloudKit.framework */; };
 		AD4099FC1F8C1E0300AB03EC /* driveObject.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4099FB1F8C1E0300AB03EC /* driveObject.m */; };
 		AD79BDA41F8C3BB30025CD6B /* dark.png in Resources */ = {isa = PBXBuildFile; fileRef = AD79BDA21F8C3BAC0025CD6B /* dark.png */; };
+		AD8E375D1FBD684300552292 /* accountObject.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8E375C1FBD684300552292 /* accountObject.m */; };
+		AD8E37601FBD70D800552292 /* clientManagerView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8E375F1FBD70D800552292 /* clientManagerView.m */; };
+		AD8E37641FBD732A00552292 /* clientManagerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8E37621FBD732A00552292 /* clientManagerCell.m */; };
+		AD8E37651FBD732A00552292 /* clientManagerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8E37631FBD732A00552292 /* clientManagerCell.xib */; };
 		AD94B4471F8C38710050F34B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD94B4461F8C38710050F34B /* QuartzCore.framework */; };
 		ADA3BDE71F9698C100B34AB2 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA3BDE61F9698C000B34AB2 /* OpenGLES.framework */; };
 		ADA3BDE91F9699B000B34AB2 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA3BDE81F9699B000B34AB2 /* GLKit.framework */; };
@@ -63,6 +67,13 @@
 		AD4099FA1F8C1E0300AB03EC /* driveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = driveObject.h; sourceTree = "<group>"; };
 		AD4099FB1F8C1E0300AB03EC /* driveObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = driveObject.m; sourceTree = "<group>"; };
 		AD79BDA21F8C3BAC0025CD6B /* dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dark.png; sourceTree = "<group>"; };
+		AD8E375B1FBD684300552292 /* accountObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = accountObject.h; sourceTree = "<group>"; };
+		AD8E375C1FBD684300552292 /* accountObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = accountObject.m; sourceTree = "<group>"; };
+		AD8E375E1FBD70D800552292 /* clientManagerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = clientManagerView.h; sourceTree = "<group>"; };
+		AD8E375F1FBD70D800552292 /* clientManagerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = clientManagerView.m; sourceTree = "<group>"; };
+		AD8E37611FBD732A00552292 /* clientManagerCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = clientManagerCell.h; sourceTree = "<group>"; };
+		AD8E37621FBD732A00552292 /* clientManagerCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = clientManagerCell.m; sourceTree = "<group>"; };
+		AD8E37631FBD732A00552292 /* clientManagerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = clientManagerCell.xib; sourceTree = "<group>"; };
 		AD94B4461F8C38710050F34B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		ADA3BDE61F9698C000B34AB2 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		ADA3BDE81F9699B000B34AB2 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -173,6 +184,13 @@
 				ADA3BDEB1F969BFF00B34AB2 /* SignatureDrawView.m */,
 				ADCFD25E1F9EBD6900215AC9 /* manualJobViewViewController.h */,
 				ADCFD25F1F9EBD6900215AC9 /* manualJobViewViewController.m */,
+				AD8E375B1FBD684300552292 /* accountObject.h */,
+				AD8E375C1FBD684300552292 /* accountObject.m */,
+				AD8E375E1FBD70D800552292 /* clientManagerView.h */,
+				AD8E375F1FBD70D800552292 /* clientManagerView.m */,
+				AD8E37611FBD732A00552292 /* clientManagerCell.h */,
+				AD8E37621FBD732A00552292 /* clientManagerCell.m */,
+				AD8E37631FBD732A00552292 /* clientManagerCell.xib */,
 			);
 			path = "ZER0trace Internal";
 			sourceTree = "<group>";
@@ -262,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD176F291F9D900C003119CD /* refresh-light.png in Resources */,
+				AD8E37651FBD732A00552292 /* clientManagerCell.xib in Resources */,
 				AD176F261F9D6C71003119CD /* refresh.png in Resources */,
 				ADB4DC961F9551A200245CCA /* light.png in Resources */,
 				ADB4DC921F954D7500245CCA /* code.png in Resources */,
@@ -339,11 +358,14 @@
 				AD4099F41F8C0ED300AB03EC /* References.m in Sources */,
 				ADA3BDEC1F969BFF00B34AB2 /* SignatureDrawView.m in Sources */,
 				ADB4DC9A1F95574800245CCA /* jobObject.m in Sources */,
+				AD8E37641FBD732A00552292 /* clientManagerCell.m in Sources */,
 				ADCFD2601F9EBD6900215AC9 /* manualJobViewViewController.m in Sources */,
 				AD3807411F8C034B007BB8DF /* main.m in Sources */,
 				AD3807331F8C034B007BB8DF /* AppDelegate.m in Sources */,
 				ADB4DC9D1F95766D00245CCA /* pastJobView.m in Sources */,
+				AD8E375D1FBD684300552292 /* accountObject.m in Sources */,
 				ADC51BFA1F8C3C6C002DC9D6 /* homeView.m in Sources */,
+				AD8E37601FBD70D800552292 /* clientManagerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
