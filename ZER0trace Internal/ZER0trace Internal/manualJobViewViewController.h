@@ -7,18 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "clientListCell.h"
+#import "accountObject.h"
 #import <CloudKit/CloudKit.h>
 #import "References.h"
 #import "jobObject.h"
 #import "homeView.h"
 
-@interface manualJobViewViewController : UIViewController {
+@interface manualJobViewViewController : UIViewController <UITableViewDelegate,UITableViewDataSource> {
+    NSMutableArray *clients;
+    __weak IBOutlet UILabel *clientName;
     NSString *code;
     __weak IBOutlet UILabel *codeView;
     CKRecord *newRecord;
     jobObject *newJob;
     __weak IBOutlet UIButton *backspace;
     __weak IBOutlet UIButton *clientList;
+    __weak IBOutlet UITableView *table;
 }
 @property(nonatomic,assign)id delegate;
 - (IBAction)append:(id)sender;

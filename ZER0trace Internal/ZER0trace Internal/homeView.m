@@ -15,6 +15,7 @@
 @implementation homeView
 
 - (void)viewDidLoad {
+    performSearch = false;
     [References cornerRadius:clientCount radius:clientCount.frame.size.width/2];
     [createJobs setBackgroundColor:[UIColor clearColor]];
     [recentJobs setBackgroundColor:[UIColor clearColor]];
@@ -40,13 +41,11 @@
         [vc dismissViewControllerAnimated:YES completion:^(void) {
             NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"code = '%@'",resultAsString]];
             CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
-            
             [[CKContainer defaultContainer].publicCloudDatabase performQuery:query
                                                                 inZoneWithID:nil
                                                            completionHandler:^(NSArray *results, NSError *error) {
                                                                if (results.count > 0) {
-                                                                   CKRecord *record = results[0];
-                                                                   dispatch_sync(dispatch_get_main_queue(), ^{
+                                                                   CKRecord *record = results[0];    dispatch_sync(dispatch_get_main_queue(), ^{
                                                                            UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
                                                                            recorderView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"recorderView"];
                                                                            controller.jobRecord = record;
@@ -81,6 +80,7 @@
             [scannerCheck becomeFirstResponder];
         });
     });
+    [search addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
     // Do any additional setup after loading the view.
 }
 
@@ -108,7 +108,6 @@
 
 - (void) keyboardWillShow:(NSNotification *)notification
 {
-    
     NSDictionary* userInfo = [notification userInfo];
     CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect keyboard = [self.view convertRect:keyboardFrame fromView:self.view.window];
@@ -123,6 +122,76 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [alert dismissViewControllerAnimated:YES completion:nil];
     });
+}
+
+-(void)textChanged:(UITextField *)textField
+{
+    if (textField.text.length == 0) {
+        nextJobs = [[NSMutableArray alloc] init];
+        for (int a = 0; a < savedNextJobs.count; a++) {
+            [nextJobs addObject:savedNextJobs[a]];
+        }
+        [upcomingJobs reloadData];
+        if (nextJobs.count < 1) {
+            [References fadeIn:noUpcomingJobs];
+            [References fadeLabelText:noUpcomingJobs newText:@"No Upcoming Jobs"];
+        } else {
+            [References fadeOut:noUpcomingJobs];
+            [References fadeIn:upcomingJobs];
+        }
+        return;
+    }
+    nextJobs = [[NSMutableArray alloc] init];
+    for (int a = 0; a < savedNextJobs.count; a++) {
+        jobObject *tJob = savedNextJobs[a];
+        if ([tJob.client localizedCaseInsensitiveContainsString:textField.text]) {
+            [nextJobs addObject:tJob];
+        }
+    }
+    [upcomingJobs reloadData];
+    if (nextJobs.count < 1) {
+        [References fadeIn:noUpcomingJobs];
+        [References fadeLabelText:noUpcomingJobs newText:@"No Upcoming Jobs"];
+    } else {
+        [References fadeOut:noUpcomingJobs];
+        [References fadeIn:upcomingJobs];
+    }
+}
+
+-(bool)textFieldShouldBeginEditing:(UITextField *)textField {
+    if (textField.tag == 2) {
+        [UIView animateWithDuration:0.25 animations:^(void){
+            searchButton.alpha = 1;
+            search.alpha = 1;
+            [searchButton setImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
+        }];
+        [scrollView setContentOffset:CGPointMake(0, scrollView.contentSize.height-scrollView.frame.size.height) animated:YES];
+    }
+    return true;
+}
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField.text.length == 0) {
+        nextJobs = [[NSMutableArray alloc] init];
+        for (int a = 0; a < savedNextJobs.count; a++) {
+            [nextJobs addObject:savedNextJobs[a]];
+        }
+        [upcomingJobs reloadData];
+        if (nextJobs.count < 1) {
+            [References fadeIn:noUpcomingJobs];
+            [References fadeLabelText:noUpcomingJobs newText:@"No Upcoming Jobs"];
+        } else {
+            [References fadeOut:noUpcomingJobs];
+            [References fadeIn:upcomingJobs];
+        }
+        [UIView animateWithDuration:0.25 animations:^(void){
+            [search setText:@"Search by Client or Code"];
+            searchButton.alpha = 0.5;
+            search.alpha = 0.5;
+            [searchButton setImage:[UIImage imageNamed:@"search.png"] forState:UIControlStateNormal];
+        }];
+    }
+    [textField resignFirstResponder];
+    return true;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -371,6 +440,8 @@
 }
 
 -(void)getUpcoming:(BOOL)isNewJob{
+    [savedNextJobs removeAllObjects];
+    [completedJobs removeAllObjects];
     [nextJobs removeAllObjects];
     [completedJobs removeAllObjects];
     [nextJobRecords removeAllObjects];
@@ -385,6 +456,7 @@
     for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:&error]) {
         [locallySaved addObject:file];
     }
+    savedNextJobs = [[NSMutableArray alloc] init];
     nextJobs = [[NSMutableArray alloc] init];
     completedJobs = [[NSMutableArray alloc] init];
     nextJobRecords = [[NSMutableArray alloc] init];
@@ -424,6 +496,10 @@
                                                                }
                                                            }
                                                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                                               NSSortDescriptor *sortDescriptor;
+                                                               sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"client" ascending:YES];
+                                                               nextJobs = [[NSMutableArray alloc] initWithArray:[nextJobs sortedArrayUsingDescriptors:@[sortDescriptor]]];
+                                                               savedNextJobs = nextJobs;
                                                                [upcomingJobs reloadData];
                                                                [recentJobs reloadData];
                                                                [self setVisibility];
@@ -432,7 +508,6 @@
                                                            
                                                        } else {
                                                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                                               
                                                                [self setVisibility];
                                                                // Update the UI on the main thread.
                                                            });
@@ -473,6 +548,12 @@
 - (IBAction)refreshButton:(id)sender {
     [self getUpcoming:NO];
     [self getPendingAccounts];
+    [UIView animateWithDuration:0.25 animations:^(void){
+        [search setText:@"Search by Client or Code"];
+        searchButton.alpha = 0.5;
+        search.alpha = 0.5;
+        [searchButton setImage:[UIImage imageNamed:@"search.png"] forState:UIControlStateNormal];
+    }];
 }
 
 - (IBAction)clientManager:(id)sender {
@@ -483,47 +564,81 @@
     [self presentViewController:controller animated:YES completion:nil];
 }
 
+- (IBAction)searchButton:(id)sender {
+    if (searchButton.alpha == 0.5) {
+        [search becomeFirstResponder];
+        [UIView animateWithDuration:0.25 animations:^(void){
+            searchButton.alpha = 1;
+            search.alpha = 1;
+            [searchButton setImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
+        }];
+    } else {
+        [search resignFirstResponder];
+        [UIView animateWithDuration:0.25 animations:^(void){
+            [search setText:@"Search by Client or Code"];
+            searchButton.alpha = 0.5;
+            search.alpha = 0.5;
+            [searchButton setImage:[UIImage imageNamed:@"search.png"] forState:UIControlStateNormal];
+        }];
+        nextJobs = [[NSMutableArray alloc] init];
+        for (int a = 0; a < savedNextJobs.count; a++) {
+            [nextJobs addObject:savedNextJobs[a]];
+        }
+        [upcomingJobs reloadData];
+        if (nextJobs.count < 1) {
+            [References fadeIn:noUpcomingJobs];
+            [References fadeLabelText:noUpcomingJobs newText:@"No Upcoming Jobs"];
+        } else {
+            [References fadeOut:noUpcomingJobs];
+            [References fadeIn:upcomingJobs];
+        }
+    }
+}
+
 -(void)handleDeleteButton:(id)sender {
     UIButton *button = (UIButton*)sender;
     [self deleteJobAtIndex:(int)button.tag];
 }
 
 -(void)deleteJobAtIndex:(int)indexInArray{
+    jobObject *job = nextJobs[indexInArray];
+    NSLog(@"%@",job.client);
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Confirm Cancellation of Job" message:@"This action is irreversible" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Cancel Job" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             deletingJob = [UIAlertController alertControllerWithTitle:@"Cancelling Job"
                                                               message:@"One Second..."
                                                        preferredStyle:UIAlertControllerStyleAlert];
             [self presentViewController:deletingJob animated:YES completion:nil];
-            jobObject *job = nextJobs[indexInArray];
             CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:job.clientCode];
             [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:recordID completionHandler:^(CKRecord *record, NSError *error) {
                 if (error) {
                     return;
                 }
-                NSMutableArray *jobCodes = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobCodes"]];
-                NSMutableArray *jobDates = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobDates"]];
-                for (int a = 0; a < jobCodes.count; a++) {
-                    if ([jobCodes[a] isEqualToString:job.code]) {
-                        [jobCodes removeObjectAtIndex:a];
-                        [jobDates removeObjectAtIndex:a];
-                        break;
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSMutableArray *jobCodes = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobCodes"]];
+                    NSMutableArray *jobDates = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobDates"]];
+                    for (int a = 0; a < jobCodes.count; a++) {
+                        if ([jobCodes[a] isEqualToString:job.code]) {
+                            [jobCodes removeObjectAtIndex:a];
+                            [jobDates removeObjectAtIndex:a];
+                            break;
+                        }
                     }
-                }
-                record[@"allJobCodes"] = jobCodes;
-                record[@"allJobDates"] = jobDates;
-                [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:job.code];
-                        [[CKContainer defaultContainer].publicCloudDatabase deleteRecordWithID:recordID completionHandler:^(CKRecordID *recordID, NSError *error) {
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                [deletingJob dismissViewControllerAnimated:YES completion:nil];
-                                [self getUpcoming:NO];
-                            });
-                        }];
-                        // Update the UI on the main thread.
-                    });
-                }];
+                    record[@"allJobCodes"] = jobCodes;
+                    record[@"allJobDates"] = jobDates;
+                    [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:job.code];
+                            [[CKContainer defaultContainer].publicCloudDatabase deleteRecordWithID:recordID completionHandler:^(CKRecordID *recordID, NSError *error) {
+                                dispatch_sync(dispatch_get_main_queue(), ^{
+                                    [deletingJob dismissViewControllerAnimated:YES completion:nil];
+                                    [self getUpcoming:NO];
+                                });
+                            }];
+                            // Update the UI on the main thread.
+                        });
+                    }];
+                });
             }];
         }];
     [alertController addAction:confirmAction];
@@ -535,9 +650,9 @@
 }
 
 -(void)getPendingAccounts {
-    [pendingAccounts removeAllObjects];
-    pendingAccounts = [[NSMutableArray alloc] init];
     [ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        [pendingAccounts removeAllObjects];
+        pendingAccounts = [[NSMutableArray alloc] init];
         NSDictionary *accounts = snapshot.value;
         if (![[NSString stringWithFormat:@"%@",accounts] isEqualToString:@"<null>"]) {
             [accounts enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {

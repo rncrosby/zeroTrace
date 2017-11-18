@@ -24,8 +24,10 @@
     UIAlertController *alert,*deletingJob,*refreshingJobs;
     NSMutableArray *pendingAccounts;
     QRCodeReaderViewController *vc;
-    
-    NSMutableArray *nextJobs,*completedJobs,*nextJobRecords,*completedJobsRecord,*locallySaved;
+    bool performSearch;
+    __weak IBOutlet UITextField *search;
+    int searchLength;
+    NSMutableArray *nextJobs,*savedNextJobs,*completedJobs,*nextJobRecords,*completedJobsRecord,*locallySaved;
     __weak IBOutlet UILabel *menuBar;
     __weak IBOutlet UICollectionView *upcomingJobs;
     __weak IBOutlet UICollectionView *recentJobs;
@@ -39,10 +41,12 @@
     FIRDatabaseReference *ref;
     __weak IBOutlet UILabel *clientCount;
     __weak IBOutlet UIButton *clientManagerButton;
+    __weak IBOutlet UIButton *searchButton;
 }
 - (IBAction)checkScanner:(id)sender;
 - (IBAction)refreshButton:(id)sender;
 - (IBAction)clientManager:(id)sender;
+- (IBAction)searchButton:(id)sender;
 
 
 

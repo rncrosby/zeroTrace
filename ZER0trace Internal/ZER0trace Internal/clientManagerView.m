@@ -31,11 +31,12 @@
 }
 
 -(void)getPendingAccounts {
-    [pendingAccounts removeAllObjects];
-    pendingAccounts = [[NSMutableArray alloc] init];
+
     [ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         NSDictionary *accounts = snapshot.value;
         if (![[NSString stringWithFormat:@"%@",accounts] isEqualToString:@"<null>"]) {
+            [pendingAccounts removeAllObjects];
+            pendingAccounts = [[NSMutableArray alloc] init];
             [accounts enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 accountObject *account = [[accountObject alloc] initWithType:key andClient:[obj valueForKey:@"client"] andCode:[obj valueForKey:@"code"] andContactName:[obj valueForKey:@"client"] andEmail:[obj valueForKey:@"email"] andPhone:[obj valueForKey:@"phone"]];
                 [pendingAccounts addObject:account];
@@ -44,7 +45,6 @@
             [clientsTable reloadData];
         } else {
             [self dismissViewControllerAnimated:YES completion:^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshJobs" object:nil userInfo:nil];
             }];
         }
 
@@ -72,14 +72,16 @@
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"clientManagerCell" owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
+    [References cornerRadius:cell.approveClient radius:cell.approveClient.frame.size.width/2];
+    cell.approveClient.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    [References cornerRadius:cell.declineClient radius:cell.declineClient.frame.size.width/2];
+    cell.declineClient.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     accountObject *account = pendingAccounts[indexPath.row];
     cell.clientName.text = account.client;
     cell.clientCode.text = account.code;
     cell.clientContactName.text = account.contactName;
     cell.clientEmail.text = account.email;
     cell.clientPhone.text = account.phone;
-    [References cornerRadius:cell.approveClient radius:7.0f];
-    [References cornerRadius:cell.declineClient radius:7.0f];
     cell.approveClient.tag = indexPath.row;
     cell.declineClient.tag = indexPath.row;
     [cell.approveClient addTarget:self
@@ -123,7 +125,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    return 304;
+    return 250;
     
 }
 

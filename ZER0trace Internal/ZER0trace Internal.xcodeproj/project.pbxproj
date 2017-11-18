@@ -26,6 +26,11 @@
 		AD8E37641FBD732A00552292 /* clientManagerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8E37621FBD732A00552292 /* clientManagerCell.m */; };
 		AD8E37651FBD732A00552292 /* clientManagerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8E37631FBD732A00552292 /* clientManagerCell.xib */; };
 		AD94B4471F8C38710050F34B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD94B4461F8C38710050F34B /* QuartzCore.framework */; };
+		AD9BB82E1FBF90AD00E5CD5A /* clientListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9BB82C1FBF90AD00E5CD5A /* clientListCell.m */; };
+		AD9BB82F1FBF90AD00E5CD5A /* clientListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD9BB82D1FBF90AD00E5CD5A /* clientListCell.xib */; };
+		AD9BB8311FBFA8CF00E5CD5A /* check.png in Resources */ = {isa = PBXBuildFile; fileRef = AD9BB8301FBFA8CF00E5CD5A /* check.png */; };
+		AD9BB8331FBFA9D000E5CD5A /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = AD9BB8321FBFA9CF00E5CD5A /* cancel.png */; };
+		AD9BB8351FBFBDFF00E5CD5A /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = AD9BB8341FBFBDFF00E5CD5A /* search.png */; };
 		ADA3BDE71F9698C100B34AB2 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA3BDE61F9698C000B34AB2 /* OpenGLES.framework */; };
 		ADA3BDE91F9699B000B34AB2 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA3BDE81F9699B000B34AB2 /* GLKit.framework */; };
 		ADA3BDEC1F969BFF00B34AB2 /* SignatureDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA3BDEB1F969BFF00B34AB2 /* SignatureDrawView.m */; };
@@ -75,6 +80,12 @@
 		AD8E37621FBD732A00552292 /* clientManagerCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = clientManagerCell.m; sourceTree = "<group>"; };
 		AD8E37631FBD732A00552292 /* clientManagerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = clientManagerCell.xib; sourceTree = "<group>"; };
 		AD94B4461F8C38710050F34B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		AD9BB82B1FBF90AD00E5CD5A /* clientListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = clientListCell.h; sourceTree = "<group>"; };
+		AD9BB82C1FBF90AD00E5CD5A /* clientListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = clientListCell.m; sourceTree = "<group>"; };
+		AD9BB82D1FBF90AD00E5CD5A /* clientListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = clientListCell.xib; sourceTree = "<group>"; };
+		AD9BB8301FBFA8CF00E5CD5A /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
+		AD9BB8321FBFA9CF00E5CD5A /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
+		AD9BB8341FBFBDFF00E5CD5A /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
 		ADA3BDE61F9698C000B34AB2 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		ADA3BDE81F9699B000B34AB2 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		ADA3BDEA1F969BFF00B34AB2 /* SignatureDrawView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignatureDrawView.h; sourceTree = "<group>"; };
@@ -191,6 +202,9 @@
 				AD8E37611FBD732A00552292 /* clientManagerCell.h */,
 				AD8E37621FBD732A00552292 /* clientManagerCell.m */,
 				AD8E37631FBD732A00552292 /* clientManagerCell.xib */,
+				AD9BB82B1FBF90AD00E5CD5A /* clientListCell.h */,
+				AD9BB82C1FBF90AD00E5CD5A /* clientListCell.m */,
+				AD9BB82D1FBF90AD00E5CD5A /* clientListCell.xib */,
 			);
 			path = "ZER0trace Internal";
 			sourceTree = "<group>";
@@ -198,6 +212,9 @@
 		ADB4DC971F95572300245CCA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				AD9BB8341FBFBDFF00E5CD5A /* search.png */,
+				AD9BB8321FBFA9CF00E5CD5A /* cancel.png */,
+				AD9BB8301FBFA8CF00E5CD5A /* check.png */,
 				ADB6F7C31F9F1937001A499C /* backspace.png */,
 				AD176F271F9D7694003119CD /* AppIcon.appiconset */,
 				AD176F251F9D6B36003119CD /* refresh.png */,
@@ -282,8 +299,12 @@
 				AD176F291F9D900C003119CD /* refresh-light.png in Resources */,
 				AD8E37651FBD732A00552292 /* clientManagerCell.xib in Resources */,
 				AD176F261F9D6C71003119CD /* refresh.png in Resources */,
+				AD9BB8351FBFBDFF00E5CD5A /* search.png in Resources */,
+				AD9BB8331FBFA9D000E5CD5A /* cancel.png in Resources */,
 				ADB4DC961F9551A200245CCA /* light.png in Resources */,
+				AD9BB82F1FBF90AD00E5CD5A /* clientListCell.xib in Resources */,
 				ADB4DC921F954D7500245CCA /* code.png in Resources */,
+				AD9BB8311FBFA8CF00E5CD5A /* check.png in Resources */,
 				ADB4DC931F954D7500245CCA /* plus.png in Resources */,
 				ADB6F7C41F9F1938001A499C /* backspace.png in Resources */,
 				ADB4DC941F954D7500245CCA /* text.png in Resources */,
@@ -359,6 +380,7 @@
 				ADA3BDEC1F969BFF00B34AB2 /* SignatureDrawView.m in Sources */,
 				ADB4DC9A1F95574800245CCA /* jobObject.m in Sources */,
 				AD8E37641FBD732A00552292 /* clientManagerCell.m in Sources */,
+				AD9BB82E1FBF90AD00E5CD5A /* clientListCell.m in Sources */,
 				ADCFD2601F9EBD6900215AC9 /* manualJobViewViewController.m in Sources */,
 				AD3807411F8C034B007BB8DF /* main.m in Sources */,
 				AD3807331F8C034B007BB8DF /* AppDelegate.m in Sources */,
