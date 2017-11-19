@@ -71,6 +71,7 @@
 		AD4099F81F8C178400AB03EC /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		AD4099FA1F8C1E0300AB03EC /* driveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = driveObject.h; sourceTree = "<group>"; };
 		AD4099FB1F8C1E0300AB03EC /* driveObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = driveObject.m; sourceTree = "<group>"; };
+		AD5809771FC23FFE00B6DE38 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		AD79BDA21F8C3BAC0025CD6B /* dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dark.png; sourceTree = "<group>"; };
 		AD8E375B1FBD684300552292 /* accountObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = accountObject.h; sourceTree = "<group>"; };
 		AD8E375C1FBD684300552292 /* accountObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = accountObject.m; sourceTree = "<group>"; };
@@ -137,6 +138,7 @@
 		99A8A86E4C36B5BE7BD226D9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AD5809771FC23FFE00B6DE38 /* MessageUI.framework */,
 				ADA3BDE81F9699B000B34AB2 /* GLKit.framework */,
 				ADA3BDE61F9698C000B34AB2 /* OpenGLES.framework */,
 				ADB4DCA01F95798C00245CCA /* AVFoundation.framework */,

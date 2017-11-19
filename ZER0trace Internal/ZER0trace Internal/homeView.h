@@ -27,7 +27,7 @@
     bool performSearch;
     __weak IBOutlet UITextField *search;
     int searchLength;
-    NSMutableArray *nextJobs,*savedNextJobs,*completedJobs,*nextJobRecords,*completedJobsRecord,*locallySaved;
+    NSMutableArray *nextJobs,*savedNextJobs,*completedJobs,*savedCompletedJobs,*nextJobRecords,*completedJobsRecord,*locallySaved;
     __weak IBOutlet UILabel *menuBar;
     __weak IBOutlet UICollectionView *upcomingJobs;
     __weak IBOutlet UICollectionView *recentJobs;

@@ -81,6 +81,7 @@
         });
     });
     [search addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
+    [self checkFiles];
     // Do any additional setup after loading the view.
 }
 
@@ -93,6 +94,15 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [self getUpcoming:YES];
     });
+}
+
+-(void)checkFiles {
+    NSError *error = nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:&error]) {
+        [[NSFileManager defaultManager] removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:file] error:&error];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -131,31 +141,32 @@
         for (int a = 0; a < savedNextJobs.count; a++) {
             [nextJobs addObject:savedNextJobs[a]];
         }
-        [upcomingJobs reloadData];
-        if (nextJobs.count < 1) {
-            [References fadeIn:noUpcomingJobs];
-            [References fadeLabelText:noUpcomingJobs newText:@"No Upcoming Jobs"];
-        } else {
-            [References fadeOut:noUpcomingJobs];
-            [References fadeIn:upcomingJobs];
+        completedJobs = [[NSMutableArray alloc] init];
+        for (int a = 0; a < savedCompletedJobs.count; a++) {
+            [completedJobs addObject:savedCompletedJobs[a]];
         }
+        [upcomingJobs reloadData];
+        [recentJobs reloadData];
+        [self setVisibility];
         return;
     }
     nextJobs = [[NSMutableArray alloc] init];
+    completedJobs = [[NSMutableArray alloc] init];
     for (int a = 0; a < savedNextJobs.count; a++) {
         jobObject *tJob = savedNextJobs[a];
         if ([tJob.client localizedCaseInsensitiveContainsString:textField.text]) {
             [nextJobs addObject:tJob];
         }
     }
-    [upcomingJobs reloadData];
-    if (nextJobs.count < 1) {
-        [References fadeIn:noUpcomingJobs];
-        [References fadeLabelText:noUpcomingJobs newText:@"No Upcoming Jobs"];
-    } else {
-        [References fadeOut:noUpcomingJobs];
-        [References fadeIn:upcomingJobs];
+    for (int a = 0; a < savedCompletedJobs.count; a++) {
+        jobObject *tJob = savedCompletedJobs[a];
+        if ([tJob.client localizedCaseInsensitiveContainsString:textField.text]) {
+            [completedJobs addObject:tJob];
+        }
     }
+    [upcomingJobs reloadData];
+    [recentJobs reloadData];
+    [self setVisibility];
 }
 
 -(bool)textFieldShouldBeginEditing:(UITextField *)textField {
@@ -175,14 +186,14 @@
         for (int a = 0; a < savedNextJobs.count; a++) {
             [nextJobs addObject:savedNextJobs[a]];
         }
-        [upcomingJobs reloadData];
-        if (nextJobs.count < 1) {
-            [References fadeIn:noUpcomingJobs];
-            [References fadeLabelText:noUpcomingJobs newText:@"No Upcoming Jobs"];
-        } else {
-            [References fadeOut:noUpcomingJobs];
-            [References fadeIn:upcomingJobs];
+        completedJobs = [[NSMutableArray alloc] init];
+        for (int a = 0; a < savedCompletedJobs.count; a++) {
+            [completedJobs addObject:savedCompletedJobs[a]];
         }
+        [upcomingJobs reloadData];
+        [recentJobs reloadData];
+        [self setVisibility];
+        
         [UIView animateWithDuration:0.25 animations:^(void){
             [search setText:@"Search by Client or Code"];
             searchButton.alpha = 0.5;
@@ -282,6 +293,7 @@
             UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
             recorderView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"recorderView"];
             controller.jobRecord = nextJobRecords[indexPath.row];
+        NSLog(@"%@",[controller.jobRecord valueForKey:@"client"]);
             //menu is only an example
             [self presentViewController:controller animated:YES completion:nil];
     } else if (collectionView.tag == 2) {
@@ -463,7 +475,7 @@
     completedJobsRecord = [[NSMutableArray alloc] init];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"TRUEPREDICATE"]];
     CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
-    query.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc]initWithKey:@"creationDate" ascending:false]];
+    query.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc]initWithKey:@"modificationDate" ascending:false]];
     [[CKContainer defaultContainer].publicCloudDatabase performQuery:query
                                                         inZoneWithID:nil
                                                    completionHandler:^(NSArray *results, NSError *error) {
@@ -499,7 +511,9 @@
                                                                NSSortDescriptor *sortDescriptor;
                                                                sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"client" ascending:YES];
                                                                nextJobs = [[NSMutableArray alloc] initWithArray:[nextJobs sortedArrayUsingDescriptors:@[sortDescriptor]]];
+                                                               nextJobRecords = [[NSMutableArray alloc] initWithArray:[nextJobRecords sortedArrayUsingDescriptors:@[sortDescriptor]]];
                                                                savedNextJobs = nextJobs;
+                                                               savedCompletedJobs = completedJobs;
                                                                [upcomingJobs reloadData];
                                                                [recentJobs reloadData];
                                                                [self setVisibility];
@@ -584,14 +598,13 @@
         for (int a = 0; a < savedNextJobs.count; a++) {
             [nextJobs addObject:savedNextJobs[a]];
         }
-        [upcomingJobs reloadData];
-        if (nextJobs.count < 1) {
-            [References fadeIn:noUpcomingJobs];
-            [References fadeLabelText:noUpcomingJobs newText:@"No Upcoming Jobs"];
-        } else {
-            [References fadeOut:noUpcomingJobs];
-            [References fadeIn:upcomingJobs];
+        completedJobs = [[NSMutableArray alloc] init];
+        for (int a = 0; a < savedCompletedJobs.count; a++) {
+            [completedJobs addObject:savedCompletedJobs[a]];
         }
+        [upcomingJobs reloadData];
+        [recentJobs reloadData];
+        [self setVisibility];
     }
 }
 

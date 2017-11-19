@@ -718,6 +718,17 @@ October 8</string>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.75" colorSpace="calibratedRGB"/>
                             </scrollView>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="LgO-nc-lTG">
+                                <rect key="frame" x="289" y="611" width="447" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                <state key="normal" title="Complete Recording Step">
+                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="completeRecordingStep:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3Ci-35-rhC"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -730,6 +741,7 @@ October 8</string>
                         <outlet property="completeSubtitle" destination="Ofz-wC-5MN" id="EU1-3e-4Gk"/>
                         <outlet property="completeTitle" destination="8E9-ss-E8C" id="jrA-cK-Jgl"/>
                         <outlet property="completeView" destination="Pwk-xm-84p" id="EdP-l4-JPf"/>
+                        <outlet property="comppleteRecordingStep" destination="LgO-nc-lTG" id="R5L-F1-abd"/>
                         <outlet property="confirmDestructionButton" destination="heI-G9-eoi" id="Ljm-18-v27"/>
                         <outlet property="destructionButton" destination="heI-G9-eoi" id="e4c-Md-3Dn"/>
                         <outlet property="drivesCollectionBlur" destination="HEp-Us-J2j" id="kJl-Cd-Eyg"/>

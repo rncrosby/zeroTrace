@@ -8,6 +8,8 @@
 
 #import "References.h"
 #import <UIKit/UIKit.h>
+#import <AVKit/AVKit.h>
+#import <AVFoundation/AVFoundation.h>
 #import <FirebaseStorage/FirebaseStorage.h>
 #import <LLSimpleCamera/LLSimpleCamera.h>
 #import "driveObject.h"
@@ -16,6 +18,8 @@
 
 
 @interface recorderView : UIViewController <UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate> {
+    bool useSimulator;
+    int clipCount;
     bool beforeRecording;
     __weak IBOutlet UILabel *statusBarReal;
     CKRecordID *newJobRecord;
@@ -51,6 +55,7 @@
     NSURL *signatureURL;
     __weak IBOutlet UIButton *destructionButton;
     __weak IBOutlet UILabel *statusBar;
+    __weak IBOutlet UIButton *comppleteRecordingStep;
 }
 - (IBAction)toggleRecording:(id)sender;
 
@@ -60,6 +65,7 @@
 @property (nonatomic, assign) NSString *recordID;
 - (IBAction)confirmDestruction:(id)sender;
 - (IBAction)cancel:(id)sender;
+- (IBAction)completeRecordingStep:(id)sender;
 
 @end
 

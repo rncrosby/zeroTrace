@@ -16,6 +16,7 @@
 
 
 - (void)viewDidLoad {
+    clipCount = 0;
     statusBar.backgroundColor = [UIColor clearColor];
     [References blurView:statusBar];
     [References cornerRadius:statusBar radius:24.0f];
@@ -57,23 +58,31 @@
     CGRect keyboard = [self.view convertRect:keyboardFrame fromView:self.view.window];
     NSLog(@"%f",keyboard.size.height);
     if (keyboard.size.height > 100) {
-        [barcode resignFirstResponder];
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Scanner Connected" message:@"Use the settings app to pair a scanner" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *continueRecording = [UIAlertAction actionWithTitle:@"Proceed Using Simulator" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+        if (useSimulator != true) {
+            [barcode resignFirstResponder];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No Scanner Connected" message:@"Use the settings app to pair a scanner" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *continueRecording = [UIAlertAction actionWithTitle:@"Proceed Using Simulator" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                useSimulator = true;
+                [References fadeIn:simulateScan];
+                [self startRecording];
+            }];
+            UIAlertAction *settings = [UIAlertAction actionWithTitle:@"Open Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"App-prefs:root=Bluetooth"]];
+            }];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel Job" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                [self cancel:self];
+            }];
+            [alert addAction:continueRecording];
+            [alert addAction:settings];
+            [alert addAction:cancel];
+            [self presentViewController:alert animated:YES completion:nil];
+        } else {
+            useSimulator = true;
             [References fadeIn:simulateScan];
             [self startRecording];
-        }];
-        UIAlertAction *settings = [UIAlertAction actionWithTitle:@"Open Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
-            
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"App-prefs:root=Bluetooth"]];
-        }];
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel Job" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
-            [self cancel:self];
-        }];
-        [alert addAction:continueRecording];
-        [alert addAction:settings];
-        [alert addAction:cancel];
-        [self presentViewController:alert animated:YES completion:nil];
+        }
+        
     } else {
         // scanner connected
         [References moveUp:simulateScan yChange:keyboard.size.height-8];
@@ -113,15 +122,17 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSURL *documentsURL = [NSURL fileURLWithPath:documentsDirectory];
-    outputURL = [[documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%@",jobName.text]] URLByAppendingPathExtension:@"mov"];
+    outputURL = [[documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"asdfg_%i",clipCount]] URLByAppendingPathExtension:@"mov"];
     compressedOutURL = documentsURL;
     [recorder startRecordingWithOutputUrl:outputURL];
-    recorderTime = [NSTimer scheduledTimerWithTimeInterval:1.0
-                                                    target:self
-                                                  selector:@selector(incrementTime)
-                                                  userInfo:nil
-                                                   repeats:YES];
-    recorderTimeInt = 0;
+    if (clipCount == 0) {
+        recorderTimeInt = 0;
+        recorderTime = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                        target:self
+                                                      selector:@selector(incrementTime)
+                                                      userInfo:nil
+                                                       repeats:YES];
+    }
     [UIView animateWithDuration:0.3 animations:^(){
         [References cornerRadius:recordButton radius:16.0];
         [References borderColor:recordButton color:[UIColor whiteColor]];
@@ -133,38 +144,64 @@
 
 - (IBAction)toggleRecording:(id)sender {
     if (isRecording == FALSE) {
-        [barcode becomeFirstResponder];
+        if (useSimulator == true) {
+            [References fadeIn:simulateScan];
+            [self startRecording];
+        } else {
+            [barcode becomeFirstResponder];
+        }
     } else {
-        [completeProgress setProgress:0];
-        cancel.hidden = YES;
-        destructionButton.hidden = YES;
-        completeTitle.text = @"Saving Destruction";
-        [destructionButton setTitle:@"Complete Destruction" forState:UIControlStateNormal];
-        [completeSubtitle setText:@""];
-        [References moveUp:signatureView yChange:34];
-        [References moveUp:cancel yChange:34];
-        [References moveUp:destructionButton yChange:34];
-        [References moveUp:signatureCard yChange:34];
-        signatureSub.hidden = YES;
-        [signatureView setUserInteractionEnabled:NO];
+        clipCount = clipCount + 1;
+        isRecording = FALSE;
         [recorder stopRecording:^(LLSimpleCamera *camera, NSURL *outputURLVideo, NSError *error){
-            [self uploadFile:outputURLVideo withName:[NSString stringWithFormat:@"%@.mov",jobName.text]];
-            clientCode.text = [_jobRecord valueForKey:@"code"];
-            isRecording = FALSE;
-            [recorderTime invalidate];
-            completeView.alpha = 0;
-            completeView.hidden = NO;
-            
             [References fadeButtonColor:recordButton color:[[References colorFromHexString:@"#EE2B2A"] colorWithAlphaComponent:0.6f]];
+            [References fadeIn:comppleteRecordingStep];
             [UIView animateWithDuration:0.3 animations:^(){
                 [References borderColor:recordButton color:[UIColor whiteColor]];
-                completeView.alpha = 1;
-                [self.view bringSubviewToFront:completeView];
                 [References cornerRadius:recordButton radius:recordButton.frame.size.width/2];
             }];
+            [self checkFiles];
         }];
+//        [completeProgress setProgress:0];
+//        cancel.hidden = YES;
+//        destructionButton.hidden = YES;
+//        completeTitle.text = @"Saving Destruction";
+//        [destructionButton setTitle:@"Complete Destruction" forState:UIControlStateNormal];
+//        [completeSubtitle setText:@""];
+//        [References moveUp:signatureView yChange:34];
+//        [References moveUp:cancel yChange:34];
+//        [References moveUp:destructionButton yChange:34];
+//        [References moveUp:signatureCard yChange:34];
+//        signatureSub.hidden = YES;
+//        [signatureView setUserInteractionEnabled:NO];
+//        [recorder stopRecording:^(LLSimpleCamera *camera, NSURL *outputURLVideo, NSError *error){
+//            [self uploadFile:outputURLVideo withName:[NSString stringWithFormat:@"%@.mov",jobName.text]];
+//            clientCode.text = [_jobRecord valueForKey:@"code"];
+//            isRecording = FALSE;
+//            [recorderTime invalidate];
+//            completeView.alpha = 0;
+//            completeView.hidden = NO;
+//
+//            [References fadeButtonColor:recordButton color:[[References colorFromHexString:@"#EE2B2A"] colorWithAlphaComponent:0.6f]];
+//            [UIView animateWithDuration:0.3 animations:^(){
+//                [References borderColor:recordButton color:[UIColor whiteColor]];
+//                completeView.alpha = 1;
+//                [self.view bringSubviewToFront:completeView];
+//                [References cornerRadius:recordButton radius:recordButton.frame.size.width/2];
+//            }];
+//        }];
     }
 }
+
+-(void)checkFiles {
+    NSError *error = nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:&error]) {
+        NSLog(@"%@",file);
+    }
+}
+
 
 - (IBAction)simulateScan:(id)sender {
     driveObject *drive = [[driveObject alloc] initWithType:[References randomStringWithLength:8] andTime:recorderTimeInt];
@@ -399,5 +436,96 @@
 
 - (IBAction)cancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)completeRecordingStep:(id)sender {
+    [self mergeAll];
+}
+
+-(void)mergeAll {
+    NSLog(@"starting merge");
+    //Create the AVMutable composition to add tracks
+    AVMutableComposition* composition = [[AVMutableComposition alloc]init];
+    //Create the mutable composition track with video media type. You can also create the tracks depending on your need if you want to merge audio files and other stuffs.
+    AVMutableCompositionTrack* composedTrack = [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSURL *documentsURL = [NSURL fileURLWithPath:documentsDirectory];
+    for (int a = clipCount-1; a >=0 ; a--) {
+        NSLog(@"on clip: %i",a);
+        NSURL *videoURL = [documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"asdfg_%i.mov",a]];
+        AVURLAsset* video = [[AVURLAsset alloc]initWithURL:videoURL options:nil];
+        
+        [composedTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, video.duration)
+                               ofTrack:[[video tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0]
+                                atTime:kCMTimeZero error:nil];
+        AVAssetTrack *assetVideoTrack = [video tracksWithMediaType:AVMediaTypeVideo].lastObject;
+        [composedTrack setPreferredTransform:assetVideoTrack.preferredTransform];
+    }
+    NSString* myDocumentPath= [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",jobName.text]];
+    
+    NSURL *url = [[NSURL alloc] initFileURLWithPath: myDocumentPath];
+    
+    //Check if the file exists then delete the old file to save the merged video file.
+    if([[NSFileManager defaultManager]fileExistsAtPath:myDocumentPath])
+    {
+        [[NSFileManager defaultManager]removeItemAtPath:myDocumentPath error:nil];
+    }
+    
+    // Create the export session to merge and save the video
+    AVAssetExportSession*exporter = [[AVAssetExportSession alloc]initWithAsset:composition presetName:AVAssetExportPresetMediumQuality];
+    exporter.outputURL=url;
+    exporter.outputFileType=@"com.apple.quicktime-movie";
+    exporter.shouldOptimizeForNetworkUse=YES;
+    [exporter exportAsynchronouslyWithCompletionHandler:^{
+        switch([exporter status])
+        {
+            case AVAssetExportSessionStatusFailed:
+                NSLog(@"Failed to export video");
+                break;
+            case AVAssetExportSessionStatusCancelled:
+                NSLog(@"export cancelled");
+                break;
+            case AVAssetExportSessionStatusCompleted:
+                //Here you go you have got the merged video :)
+                
+                [self completeRecordingUpload:url];
+                break;
+            default:
+                NSLog(@"somethings not right");
+                break;
+        }
+        
+    }];
+}
+
+-(void)completeRecordingUpload:(NSURL*)fileURL{
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [completeProgress setProgress:0];
+        cancel.hidden = YES;
+        destructionButton.hidden = YES;
+        completeTitle.text = @"Saving Destruction";
+        [destructionButton setTitle:@"Complete Destruction" forState:UIControlStateNormal];
+        [completeSubtitle setText:@""];
+        [References moveUp:signatureView yChange:34];
+        [References moveUp:cancel yChange:34];
+        [References moveUp:destructionButton yChange:34];
+        [References moveUp:signatureCard yChange:34];
+        signatureSub.hidden = YES;
+        [signatureView setUserInteractionEnabled:NO];
+        [self uploadFile:fileURL withName:[NSString stringWithFormat:@"%@.mp4",jobName.text]];
+        clientCode.text = [_jobRecord valueForKey:@"code"];
+        isRecording = FALSE;
+        [recorderTime invalidate];
+        completeView.alpha = 0;
+        completeView.hidden = NO;
+        [References fadeButtonColor:recordButton color:[[References colorFromHexString:@"#EE2B2A"] colorWithAlphaComponent:0.6f]];
+        [UIView animateWithDuration:0.3 animations:^(){
+            [References borderColor:recordButton color:[UIColor whiteColor]];
+            completeView.alpha = 1;
+            [self.view bringSubviewToFront:completeView];
+            [References cornerRadius:recordButton radius:recordButton.frame.size.width/2];
+        }];
+    });
 }
 @end

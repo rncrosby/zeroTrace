@@ -9,9 +9,12 @@
 #import "jobObject.h"
 #import "References.h"
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 #import <CTVideoPlayerView/CTVideoViewCommonHeader.h>
 
-@interface pastJobView : UIViewController {
+@interface pastJobView : UIViewController <UIPopoverControllerDelegate,MFMessageComposeViewControllerDelegate,MFMailComposeViewControllerDelegate> {
+    UIPopoverController *popover;
+    NSString *dateText;
     CTVideoView *videoView;
     __weak IBOutlet UIView *videoPlayer;
     __weak IBOutlet UILabel *date;
