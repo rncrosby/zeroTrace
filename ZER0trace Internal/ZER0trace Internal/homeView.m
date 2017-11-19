@@ -154,13 +154,13 @@
     completedJobs = [[NSMutableArray alloc] init];
     for (int a = 0; a < savedNextJobs.count; a++) {
         jobObject *tJob = savedNextJobs[a];
-        if ([tJob.client localizedCaseInsensitiveContainsString:textField.text]) {
+        if ([tJob.client localizedCaseInsensitiveContainsString:textField.text] || [tJob.code localizedCaseInsensitiveContainsString:textField.text]) {
             [nextJobs addObject:tJob];
         }
     }
     for (int a = 0; a < savedCompletedJobs.count; a++) {
         jobObject *tJob = savedCompletedJobs[a];
-        if ([tJob.client localizedCaseInsensitiveContainsString:textField.text]) {
+        if ([tJob.client localizedCaseInsensitiveContainsString:textField.text] || [tJob.code localizedCaseInsensitiveContainsString:textField.text]) {
             [completedJobs addObject:tJob];
         }
     }
@@ -176,7 +176,6 @@
             search.alpha = 1;
             [searchButton setImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
         }];
-        [scrollView setContentOffset:CGPointMake(0, scrollView.contentSize.height-scrollView.frame.size.height) animated:YES];
     }
     return true;
 }
@@ -196,8 +195,7 @@
         
         [UIView animateWithDuration:0.25 animations:^(void){
             [search setText:@"Search by Client or Code"];
-            searchButton.alpha = 0.5;
-            search.alpha = 0.5;
+            searchButton.alpha = 1;
             [searchButton setImage:[UIImage imageNamed:@"search.png"] forState:UIControlStateNormal];
         }];
     }
@@ -307,23 +305,6 @@
     } else {
         if (indexPath.row == 0) {
             [self presentViewController:vc animated:YES completion:nil];
-        }
-        if (indexPath.row == 1) {
-            [References toastMessage:@"Not Activated" andView:self andClose:NO];
-//            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Enter Code" message:@"Code is 5 characters long" preferredStyle:UIAlertControllerStyleAlert];
-//            [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-//                textField.placeholder = @"00000";
-//                textField.textAlignment = NSTextAlignmentCenter;
-//            }];
-//            UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Next" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//                [self manualCode:[[alertController textFields][0] text]];
-//            }];
-//            [alertController addAction:confirmAction];
-//            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//
-//            }];
-//            [alertController addAction:cancelAction];
-//            [self presentViewController:alertController animated:YES completion:nil];
         }
         if (indexPath.row == 2) {
             UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
@@ -549,6 +530,14 @@
         [References fadeIn:recentJobs];
     }
 }
+- (IBAction)createJob:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    manualJobViewViewController *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"manualJobViewViewController"];
+    controller.modalPresentationStyle = UIModalPresentationFormSheet;
+    //menu is only an example
+    [self presentViewController:controller animated:YES completion:nil];
+}
+
 - (IBAction)checkScanner:(id)sender {
     alert = [UIAlertController alertControllerWithTitle:@"Connecting"
                                                 message:@"Looking for Scanner..."
@@ -579,20 +568,35 @@
 }
 
 - (IBAction)searchButton:(id)sender {
-    if (searchButton.alpha == 0.5) {
-        [search becomeFirstResponder];
+    if (search.hidden == YES) {
+        search.hidden = false;
         [UIView animateWithDuration:0.25 animations:^(void){
-            searchButton.alpha = 1;
+            logo.alpha = 0;
+            scannerSub.alpha = 0;
+            scannerCheck.alpha = 0;
+            checkScannerButton.alpha = 0;
             search.alpha = 1;
             [searchButton setImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
+        } completion:^(bool complete){
+            if (complete) {
+                [search becomeFirstResponder];
+            }
         }];
+        
     } else {
         [search resignFirstResponder];
         [UIView animateWithDuration:0.25 animations:^(void){
-            [search setText:@"Search by Client or Code"];
-            searchButton.alpha = 0.5;
-            search.alpha = 0.5;
+            logo.alpha = 1;
+            scannerSub.alpha = 1;
+            scannerCheck.alpha =1;
+            checkScannerButton.alpha = 1;
+            search.alpha = 0;
             [searchButton setImage:[UIImage imageNamed:@"search.png"] forState:UIControlStateNormal];
+        } completion:^(bool complete){
+            if (complete) {
+                search.hidden = true;
+                [search setText:@"Search by Client or Code"];
+            }
         }];
         nextJobs = [[NSMutableArray alloc] init];
         for (int a = 0; a < savedNextJobs.count; a++) {
@@ -674,8 +678,12 @@
                 // Set stop to YES when you wanted to break the iteration.
             }];
             if (pendingAccounts.count < 1) {
+                [UIView animateWithDuration:0.25 animations:^(void){
+                    refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
+                    searchButton.frame = CGRectMake(clientManagerButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
+                }];
                 clientManagerButton.enabled = false;
-                clientManagerButton.alpha = 0.5f;
+                clientManagerButton.alpha = 0.0f;
                 clientCount.hidden = true;
             } else {
                 clientManagerButton.enabled = true;

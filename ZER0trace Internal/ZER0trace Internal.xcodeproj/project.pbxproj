@@ -20,6 +20,7 @@
 		AD4099F41F8C0ED300AB03EC /* References.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4099F21F8C0ED300AB03EC /* References.m */; };
 		AD4099F91F8C178400AB03EC /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD4099F81F8C178400AB03EC /* CloudKit.framework */; };
 		AD4099FC1F8C1E0300AB03EC /* driveObject.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4099FB1F8C1E0300AB03EC /* driveObject.m */; };
+		AD5809791FC24CA600B6DE38 /* client.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5809781FC24CA600B6DE38 /* client.png */; };
 		AD79BDA41F8C3BB30025CD6B /* dark.png in Resources */ = {isa = PBXBuildFile; fileRef = AD79BDA21F8C3BAC0025CD6B /* dark.png */; };
 		AD8E375D1FBD684300552292 /* accountObject.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8E375C1FBD684300552292 /* accountObject.m */; };
 		AD8E37601FBD70D800552292 /* clientManagerView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8E375F1FBD70D800552292 /* clientManagerView.m */; };
@@ -72,6 +73,7 @@
 		AD4099FA1F8C1E0300AB03EC /* driveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = driveObject.h; sourceTree = "<group>"; };
 		AD4099FB1F8C1E0300AB03EC /* driveObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = driveObject.m; sourceTree = "<group>"; };
 		AD5809771FC23FFE00B6DE38 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		AD5809781FC24CA600B6DE38 /* client.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = client.png; sourceTree = "<group>"; };
 		AD79BDA21F8C3BAC0025CD6B /* dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dark.png; sourceTree = "<group>"; };
 		AD8E375B1FBD684300552292 /* accountObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = accountObject.h; sourceTree = "<group>"; };
 		AD8E375C1FBD684300552292 /* accountObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = accountObject.m; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 		ADB4DC971F95572300245CCA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				AD5809781FC24CA600B6DE38 /* client.png */,
 				AD9BB8341FBFBDFF00E5CD5A /* search.png */,
 				AD9BB8321FBFA9CF00E5CD5A /* cancel.png */,
 				AD9BB8301FBFA8CF00E5CD5A /* check.png */,
@@ -306,6 +309,7 @@
 				ADB4DC961F9551A200245CCA /* light.png in Resources */,
 				AD9BB82F1FBF90AD00E5CD5A /* clientListCell.xib in Resources */,
 				ADB4DC921F954D7500245CCA /* code.png in Resources */,
+				AD5809791FC24CA600B6DE38 /* client.png in Resources */,
 				AD9BB8311FBFA8CF00E5CD5A /* check.png in Resources */,
 				ADB4DC931F954D7500245CCA /* plus.png in Resources */,
 				ADB6F7C41F9F1938001A499C /* backspace.png in Resources */,

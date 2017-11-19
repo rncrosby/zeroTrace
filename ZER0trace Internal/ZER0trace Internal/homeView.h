@@ -42,7 +42,14 @@
     __weak IBOutlet UILabel *clientCount;
     __weak IBOutlet UIButton *clientManagerButton;
     __weak IBOutlet UIButton *searchButton;
+    
+    // menu bar
+    __weak IBOutlet UIImageView *logo;
+    __weak IBOutlet UILabel *scannerSub;
+    __weak IBOutlet UIButton *refreshButton;
+    
 }
+- (IBAction)createJob:(id)sender;
 - (IBAction)checkScanner:(id)sender;
 - (IBAction)refreshButton:(id)sender;
 - (IBAction)clientManager:(id)sender;

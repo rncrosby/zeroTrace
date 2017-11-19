@@ -144,6 +144,7 @@
 
 - (IBAction)toggleRecording:(id)sender {
     if (isRecording == FALSE) {
+        [References fadeOut:comppleteRecordingStep];
         if (useSimulator == true) {
             [References fadeIn:simulateScan];
             [self startRecording];
