@@ -34,6 +34,8 @@
 		AD92C4561F8EA33100454285 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD92C4551F8EA33100454285 /* Assets.xcassets */; };
 		AD92C4591F8EA33100454285 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD92C4571F8EA33100454285 /* LaunchScreen.storyboard */; };
 		AD92C45C1F8EA33100454285 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AD92C45B1F8EA33100454285 /* main.m */; };
+		ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = ADDFAA161FC383AB00C1F1D3 /* shred.mp4 */; };
+		ADDFAA1A1FC3899B00C1F1D3 /* blr.jpg in Resources */ = {isa = PBXBuildFile; fileRef = ADDFAA191FC3899B00C1F1D3 /* blr.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +83,9 @@
 		AD92C4581F8EA33100454285 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AD92C45A1F8EA33100454285 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD92C45B1F8EA33100454285 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		ADDFAA161FC383AB00C1F1D3 /* shred.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = shred.mp4; path = ../../Website/shred.mp4; sourceTree = "<group>"; };
+		ADDFAA171FC383E800C1F1D3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		ADDFAA191FC3899B00C1F1D3 /* blr.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blr.jpg; sourceTree = "<group>"; };
 		DE9230446DDE54DF4A6EE290 /* Pods-ZER0trace External.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZER0trace External.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZER0trace External/Pods-ZER0trace External.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,6 +116,7 @@
 		6FF90382E1972151008D6ED1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				ADDFAA171FC383E800C1F1D3 /* MediaPlayer.framework */,
 				AD845EEF1FBA656C00F5B965 /* Foundation.framework */,
 				AD1F565B1F8EB8AC00C9F33F /* AVFoundation.framework */,
 				AD1F56591F8EB89900C9F33F /* CoreMedia.framework */,
@@ -123,6 +129,7 @@
 		AD1F56621F8EC26800C9F33F /* images */ = {
 			isa = PBXGroup;
 			children = (
+				ADDFAA191FC3899B00C1F1D3 /* blr.jpg */,
 				AD1F566A1F8ED0A700C9F33F /* fullscreen.png */,
 				AD1F56601F8EC26100C9F33F /* pause.png */,
 				AD1F56611F8EC26200C9F33F /* play.png */,
@@ -166,6 +173,7 @@
 		AD92C44B1F8EA33100454285 /* ZER0trace External */ = {
 			isa = PBXGroup;
 			children = (
+				ADDFAA161FC383AB00C1F1D3 /* shred.mp4 */,
 				AD845EED1FBA62EE00F5B965 /* logo.png */,
 				AD845EE71FBA61E300F5B965 /* AES */,
 				AD1F56621F8EC26800C9F33F /* images */,
@@ -266,6 +274,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADDFAA1A1FC3899B00C1F1D3 /* blr.jpg in Resources */,
+				ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */,
 				AD1F56631F8EC27500C9F33F /* pause.png in Resources */,
 				AD1F56641F8EC27500C9F33F /* play.png in Resources */,
 				AD1F56551F8EAADB00C9F33F /* References.h in Resources */,
