@@ -11,10 +11,14 @@
 #import <CloudKit/CloudKit.h>
 #import "clientView.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import <FirebaseAuth/FirebaseAuth.h>
+@import Firebase;
 
 @interface loginView : UIViewController <UITextFieldDelegate> {
     CGRect cardOrigin;
     int currentCard;
+    __weak IBOutlet UILabel *header;
+    __weak IBOutlet UILabel *subHeader;
     __weak IBOutlet UILabel *usernameHeader;
     __weak IBOutlet UITextField *username;
     __weak IBOutlet UILabel *passwordHeader;
@@ -23,7 +27,7 @@
     __weak IBOutlet UITextField *contactName;
     __weak IBOutlet UILabel *contactPhoneHeader;
     __weak IBOutlet UITextField *contactPhone;
-    
+    FIRAuth *auth;
     
     
     

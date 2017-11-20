@@ -16,7 +16,7 @@
 
 @interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource> {
     NSMutableArray *jobs;
-    __weak IBOutlet UIImageView *image;
+    __weak IBOutlet UILabel *clientName;
     __weak IBOutlet UITableView *table;
 }
 

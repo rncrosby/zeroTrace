@@ -19,6 +19,9 @@ PODS:
     - AFNetworking
     - CTPersistance
     - HandyFrame
+  - Firebase/Auth (4.1.0):
+    - Firebase/Core
+    - FirebaseAuth (= 4.1.0)
   - Firebase/Core (4.1.0):
     - FirebaseAnalytics (= 4.0.3)
     - FirebaseCore (= 4.0.5)
@@ -30,6 +33,10 @@ PODS:
     - FirebaseInstanceID (~> 2.0)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
     - nanopb (~> 0.3)
+  - FirebaseAuth (4.1.0):
+    - FirebaseAnalytics (~> 4.0)
+    - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
+    - GTMSessionFetcher/Core (~> 1.1)
   - FirebaseCore (4.0.5):
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
     - nanopb (~> 0.3)
@@ -39,9 +46,16 @@ PODS:
     - FirebaseAnalytics (~> 4.0)
     - FirebaseCore (~> 4.0)
     - GTMSessionFetcher/Core (~> 1.1)
+  - GoogleToolboxForMac/DebugUtils (2.1.1):
+    - GoogleToolboxForMac/Defines (= 2.1.1)
   - GoogleToolboxForMac/Defines (2.1.1)
   - GoogleToolboxForMac/NSData+zlib (2.1.1):
     - GoogleToolboxForMac/Defines (= 2.1.1)
+  - GoogleToolboxForMac/NSDictionary+URLArguments (2.1.1):
+    - GoogleToolboxForMac/DebugUtils (= 2.1.1)
+    - GoogleToolboxForMac/Defines (= 2.1.1)
+    - GoogleToolboxForMac/NSString+URLArguments (= 2.1.1)
+  - GoogleToolboxForMac/NSString+URLArguments (2.1.1)
   - GTMSessionFetcher/Core (1.1.11)
   - HandyFrame (1.1.3)
   - nanopb (0.3.8):
@@ -52,6 +66,7 @@ PODS:
 
 DEPENDENCIES:
   - CTVideoPlayerView
+  - Firebase/Auth
   - Firebase/Core
   - Firebase/Storage
 
@@ -61,6 +76,7 @@ SPEC CHECKSUMS:
   CTVideoPlayerView: 00408d908a577f0bbfe17b9d5a96e5964d55b1c8
   Firebase: ebebf41db7f10e0c7668b6eaaa857fbe599aa478
   FirebaseAnalytics: 76f754d37ca5b04f36856729b6af3ca0152d1069
+  FirebaseAuth: 8d1d2389cf82f891048d6d50d27d044f55ae09a6
   FirebaseCore: 7d876ea97a830cbe62ba7fbbe7670c833a324ba0
   FirebaseInstanceID: 9fbf536668f4d3f0880e7438456dabd1376e294b
   FirebaseStorage: 661fc1f8d4131891d256b62e82a45ace8b3f0c3b
@@ -69,6 +85,6 @@ SPEC CHECKSUMS:
   HandyFrame: 5fef3c197c383332d7d5c838b3f7a85ce2f8f9cc
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
 
-PODFILE CHECKSUM: 55176e940f0925df3ed889d39a856874e63c27fb
+PODFILE CHECKSUM: 6469d861d38369bcec44fe0e4226b1c8021b980e
 
 COCOAPODS: 1.3.1

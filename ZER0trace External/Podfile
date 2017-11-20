@@ -4,6 +4,7 @@
 target 'ZER0trace External' do
   	pod 'Firebase/Core'
 	pod 'Firebase/Storage'
+	pod 'Firebase/Auth'
 	pod ‘CTVideoPlayerView’
 
 end

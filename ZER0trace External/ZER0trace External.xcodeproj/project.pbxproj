@@ -36,6 +36,8 @@
 		AD92C45C1F8EA33100454285 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AD92C45B1F8EA33100454285 /* main.m */; };
 		ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = ADDFAA161FC383AB00C1F1D3 /* shred.mp4 */; };
 		ADDFAA1A1FC3899B00C1F1D3 /* blr.jpg in Resources */ = {isa = PBXBuildFile; fileRef = ADDFAA191FC3899B00C1F1D3 /* blr.jpg */; };
+		ADE9B7B81FC39F760078DE1D /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE9B7B61FC39F750078DE1D /* menu.png */; };
+		ADE9B7B91FC39F760078DE1D /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE9B7B71FC39F750078DE1D /* plus.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +88,8 @@
 		ADDFAA161FC383AB00C1F1D3 /* shred.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = shred.mp4; path = ../../Website/shred.mp4; sourceTree = "<group>"; };
 		ADDFAA171FC383E800C1F1D3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		ADDFAA191FC3899B00C1F1D3 /* blr.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blr.jpg; sourceTree = "<group>"; };
+		ADE9B7B61FC39F750078DE1D /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
+		ADE9B7B71FC39F750078DE1D /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
 		DE9230446DDE54DF4A6EE290 /* Pods-ZER0trace External.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZER0trace External.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZER0trace External/Pods-ZER0trace External.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,6 +133,8 @@
 		AD1F56621F8EC26800C9F33F /* images */ = {
 			isa = PBXGroup;
 			children = (
+				ADE9B7B61FC39F750078DE1D /* menu.png */,
+				ADE9B7B71FC39F750078DE1D /* plus.png */,
 				ADDFAA191FC3899B00C1F1D3 /* blr.jpg */,
 				AD1F566A1F8ED0A700C9F33F /* fullscreen.png */,
 				AD1F56601F8EC26100C9F33F /* pause.png */,
@@ -277,7 +283,9 @@
 				ADDFAA1A1FC3899B00C1F1D3 /* blr.jpg in Resources */,
 				ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */,
 				AD1F56631F8EC27500C9F33F /* pause.png in Resources */,
+				ADE9B7B81FC39F760078DE1D /* menu.png in Resources */,
 				AD1F56641F8EC27500C9F33F /* play.png in Resources */,
+				ADE9B7B91FC39F760078DE1D /* plus.png in Resources */,
 				AD1F56551F8EAADB00C9F33F /* References.h in Resources */,
 				AD1F56491F8EA58000C9F33F /* GoogleService-Info.plist in Resources */,
 				AD1F56691F8EC95A00C9F33F /* driveCell.xib in Resources */,

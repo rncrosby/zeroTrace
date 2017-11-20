@@ -15,9 +15,8 @@
 @implementation clientView
 
 - (void)viewDidLoad {
-    [References cornerRadius:image radius:image.frame.size.width/2];
+    clientName.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"client"];
     [super viewDidLoad];
-    [self getClientJobs];
     // Do any additional setup after loading the view.
 }
 
