@@ -56,6 +56,7 @@
     __weak IBOutlet UIButton *destructionButton;
     __weak IBOutlet UILabel *statusBar;
     __weak IBOutlet UIButton *comppleteRecordingStep;
+    
 }
 - (IBAction)toggleRecording:(id)sender;
 

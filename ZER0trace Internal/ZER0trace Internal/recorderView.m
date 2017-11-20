@@ -154,12 +154,14 @@
     } else {
         clipCount = clipCount + 1;
         isRecording = FALSE;
+        [References fadeIn:comppleteRecordingStep];
         [recorder stopRecording:^(LLSimpleCamera *camera, NSURL *outputURLVideo, NSError *error){
             [References fadeButtonColor:recordButton color:[[References colorFromHexString:@"#EE2B2A"] colorWithAlphaComponent:0.6f]];
-            [References fadeIn:comppleteRecordingStep];
             [UIView animateWithDuration:0.3 animations:^(){
+                comppleteRecordingStep.alpha = 1;
                 [References borderColor:recordButton color:[UIColor whiteColor]];
                 [References cornerRadius:recordButton radius:recordButton.frame.size.width/2];
+                
             }];
             [self checkFiles];
         }];
