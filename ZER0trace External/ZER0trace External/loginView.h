@@ -14,6 +14,7 @@
 #import <FirebaseAuth/FirebaseAuth.h>
 @import Firebase;
 
+
 @interface loginView : UIViewController <UITextFieldDelegate> {
     CGRect cardOrigin;
     int currentCard;
@@ -41,5 +42,6 @@
 - (IBAction)goToSignIn:(id)sender;
 - (IBAction)goToJobCode:(id)sender;
 - (IBAction)goToSignUp:(id)sender;
+- (IBAction)continueButton:(id)sender;
 
 @end

@@ -11,11 +11,11 @@
 @interface jobObject : NSObject
 
 @property (nonatomic, strong) NSURL* videoURL;
-@property (nonatomic, strong) NSDate *dateOfDestruction;
+@property (nonatomic, strong) NSString *dateOfDestruction;
 @property (nonatomic, strong) NSArray* driveTimes;
 @property (nonatomic, strong) NSArray* driveSerials;
 
--(instancetype)initWithType:(NSURL*)videoURL andTimes:(NSArray*)driveTimes andSerials:(NSArray*)driveSerials andDate:(NSDate*)date;
+-(instancetype)initWithType:(NSURL*)videoURL andTimes:(NSArray*)driveTimes andSerials:(NSArray*)driveSerials andDate:(NSString*)date;
 
 
 @end
