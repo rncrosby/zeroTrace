@@ -210,10 +210,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <textField hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search by Serial Number" textAlignment="natural" minimumFontSize="17" id="qoc-Qy-9xx">
+                                <rect key="frame" x="16" y="86" width="382" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="textColor" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="search"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                        <color key="value" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="3g7-Ca-iQg"/>
+                                </connections>
+                            </textField>
                             <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="tpH-uQ-sxP">
                                 <rect key="frame" x="0.0" y="74" width="414" height="662"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="contentInset" minX="0.0" minY="8" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="MgD-87-DAJ"/>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="Ima-kd-vFw"/>
@@ -226,6 +242,19 @@
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cTn-M1-gcS">
+                                <rect key="frame" x="16" y="31" width="25" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="menu.png"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="61u-Rw-0Hv">
+                                <rect key="frame" x="369" y="31" width="25" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="search.png"/>
+                                <connections>
+                                    <action selector="searchButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KQg-ux-6Gv"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.054902657866477966" green="0.054900698363780975" blue="0.054902039468288422" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
@@ -233,6 +262,8 @@
                     <size key="freeformSize" width="414" height="736"/>
                     <connections>
                         <outlet property="clientName" destination="GIq-BA-mRm" id="FOm-qS-vMe"/>
+                        <outlet property="searchBar" destination="qoc-Qy-9xx" id="p6B-87-kDw"/>
+                        <outlet property="searchButton" destination="61u-Rw-0Hv" id="bNV-dw-XtS"/>
                         <outlet property="table" destination="tpH-uQ-sxP" id="cVa-3O-SCq"/>
                     </connections>
                 </viewController>
@@ -319,4 +350,8 @@
             <point key="canvasLocation" x="-49.5" y="76.5"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="menu.png" width="100" height="100"/>
+        <image name="search.png" width="100" height="100"/>
+    </resources>
 </document>

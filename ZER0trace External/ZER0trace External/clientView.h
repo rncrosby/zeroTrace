@@ -14,10 +14,15 @@
 #import "jobView.h"
 #import <AVFoundation/AVFoundation.h>
 
-@interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource> {
-    NSMutableArray *jobs;
+@interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate> {
+    NSMutableArray *jobs,*savedJobs;
+    UIView *line;
     __weak IBOutlet UILabel *clientName;
     __weak IBOutlet UITableView *table;
+    __weak IBOutlet UITextField *searchBar;
+    __weak IBOutlet UIButton *searchButton;
+    bool isSearching;
 }
+- (IBAction)searchButton:(id)sender;
 
 @end

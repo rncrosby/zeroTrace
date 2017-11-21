@@ -15,9 +15,16 @@
 @implementation clientView
 
 - (void)viewDidLoad {
+    isSearching = false;
     clientName.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"client"];
+   line = [[UIView alloc] initWithFrame:CGRectMake(0, clientName.frame.origin.y+clientName.frame.size.height+8, 1000, 1)];
+    [line setBackgroundColor:[UIColor whiteColor]];
+    line.alpha = 0.2f;
+    [self.view addSubview:line];
+    [self.view bringSubviewToFront:line];
     [self getClientJobs];
     [super viewDidLoad];
+    [searchBar addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
     // Do any additional setup after loading the view.
 }
 
@@ -35,7 +42,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 188;
+    return 167;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -60,9 +67,20 @@
     [References cornerRadius:cell.card radius:16.0f];
     jobObject *job = jobs[indexPath.row];
     cell.date.text = job.dateOfDestruction;
-    cell.drives.text = [NSString stringWithFormat:@"  %lu Drives  ",(unsigned long)job.driveSerials.count];
-    [cell.drives sizeToFit];
-    cell.drives.frame = CGRectMake(cell.drives.frame.origin.x, 118, cell.drives.frame.size.width, 50);
+    if (isSearching == true) {
+        for (int a = 0; a < savedJobs.count; a++) {
+            jobObject *job = savedJobs[a];
+            for (int b = 0; b < job.driveSerials.count; b++) {
+                if ([job.driveSerials[b] localizedCaseInsensitiveContainsString:searchBar.text]) {
+                    cell.drives.text = [NSString stringWithFormat:@"Found %@",job.driveSerials[b]];
+                    break;
+                }
+            }
+        }
+        
+    } else {
+        cell.drives.text = [NSString stringWithFormat:@"%lu Drives",(unsigned long)job.driveSerials.count];
+    }
     [References cornerRadius:cell.drives radius:16.0f];
     return cell;
 }
@@ -70,8 +88,10 @@
 -(void)getClientJobs {
     table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y+[References screenHeight], [References screenWidth], table.frame.size.height);
     jobs = [[NSMutableArray alloc] init];
+    savedJobs = [[NSMutableArray alloc] init];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"clientCode = '%@'",[[NSUserDefaults standardUserDefaults] objectForKey:@"code"]]];
     CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
+    query.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc]initWithKey:@"modificationDate" ascending:false]];
     CKContainer *container = [CKContainer containerWithIdentifier:@"iCloud.com.fullytoasted.ZER0trace-Internal"];
     [container.publicCloudDatabase performQuery:query
                                                         inZoneWithID:nil
@@ -80,7 +100,7 @@
                                                            NSLog(@"%@",error.localizedDescription);
                                                        }
                                                        for (int a = 0; a < results.count; a++) {
-                                                           CKRecord *record = results[0];
+                                                           CKRecord *record = results[a];
                                                            NSString *date = [record valueForKey:@"jobDate"];
                                                            for (int a = 0; a < date.length; a++) {
                                                                if ([date characterAtIndex:a] == ' ') {
@@ -97,8 +117,8 @@
                                                            NSURL *videoURL = [NSURL URLWithString:[record valueForKey:@"videoURL"]];
                                                            jobObject *job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:date];
                                                            [jobs addObject:job];
-                                                       }
-                                                       dispatch_sync(dispatch_get_main_queue(), ^{
+                                                           [savedJobs addObject:job];
+                                                       } dispatch_sync(dispatch_get_main_queue(), ^{
                                                            [table reloadData];
                                                            [UIView animateWithDuration:0.5f animations:^(void){
                                                                table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y-[References screenHeight], [References screenWidth], table.frame.size.height);
@@ -108,4 +128,73 @@
                                                    }];
 }
 
+- (IBAction)searchButton:(id)sender {
+    if (isSearching == false) {
+        searchBar.hidden = false;
+        [UIView animateWithDuration:0.25f animations:^(void){
+            line.frame = CGRectMake(0, line.frame.origin.y+searchBar.frame.size.height+20, line.frame.size.width, line.frame.size.height);
+            table.frame = CGRectMake(0, table.frame.origin.y+searchBar.frame.size.height+20, table.frame.size.width, table.frame.size.height-searchBar.frame.size.height-20);
+            [searchButton setImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
+        } completion:^(bool complete){
+            if (complete) {
+                [searchBar becomeFirstResponder];
+                isSearching = true;
+            }
+        }];
+    } else {
+        jobs = [[NSMutableArray alloc] init];
+        for (int a = 0; a < savedJobs.count; a++) {
+            [jobs addObject:savedJobs[a]];
+        }
+        [table reloadData];
+        [searchBar resignFirstResponder];
+        [UIView animateWithDuration:0.25f animations:^(void){
+            line.frame = CGRectMake(0, line.frame.origin.y-searchBar.frame.size.height-20, line.frame.size.width, line.frame.size.height);
+            table.frame = CGRectMake(0, table.frame.origin.y-searchBar.frame.size.height-20, table.frame.size.width, table.frame.size.height+searchBar.frame.size.height+20);
+            [searchButton setImage:[UIImage imageNamed:@"search.png"] forState:UIControlStateNormal];
+        } completion:^(bool complete){
+            if (complete) {
+                searchBar.hidden = true;
+                isSearching = false;
+            }
+        }];
+    }
+    
+}
+
+-(void)textChanged:(UITextField *)textField {
+    if (textField.text.length == 0) {
+        jobs = [[NSMutableArray alloc] init];
+        for (int a = 0; a < savedJobs.count; a++) {
+            [jobs addObject:savedJobs[a]];
+        }
+        [table reloadData];
+        return ;
+    }
+    jobs = [[NSMutableArray alloc] init];
+    for (int a = 0; a < savedJobs.count; a++) {
+        jobObject *job = savedJobs[a];
+        for (int b = 0; b < job.driveSerials.count; b++) {
+            if ([job.driveSerials[b] localizedCaseInsensitiveContainsString:textField.text]) {
+                [jobs addObject:job];
+            }
+        }
+    }
+    [table reloadData];
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    jobs = [[NSMutableArray alloc] init];
+    for (int a = 0; a < savedJobs.count; a++) {
+        jobObject *job = savedJobs[a];
+        for (int b = 0; b < job.driveSerials.count; b++) {
+            if ([job.driveSerials[b] localizedCaseInsensitiveContainsString:textField.text]) {
+                [jobs addObject:job];
+            }
+        }
+    }
+    [table reloadData];
+    [textField resignFirstResponder];
+    return true;
+}
 @end

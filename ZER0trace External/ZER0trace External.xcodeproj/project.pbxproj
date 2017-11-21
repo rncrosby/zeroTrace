@@ -23,6 +23,9 @@
 		AD1F56641F8EC27500C9F33F /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1F56611F8EC26200C9F33F /* play.png */; };
 		AD1F56681F8EC95A00C9F33F /* driveCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1F56661F8EC95A00C9F33F /* driveCell.m */; };
 		AD1F56691F8EC95A00C9F33F /* driveCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD1F56671F8EC95A00C9F33F /* driveCell.xib */; };
+		AD41F5A51FC4C9F70027B007 /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = AD41F5A41FC4C9F70027B007 /* menu.png */; };
+		AD41F5A71FC4CA6D0027B007 /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = AD41F5A61FC4CA6D0027B007 /* search.png */; };
+		AD41F5A91FC4CCB40027B007 /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = AD41F5A81FC4CCB40027B007 /* cancel.png */; };
 		AD845EE31FBA61DC00F5B965 /* NSData+CommonCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = AD845EDB1FBA61DA00F5B965 /* NSData+CommonCrypto.m */; };
 		AD845EE41FBA61DC00F5B965 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = AD845EDD1FBA61DB00F5B965 /* NSString+Base64.m */; };
 		AD845EE51FBA61DC00F5B965 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = AD845EDF1FBA61DB00F5B965 /* NSData+Base64.m */; };
@@ -36,7 +39,6 @@
 		AD92C45C1F8EA33100454285 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AD92C45B1F8EA33100454285 /* main.m */; };
 		ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = ADDFAA161FC383AB00C1F1D3 /* shred.mp4 */; };
 		ADDFAA1A1FC3899B00C1F1D3 /* blr.jpg in Resources */ = {isa = PBXBuildFile; fileRef = ADDFAA191FC3899B00C1F1D3 /* blr.jpg */; };
-		ADE9B7B81FC39F760078DE1D /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE9B7B61FC39F750078DE1D /* menu.png */; };
 		ADE9B7B91FC39F760078DE1D /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE9B7B71FC39F750078DE1D /* plus.png */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +67,9 @@
 		AD1F56661F8EC95A00C9F33F /* driveCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = driveCell.m; sourceTree = "<group>"; };
 		AD1F56671F8EC95A00C9F33F /* driveCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = driveCell.xib; sourceTree = "<group>"; };
 		AD1F566A1F8ED0A700C9F33F /* fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullscreen.png; sourceTree = "<group>"; };
+		AD41F5A41FC4C9F70027B007 /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
+		AD41F5A61FC4CA6D0027B007 /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
+		AD41F5A81FC4CCB40027B007 /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
 		AD845EDB1FBA61DA00F5B965 /* NSData+CommonCrypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CommonCrypto.m"; sourceTree = "<group>"; };
 		AD845EDC1FBA61DA00F5B965 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
 		AD845EDD1FBA61DB00F5B965 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
@@ -88,7 +93,6 @@
 		ADDFAA161FC383AB00C1F1D3 /* shred.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = shred.mp4; path = ../../Website/shred.mp4; sourceTree = "<group>"; };
 		ADDFAA171FC383E800C1F1D3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		ADDFAA191FC3899B00C1F1D3 /* blr.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blr.jpg; sourceTree = "<group>"; };
-		ADE9B7B61FC39F750078DE1D /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
 		ADE9B7B71FC39F750078DE1D /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
 		DE9230446DDE54DF4A6EE290 /* Pods-ZER0trace External.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZER0trace External.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZER0trace External/Pods-ZER0trace External.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -133,7 +137,9 @@
 		AD1F56621F8EC26800C9F33F /* images */ = {
 			isa = PBXGroup;
 			children = (
-				ADE9B7B61FC39F750078DE1D /* menu.png */,
+				AD41F5A81FC4CCB40027B007 /* cancel.png */,
+				AD41F5A61FC4CA6D0027B007 /* search.png */,
+				AD41F5A41FC4C9F70027B007 /* menu.png */,
 				ADE9B7B71FC39F750078DE1D /* plus.png */,
 				ADDFAA191FC3899B00C1F1D3 /* blr.jpg */,
 				AD1F566A1F8ED0A700C9F33F /* fullscreen.png */,
@@ -283,13 +289,15 @@
 				ADDFAA1A1FC3899B00C1F1D3 /* blr.jpg in Resources */,
 				ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */,
 				AD1F56631F8EC27500C9F33F /* pause.png in Resources */,
-				ADE9B7B81FC39F760078DE1D /* menu.png in Resources */,
+				AD41F5A91FC4CCB40027B007 /* cancel.png in Resources */,
 				AD1F56641F8EC27500C9F33F /* play.png in Resources */,
+				AD41F5A51FC4C9F70027B007 /* menu.png in Resources */,
 				ADE9B7B91FC39F760078DE1D /* plus.png in Resources */,
 				AD1F56551F8EAADB00C9F33F /* References.h in Resources */,
 				AD1F56491F8EA58000C9F33F /* GoogleService-Info.plist in Resources */,
 				AD1F56691F8EC95A00C9F33F /* driveCell.xib in Resources */,
 				AD92C4591F8EA33100454285 /* LaunchScreen.storyboard in Resources */,
+				AD41F5A71FC4CA6D0027B007 /* search.png in Resources */,
 				AD845EEE1FBA62EF00F5B965 /* logo.png in Resources */,
 				AD92C4561F8EA33100454285 /* Assets.xcassets in Resources */,
 				AD92C4541F8EA33100454285 /* Main.storyboard in Resources */,

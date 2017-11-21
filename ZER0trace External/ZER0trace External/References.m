@@ -308,8 +308,8 @@
 
 +(void)createLine:(UIView*)superview  xPos:(int)xPos yPos:(int)yPos inFront:(bool)inFront{
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(xPos, yPos, 1000, 1)];
-    [view setBackgroundColor:[UIColor blackColor]];
-    view.alpha = 0.1f;
+    [view setBackgroundColor:[UIColor whiteColor]];
+    view.alpha = 0.2f;
     [superview addSubview:view];
     if (inFront == TRUE) {
         [superview bringSubviewToFront:view];
@@ -319,10 +319,7 @@
 }
 
 +(void)ViewToLine:(UIView*)superview withView:(UIView*)view xPos:(int)xPos yPos:(int)yPos{
-    view = [[UIView alloc] initWithFrame:CGRectMake(xPos, yPos, 1000, 1)];
-    [view setBackgroundColor:[UIColor blackColor]];
-    view.alpha = 0.1;
-    [superview addSubview:view];
+
 }
 
 + (UIColor *)colorFromHexString:(NSString *)hexString {
