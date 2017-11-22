@@ -12,6 +12,8 @@
 #import "References.h"
 #import "jobObject.h"
 #import "jobView.h"
+#import <ZXMultiFormatWriter.h>
+#import <ZXImage.h>
 #import <AVFoundation/AVFoundation.h>
 
 @interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate> {

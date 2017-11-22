@@ -63,12 +63,16 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - ZXingObjC (3.2.1):
+    - ZXingObjC/All (= 3.2.1)
+  - ZXingObjC/All (3.2.1)
 
 DEPENDENCIES:
   - CTVideoPlayerView
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Storage
+  - ZXingObjC (~> 3.2.1)
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
@@ -84,7 +88,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5ad62e8200fa00ed011fe5e08d27fef72c5b1429
   HandyFrame: 5fef3c197c383332d7d5c838b3f7a85ce2f8f9cc
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  ZXingObjC: bbf7b8f0cf8933fdd33eb4f9f46e22308552869b
 
-PODFILE CHECKSUM: 6469d861d38369bcec44fe0e4226b1c8021b980e
+PODFILE CHECKSUM: 2ff84a86570a69d37de5dc6b3b4d8ee2b04a4e47
 
 COCOAPODS: 1.3.1

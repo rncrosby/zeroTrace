@@ -42,15 +42,15 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 167;
+    return 104;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    jobView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"jobView"];
-    controller.job = jobs[indexPath.row];
-    //menu is only an example
-    [self presentViewController:controller animated:YES completion:nil];
+//    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+//    jobView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"jobView"];
+//    controller.job = jobs[indexPath.row];
+//    //menu is only an example
+//    [self presentViewController:controller animated:YES completion:nil];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -64,25 +64,38 @@
         cell = [nib objectAtIndex:0];
     }
     [cell setBackgroundColor:[UIColor clearColor]];
-    [References cornerRadius:cell.card radius:16.0f];
     jobObject *job = jobs[indexPath.row];
+    [References cornerRadius:cell.card radius:16.0f];
+    cell.card.layer.cornerRadius = cell.card.layer.cornerRadius;
     cell.date.text = job.dateOfDestruction;
     if (isSearching == true) {
-        for (int a = 0; a < savedJobs.count; a++) {
-            jobObject *job = savedJobs[a];
+            jobObject *job = jobs[indexPath.row];
             for (int b = 0; b < job.driveSerials.count; b++) {
                 if ([job.driveSerials[b] localizedCaseInsensitiveContainsString:searchBar.text]) {
                     cell.drives.text = [NSString stringWithFormat:@"Found %@",job.driveSerials[b]];
                     break;
                 }
             }
-        }
-        
     } else {
         cell.drives.text = [NSString stringWithFormat:@"%lu Drives",(unsigned long)job.driveSerials.count];
     }
-    [References cornerRadius:cell.drives radius:16.0f];
+    [cell.barCode setImage:[UIImage imageWithCIImage:[self generateBarcode:job.jobCode]]];
+    [References cardshadow:cell.shadow];
+    cell.layer.zPosition = indexPath.row;
     return cell;
+}
+
+-(CIImage*)generateBarcode:(NSString*)dataString{
+    
+    CIFilter *barCodeFilter = [CIFilter filterWithName:@"CIAztecCodeGenerator"];
+    NSData *barCodeData = [dataString dataUsingEncoding:NSASCIIStringEncoding];
+    [barCodeFilter setValue:barCodeData forKey:@"inputMessage"];
+//    [barCodeFilter setValue:[NSNumber numberWithInt:56] forKey:@"inputMinHeight"];
+//    [barCodeFilter setValue:[NSNumber numberWithInt:1] forKey:@"inputDataColumns"];
+//    [barCodeFilter setValue:[NSNumber numberWithInt:15] forKey:@"inputRows"];
+CIImage *barCodeImage = barCodeFilter.outputImage;
+    
+    return barCodeImage;
 }
 
 -(void)getClientJobs {
@@ -102,6 +115,8 @@
                                                        for (int a = 0; a < results.count; a++) {
                                                            CKRecord *record = results[a];
                                                            NSString *date = [record valueForKey:@"jobDate"];
+                                                           NSString *code = [record valueForKey:@"code"];
+
                                                            for (int a = 0; a < date.length; a++) {
                                                                if ([date characterAtIndex:a] == ' ') {
                                                                    
@@ -115,7 +130,7 @@
                                                            NSArray *driveTimes = [record objectForKey:@"driveTimes"];
                                                            NSArray *driveSerials = [record objectForKey:@"driveSerials"];
                                                            NSURL *videoURL = [NSURL URLWithString:[record valueForKey:@"videoURL"]];
-                                                           jobObject *job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:date];
+                                                           jobObject *job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:date andCode:code];
                                                            [jobs addObject:job];
                                                            [savedJobs addObject:job];
                                                        } dispatch_sync(dispatch_get_main_queue(), ^{
@@ -171,12 +186,14 @@
         [table reloadData];
         return ;
     }
+    [jobs removeAllObjects];
     jobs = [[NSMutableArray alloc] init];
     for (int a = 0; a < savedJobs.count; a++) {
         jobObject *job = savedJobs[a];
         for (int b = 0; b < job.driveSerials.count; b++) {
             if ([job.driveSerials[b] localizedCaseInsensitiveContainsString:textField.text]) {
                 [jobs addObject:job];
+                break;
             }
         }
     }
@@ -184,16 +201,6 @@
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
-    jobs = [[NSMutableArray alloc] init];
-    for (int a = 0; a < savedJobs.count; a++) {
-        jobObject *job = savedJobs[a];
-        for (int b = 0; b < job.driveSerials.count; b++) {
-            if ([job.driveSerials[b] localizedCaseInsensitiveContainsString:textField.text]) {
-                [jobs addObject:job];
-            }
-        }
-    }
-    [table reloadData];
     [textField resignFirstResponder];
     return true;
 }

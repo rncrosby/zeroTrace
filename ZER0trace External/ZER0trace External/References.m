@@ -62,10 +62,10 @@
     view.layer.shadowOpacity = .1;
 }
 +(void)cardshadow:(UIView*)view {
-    view.layer.shadowOffset = CGSizeMake(0, 3);
-    view.layer.shadowRadius = 7;
+    view.layer.shadowOffset = CGSizeMake(0, 4);
+    view.layer.shadowRadius = 15;
     view.layer.shadowColor = [UIColor blackColor].CGColor;
-    view.layer.shadowOpacity = .5;
+    view.layer.shadowOpacity = .3;
 }
 +(void)lightCardShadow:(UIView*)view {
     view.layer.shadowOffset = CGSizeMake(0, 0);

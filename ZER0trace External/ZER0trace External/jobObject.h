@@ -14,8 +14,9 @@
 @property (nonatomic, strong) NSString *dateOfDestruction;
 @property (nonatomic, strong) NSArray* driveTimes;
 @property (nonatomic, strong) NSArray* driveSerials;
+@property (nonatomic, strong) NSString *jobCode;
 
--(instancetype)initWithType:(NSURL*)videoURL andTimes:(NSArray*)driveTimes andSerials:(NSArray*)driveSerials andDate:(NSString*)date;
+-(instancetype)initWithType:(NSURL*)videoURL andTimes:(NSArray*)driveTimes andSerials:(NSArray*)driveSerials andDate:(NSString*)date andCode:(NSString*)jobCode;
 
 
 @end
