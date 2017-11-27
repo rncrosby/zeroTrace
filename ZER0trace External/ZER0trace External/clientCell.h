@@ -12,8 +12,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *card;
 @property (weak, nonatomic) IBOutlet UILabel *date;
 @property (weak, nonatomic) IBOutlet UILabel *drives;
-@property (weak, nonatomic) IBOutlet UIImageView *barCode;
 @property (weak, nonatomic) IBOutlet UILabel *shadow;
+@property (weak, nonatomic) IBOutlet UILabel *status;
+@property (weak, nonatomic) IBOutlet UILabel *statusText;
 
 
 @end

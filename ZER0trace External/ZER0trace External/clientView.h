@@ -15,15 +15,22 @@
 #import <ZXMultiFormatWriter.h>
 #import <ZXImage.h>
 #import <AVFoundation/AVFoundation.h>
+#import "headerView.h"
 
-@interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate> {
+@interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate> {
     NSMutableArray *jobs,*savedJobs;
-    UIView *line;
     __weak IBOutlet UILabel *clientName;
+    __weak IBOutlet UILabel *clientInfo;
+    __weak IBOutlet UILabel *driveCount;
     __weak IBOutlet UITableView *table;
-    __weak IBOutlet UITextField *searchBar;
-    __weak IBOutlet UIButton *searchButton;
-    bool isSearching;
+    __weak IBOutlet UILabel *filmRuntime;
+    __weak IBOutlet UILabel *destructionCount;
+    //    __weak IBOutlet UITextField *searchBar;
+//    __weak IBOutlet UIButton *searchButton;
+    NSString *machineLearningLabel;
+    __weak IBOutlet UIScrollView *scroll;
+    int oldY,intUpcoming,intComplete;
+    bool isSearching,hideStatusBar;
 }
 - (IBAction)searchButton:(id)sender;
 

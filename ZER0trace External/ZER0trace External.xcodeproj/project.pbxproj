@@ -32,6 +32,8 @@
 		AD845EE61FBA61DC00F5B965 /* AESCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = AD845EE11FBA61DB00F5B965 /* AESCrypt.m */; };
 		AD845EEA1FBA622900F5B965 /* loginView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD845EE91FBA622900F5B965 /* loginView.m */; };
 		AD845EEE1FBA62EF00F5B965 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = AD845EED1FBA62EE00F5B965 /* logo.png */; };
+		AD8A114C1FCBA8DC007FD807 /* headerView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8A114A1FCBA8DC007FD807 /* headerView.m */; };
+		AD8A114D1FCBA8DC007FD807 /* headerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8A114B1FCBA8DC007FD807 /* headerView.xib */; };
 		AD92C44E1F8EA33100454285 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AD92C44D1F8EA33100454285 /* AppDelegate.m */; };
 		AD92C4541F8EA33100454285 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD92C4521F8EA33100454285 /* Main.storyboard */; };
 		AD92C4561F8EA33100454285 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD92C4551F8EA33100454285 /* Assets.xcassets */; };
@@ -82,6 +84,9 @@
 		AD845EE91FBA622900F5B965 /* loginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = loginView.m; sourceTree = "<group>"; };
 		AD845EED1FBA62EE00F5B965 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = ../../Website/logo.png; sourceTree = "<group>"; };
 		AD845EEF1FBA656C00F5B965 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		AD8A11491FCBA8DC007FD807 /* headerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = headerView.h; sourceTree = "<group>"; };
+		AD8A114A1FCBA8DC007FD807 /* headerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = headerView.m; sourceTree = "<group>"; };
+		AD8A114B1FCBA8DC007FD807 /* headerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = headerView.xib; sourceTree = "<group>"; };
 		AD92C4491F8EA33100454285 /* ZER0trace External.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ZER0trace External.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD92C44C1F8EA33100454285 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		AD92C44D1F8EA33100454285 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -214,6 +219,9 @@
 				AD1F56671F8EC95A00C9F33F /* driveCell.xib */,
 				AD845EE81FBA622900F5B965 /* loginView.h */,
 				AD845EE91FBA622900F5B965 /* loginView.m */,
+				AD8A11491FCBA8DC007FD807 /* headerView.h */,
+				AD8A114A1FCBA8DC007FD807 /* headerView.m */,
+				AD8A114B1FCBA8DC007FD807 /* headerView.xib */,
 			);
 			path = "ZER0trace External";
 			sourceTree = "<group>";
@@ -286,6 +294,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD8A114D1FCBA8DC007FD807 /* headerView.xib in Resources */,
 				ADDFAA1A1FC3899B00C1F1D3 /* blr.jpg in Resources */,
 				ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */,
 				AD1F56631F8EC27500C9F33F /* pause.png in Resources */,
@@ -364,6 +373,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD1F56681F8EC95A00C9F33F /* driveCell.m in Sources */,
+				AD8A114C1FCBA8DC007FD807 /* headerView.m in Sources */,
 				AD1F564C1F8EA8AD00C9F33F /* clientView.m in Sources */,
 				AD845EE31FBA61DC00F5B965 /* NSData+CommonCrypto.m in Sources */,
 				AD845EE51FBA61DC00F5B965 /* NSData+Base64.m in Sources */,
