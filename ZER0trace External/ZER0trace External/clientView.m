@@ -15,6 +15,7 @@
 @implementation clientView
 
 - (void)viewDidLoad {
+    indexSelected = -1;
     isSearching = false;
     hideStatusBar = false;
     [self getClientJobs];
@@ -50,11 +51,14 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 136;
+    if (indexPath.row == indexSelected) {
+        return [References screenHeight];
+    }
+    return 332;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 49;
+    return 57;
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -81,11 +85,24 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    jobView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"jobView"];
-    controller.job = jobs[indexPath.row];
-    //menu is only an example
-    [self presentViewController:controller animated:YES completion:nil];
+    if (indexSelected == indexPath.row) {
+        table.frame = CGRectMake(0, table.frame.origin.y, [References screenWidth], table.frame.size.height+332-[References screenHeight]);
+        scroll.contentSize = CGSizeMake([References screenWidth],  table.frame.origin.y+tableView.frame.size.height);
+    } else {
+        table.frame = CGRectMake(0, table.frame.origin.y, [References screenWidth], table.frame.size.height-332+[References screenHeight]);
+        scroll.contentSize = CGSizeMake([References screenWidth],  table.frame.origin.y+table.frame.size.height);
+    }
+    indexSelected = (int)indexPath.row;
+    [scroll setContentOffset:CGPointMake(0, (indexPath.row * 324)+(2*45)+table.frame.origin.y+40) animated:YES];
+    [UIView animateWithDuration: 0.25 animations: ^{
+        clientCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        cell.card.frame = CGRectMake(16,  cell.card.frame.origin.y, cell.card.frame.size.width, [References screenHeight]-40);
+        cell.mapView.frame = CGRectMake(16,  cell.mapView.frame.origin.y, cell.mapView.frame.size.width, [References screenHeight]-40);
+        cell.bottomBlur.frame = CGRectMake(16, cell.bottomBlur.frame.origin.y, cell.bottomBlur.frame.size.width, cell.bottomBlur.frame.size.height);
+    }];
+    [tableView beginUpdates];
+    [tableView endUpdates];
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -98,44 +115,34 @@
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"clientCell" owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
-    if (indexPath.section == 1) {
-        cell.statusText.hidden = TRUE;
-        cell.status.hidden = TRUE;
-    }
-    [References cornerRadius:cell.status radius:cell.status.frame.size.width/2];
+    [References cornerRadius:cell.playButton radius:cell.playButton.frame.size.width/2];
+    [References tintUIButton:cell.playButton color:cell.drives.textColor];
+//    cell.playButton.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    [References cornerRadius:cell.mapView radius:12.0f];
+    cell.backgroundColor = [UIColor clearColor];
     [cell setBackgroundColor:[UIColor clearColor]];
-    cell.card.backgroundColor = [UIColor clearColor];
-    cell.card.layer.cornerRadius = cell.card.layer.cornerRadius;
-    CAGradientLayer *gradient = [CAGradientLayer layer];
     jobObject *job = jobs[indexPath.row];
-    gradient.frame = cell.card.bounds;
-    gradient.colors = @[(id)[References colorFromHexString:@"#2B2B2B"].CGColor, (id)[References colorFromHexString:@"#171717"].CGColor];
-
-    [cell.card.layer insertSublayer:gradient atIndex:0];
-    [References cornerRadius:cell.card radius:8.0f];
+    [References cornerRadius:cell.card radius:  12.0f];
     cell.date.text = job.dateOfDestruction;
-//    if (isSearching == true) {
-//            jobObject *job = jobs[indexPath.row];
-//            for (int b = 0; b < job.driveSerials.count; b++) {
-//                if ([job.driveSerials[b] localizedCaseInsensitiveContainsString:searchBar.text]) {
-//                    cell.drives.text = [NSString stringWithFormat:@"Found %@",job.driveSerials[b]];
-//                    break;
-//                }
-//            }
-//    }
-//
-//    else {
-        cell.drives.text = [NSString stringWithFormat:@"%lu Drives",(unsigned long)job.driveSerials.count];
-//    }
-   
-    [References cardshadow:cell.shadow];
+
+        cell.drives.text = [NSString stringWithFormat:@"%lu\nDrives",(unsigned long)job.driveSerials.count];
+    [References blurView:cell.playButton];
+    [References lightCardShadow:cell.shadow];
+    [References blurView:cell.bottomBlur];
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:cell.bottomBlur.bounds byRoundingCorners:(UIRectCornerTopRight | UIRectCornerTopLeft) cornerRadii:CGSizeMake(12.0, 12.0)];
+    
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+    maskLayer.frame = self.view.bounds;
+    maskLayer.path  = maskPath.CGPath;
+    cell.bottomBlur.layer.mask = maskLayer;
+    [References cardshadow:cell.playButton];
+    cell.playButton.tag = indexPath.row;
+    [cell.playButton addTarget:self action:@selector(openView:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
 }
 
+-(void)openView:(id)sender {
 
-
--(void)longHold {
-    NSLog(@"down");
 }
 
 -(CIImage*)generateBarcode:(NSString*)dataString{
@@ -255,9 +262,9 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
                                                        } dispatch_sync(dispatch_get_main_queue(), ^{
                                                            clientInfo.text = machineLearningLabel;
                                                            [table reloadData];
-                                                           int height = table.frame.origin.y + ((intComplete + intUpcoming) * 136) + (2 * 45)+16;
+                                                           int height = table.frame.origin.y + ((intComplete + intUpcoming) * 324) + (2 * 45)+16;
                                                            scroll.contentSize = CGSizeMake([References screenWidth], height);
-                                                           table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y, [References screenWidth], ((intComplete + intUpcoming) * 136)+(2*45)+1000);
+                                                           table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y, [References screenWidth], ((intComplete + intUpcoming) * 324)+(2*45)+1000);
                                                        });
                                                        
                                                    }];

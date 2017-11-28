@@ -259,7 +259,7 @@ destructions</string>
                                         <rect key="frame" x="0.0" y="159" width="414" height="557"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <inset key="contentInset" minX="0.0" minY="8" maxX="0.0" maxY="0.0"/>
+                                        <inset key="contentInset" minX="0.0" minY="16" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="dataSource" destination="BYZ-38-t0r" id="MgD-87-DAJ"/>
                                             <outlet property="delegate" destination="BYZ-38-t0r" id="Ima-kd-vFw"/>

@@ -18,6 +18,8 @@
 #import "headerView.h"
 
 @interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate> {
+    int indexSelected;
+    int jobCountTotal;
     NSMutableArray *jobs,*savedJobs;
     __weak IBOutlet UILabel *clientName;
     __weak IBOutlet UILabel *clientInfo;

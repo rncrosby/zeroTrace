@@ -56,10 +56,10 @@
     view.layer.shadowOpacity = .2;
 }
 +(void)topshadow:(UIView*)view {
-    view.layer.shadowOffset = CGSizeMake(0, -2);
+    view.layer.shadowOffset = CGSizeMake(0, 5);
     view.layer.shadowRadius = 5;
     view.layer.shadowColor = [UIColor blackColor].CGColor;
-    view.layer.shadowOpacity = .1;
+    view.layer.shadowOpacity = .5;
 }
 +(void)cardshadow:(UIView*)view {
     view.layer.shadowOffset = CGSizeMake(0, 4);
@@ -68,10 +68,10 @@
     view.layer.shadowOpacity = .3;
 }
 +(void)lightCardShadow:(UIView*)view {
-    view.layer.shadowOffset = CGSizeMake(0, 0);
-    view.layer.shadowRadius = 7;
+    view.layer.shadowOffset = CGSizeMake(0, 25);
+    view.layer.shadowRadius = 15;
     view.layer.shadowColor = [UIColor blackColor].CGColor;
-    view.layer.shadowOpacity = .6;
+    view.layer.shadowOpacity = .4;
 }
 
 +(void)fromoffscreen:(UIView*)view where:(NSString*)where{
@@ -222,10 +222,9 @@
 
 +(void)blurView:(UIView *)view {
     [view setBackgroundColor:[UIColor clearColor]];
-    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
     UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-    blurEffectView.frame = view.bounds;
-    blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    blurEffectView.frame =CGRectMake(-500, -500, 5000, 2000);
     
     [view addSubview:blurEffectView];
     [view sendSubviewToBack:blurEffectView];
@@ -277,7 +276,7 @@
 }
 
 +(void)tintUIButton:(UIButton*)button color:(UIColor*)color{
-    UIImage *image = [button.currentBackgroundImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIImage *image = [button.imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [button setImage:image forState:UIControlStateNormal];
     button.tintColor = color;
 }

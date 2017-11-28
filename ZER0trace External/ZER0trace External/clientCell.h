@@ -7,14 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 
 @interface clientCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *card;
 @property (weak, nonatomic) IBOutlet UILabel *date;
 @property (weak, nonatomic) IBOutlet UILabel *drives;
 @property (weak, nonatomic) IBOutlet UILabel *shadow;
-@property (weak, nonatomic) IBOutlet UILabel *status;
-@property (weak, nonatomic) IBOutlet UILabel *statusText;
+@property (weak, nonatomic) IBOutlet UILabel *timeCompleted;
+@property (weak, nonatomic) IBOutlet UIButton *playButton;
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (weak, nonatomic) IBOutlet UILabel *bottomBlur;
 
 
 @end
