@@ -71,7 +71,7 @@
     view.layer.shadowOffset = CGSizeMake(0, 25);
     view.layer.shadowRadius = 15;
     view.layer.shadowColor = [UIColor blackColor].CGColor;
-    view.layer.shadowOpacity = .4;
+    view.layer.shadowOpacity = .15;
 }
 
 +(void)fromoffscreen:(UIView*)view where:(NSString*)where{

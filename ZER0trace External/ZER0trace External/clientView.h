@@ -15,9 +15,16 @@
 #import <ZXMultiFormatWriter.h>
 #import <ZXImage.h>
 #import <AVFoundation/AVFoundation.h>
+#import <QuartzCore/CAAnimation.h>
 #import "headerView.h"
+#import <CTVideoPlayerView/CTVideoViewCommonHeader.h>
+#import "newJobCell.h"
 
 @interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate> {
+    bool videoPlaying;
+    clientCell *expandedCell;
+    CGRect ogCellShadow,ogCellCard,ogBottomBlur;
+    int ogTableHeight;
     int indexSelected;
     int jobCountTotal;
     NSMutableArray *jobs,*savedJobs;
@@ -33,6 +40,7 @@
     __weak IBOutlet UIScrollView *scroll;
     int oldY,intUpcoming,intComplete;
     bool isSearching,hideStatusBar;
+    __weak IBOutlet UITextField *searchField;
 }
 - (IBAction)searchButton:(id)sender;
 

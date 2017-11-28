@@ -25,19 +25,10 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rt2-4M-7Af">
-                        <rect key="frame" x="265" y="0.0" width="133" height="40"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="35"/>
-                        <state key="normal" title="New">
-                            <color key="titleColor" red="1" green="0.090196080505847931" blue="0.26666668057441711" alpha="1" colorSpace="calibratedRGB"/>
-                        </state>
-                    </button>
                 </subviews>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
-                <outlet property="headerAction" destination="rt2-4M-7Af" id="emh-sb-RQF"/>
                 <outlet property="headerTitle" destination="DwO-NP-0NY" id="Mzq-sy-Me7"/>
             </connections>
             <point key="canvasLocation" x="-674" y="91"/>

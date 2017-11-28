@@ -1,18 +1,17 @@
 //
-//  clientCell.m
+//  newJobCell.m
 //  ZER0trace External
 //
-//  Created by Robert Crosby on 10/11/17.
+//  Created by Robert Crosby on 11/28/17.
 //  Copyright © 2017 fully toasted. All rights reserved.
 //
 
-#import "clientCell.h"
+#import "newJobCell.h"
 
-@implementation clientCell
+@implementation newJobCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    
     // Initialization code
 }
 

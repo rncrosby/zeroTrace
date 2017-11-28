@@ -39,6 +39,8 @@
 		AD92C4561F8EA33100454285 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD92C4551F8EA33100454285 /* Assets.xcassets */; };
 		AD92C4591F8EA33100454285 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD92C4571F8EA33100454285 /* LaunchScreen.storyboard */; };
 		AD92C45C1F8EA33100454285 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AD92C45B1F8EA33100454285 /* main.m */; };
+		ADA32E991FCE103F000B9BBA /* newJobCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA32E971FCE103F000B9BBA /* newJobCell.m */; };
+		ADA32E9A1FCE103F000B9BBA /* newJobCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADA32E981FCE103F000B9BBA /* newJobCell.xib */; };
 		ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = ADDFAA161FC383AB00C1F1D3 /* shred.mp4 */; };
 		ADDFAA1A1FC3899B00C1F1D3 /* blr.jpg in Resources */ = {isa = PBXBuildFile; fileRef = ADDFAA191FC3899B00C1F1D3 /* blr.jpg */; };
 		ADE9B7B91FC39F760078DE1D /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE9B7B71FC39F750078DE1D /* plus.png */; };
@@ -84,6 +86,7 @@
 		AD845EE91FBA622900F5B965 /* loginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = loginView.m; sourceTree = "<group>"; };
 		AD845EED1FBA62EE00F5B965 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo.png; path = ../../Website/logo.png; sourceTree = "<group>"; };
 		AD845EEF1FBA656C00F5B965 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		AD84A84B1FCD1BEF003A79FC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		AD8A11491FCBA8DC007FD807 /* headerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = headerView.h; sourceTree = "<group>"; };
 		AD8A114A1FCBA8DC007FD807 /* headerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = headerView.m; sourceTree = "<group>"; };
 		AD8A114B1FCBA8DC007FD807 /* headerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = headerView.xib; sourceTree = "<group>"; };
@@ -95,6 +98,9 @@
 		AD92C4581F8EA33100454285 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AD92C45A1F8EA33100454285 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD92C45B1F8EA33100454285 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		ADA32E961FCE103F000B9BBA /* newJobCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = newJobCell.h; sourceTree = "<group>"; };
+		ADA32E971FCE103F000B9BBA /* newJobCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = newJobCell.m; sourceTree = "<group>"; };
+		ADA32E981FCE103F000B9BBA /* newJobCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = newJobCell.xib; sourceTree = "<group>"; };
 		ADDFAA161FC383AB00C1F1D3 /* shred.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = shred.mp4; path = ../../Website/shred.mp4; sourceTree = "<group>"; };
 		ADDFAA171FC383E800C1F1D3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		ADDFAA191FC3899B00C1F1D3 /* blr.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blr.jpg; sourceTree = "<group>"; };
@@ -129,6 +135,7 @@
 		6FF90382E1972151008D6ED1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AD84A84B1FCD1BEF003A79FC /* QuartzCore.framework */,
 				ADDFAA171FC383E800C1F1D3 /* MediaPlayer.framework */,
 				AD845EEF1FBA656C00F5B965 /* Foundation.framework */,
 				AD1F565B1F8EB8AC00C9F33F /* AVFoundation.framework */,
@@ -222,6 +229,9 @@
 				AD8A11491FCBA8DC007FD807 /* headerView.h */,
 				AD8A114A1FCBA8DC007FD807 /* headerView.m */,
 				AD8A114B1FCBA8DC007FD807 /* headerView.xib */,
+				ADA32E961FCE103F000B9BBA /* newJobCell.h */,
+				ADA32E971FCE103F000B9BBA /* newJobCell.m */,
+				ADA32E981FCE103F000B9BBA /* newJobCell.xib */,
 			);
 			path = "ZER0trace External";
 			sourceTree = "<group>";
@@ -294,6 +304,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADA32E9A1FCE103F000B9BBA /* newJobCell.xib in Resources */,
 				AD8A114D1FCBA8DC007FD807 /* headerView.xib in Resources */,
 				ADDFAA1A1FC3899B00C1F1D3 /* blr.jpg in Resources */,
 				ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */,
@@ -377,6 +388,7 @@
 				AD1F564C1F8EA8AD00C9F33F /* clientView.m in Sources */,
 				AD845EE31FBA61DC00F5B965 /* NSData+CommonCrypto.m in Sources */,
 				AD845EE51FBA61DC00F5B965 /* NSData+Base64.m in Sources */,
+				ADA32E991FCE103F000B9BBA /* newJobCell.m in Sources */,
 				AD845EE61FBA61DC00F5B965 /* AESCrypt.m in Sources */,
 				AD1F56541F8EAACA00C9F33F /* References.m in Sources */,
 				AD845EE41FBA61DC00F5B965 /* NSString+Base64.m in Sources */,
