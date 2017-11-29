@@ -277,6 +277,14 @@ destructions</string>
                                             <outlet property="delegate" destination="BYZ-38-t0r" id="RDh-OK-d9B"/>
                                         </connections>
                                     </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WhJ-rN-pvo">
+                                        <rect key="frame" x="359" y="163" width="35" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="search.png"/>
+                                        <connections>
+                                            <action selector="searchButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rQ9-x7-o50"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="NMY-Os-ZjD"/>
@@ -294,6 +302,7 @@ destructions</string>
                         <outlet property="driveCount" destination="fi7-GX-LeP" id="3yp-EF-l3W"/>
                         <outlet property="filmRuntime" destination="Sd6-qD-eOc" id="7Vg-A8-bfo"/>
                         <outlet property="scroll" destination="dMj-n0-QfD" id="l09-Dg-Z02"/>
+                        <outlet property="searchButton" destination="WhJ-rN-pvo" id="9qS-Pj-cpa"/>
                         <outlet property="searchField" destination="wig-lN-NhO" id="Wh5-sI-743"/>
                         <outlet property="table" destination="tpH-uQ-sxP" id="cVa-3O-SCq"/>
                     </connections>
@@ -317,4 +326,7 @@ destructions</string>
             <point key="canvasLocation" x="-10" y="-258"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="search.png" width="100" height="100"/>
+    </resources>
 </document>

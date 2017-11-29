@@ -25,18 +25,89 @@
     clientInfo.text = @"Your last job was completed about 4 hours ago";
     searchField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 9, 0);
     [References cornerRadius:searchField radius:8.0f];
+    [References cornerRadius:searchButton radius:searchButton.frame.size.width/2];
+    [References tintUIButton:searchButton color:clientInfo.textColor];
+    searchButton.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
 //    [searchBar addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
     // Do any additional setup after loading the view.
 }
 
+- (IBAction)searchButton:(id)sender {
+    if (isSearching == true) {
+        intUpcoming = 0;
+        intComplete = 0;
+        [jobs removeAllObjects];
+        jobs = [[NSMutableArray alloc] init];
+        for (int a = 0; a < savedJobs.count; a++) {
+            jobObject *job = savedJobs[a];
+            if (job.driveSerials.count < 1) {
+                intUpcoming = intUpcoming + 1;
+            } else {
+                intComplete = intComplete + 1;
+            }
+            [jobs addObject:job];
+        }
+        ogTableHeight = table.frame.origin.y + ((intComplete + intUpcoming) * 308) + (2 * 45)+32;
+        if (intUpcoming == 0) {
+            ogTableHeight = ogTableHeight + 92;
+        }
+        isSearching = false;
+        [table reloadData];
+        scroll.contentSize = CGSizeMake([References screenWidth], ogTableHeight);
+        table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y, [References screenWidth], ((intComplete + intUpcoming) * 308)+(2*45)+1000);
+        [searchButton setImage:[UIImage imageNamed:@"search.png"] forState:UIControlStateNormal];
+        [References tintUIButton:searchButton color:clientInfo.textColor];
+        searchButton.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
+        
+        [searchField setText:@""];
+        [searchField resignFirstResponder];
+    } else {
+        [table reloadData];
+        [searchField becomeFirstResponder];
+        isSearching = true;
+        
+    }
+
+}
+
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+    [searchButton setImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
+    [References tintUIButton:searchButton color:clientInfo.textColor];
+    searchButton.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
+    [scroll setContentOffset:CGPointMake(0, searchField.frame.origin.y-8) animated:YES];
     isSearching = true;
     return true;
 }
 
 -(bool)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
+    intUpcoming = 0;
+    intComplete = 0;
+    [jobs removeAllObjects];
+    jobs = [[NSMutableArray alloc] init];
+    for (int a = 0; a < savedJobs.count; a++) {
+        jobObject *job = savedJobs[a];
+            for (int b = 0; b < job.driveSerials.count; b++) {
+                    if ([job.driveSerials[b] containsString:textField.text]) {
+                        if (job.driveSerials.count < 1) {
+                            intUpcoming = intUpcoming + 1;
+                        } else {
+                            intComplete = intComplete + 1;
+                        }
+                        [jobs addObject:job];
+                        
+                }
+        }
+        
+    }
     [table reloadData];
+    ogTableHeight = table.frame.origin.y + ((intComplete + intUpcoming) * 308) + (2 * 45)+60;
+    if (intUpcoming == 0) {
+        ogTableHeight = ogTableHeight + 92;
+    }
+    scroll.contentSize = CGSizeMake([References screenWidth], ogTableHeight);
+    table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y, [References screenWidth], ((intComplete + intUpcoming) * 308)+(2*45)+1000);
+    [textField resignFirstResponder];
+    [scroll setContentOffset:CGPointMake(0, -20) animated:YES];
     return true;
 }
 
@@ -58,7 +129,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        if (intUpcoming == 0) {
+        if (intUpcoming == 0 && isSearching == false) {
             return 1;
         }
         return intUpcoming;
@@ -499,7 +570,6 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
                                                        
                                                    }];
 }
-
 //- (IBAction)searchButton:(id)sender {
 //    if (isSearching == false) {
 //        searchBar.hidden = false;

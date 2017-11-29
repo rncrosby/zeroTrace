@@ -41,6 +41,7 @@
     int oldY,intUpcoming,intComplete;
     bool isSearching,hideStatusBar;
     __weak IBOutlet UITextField *searchField;
+    __weak IBOutlet UIButton *searchButton;
 }
 - (IBAction)searchButton:(id)sender;
 
