@@ -260,8 +260,19 @@
 }
 
 -(void)videoProgressManager {
-    float progress = expandedCell.videoPlayer.currentPlaySecond /  expandedCell.videoPlayer.totalDurationSeconds;
-    [expandedCell.progressBar setProgress:progress animated:YES];
+    if (indexSelected != -1) {
+        float progress = expandedCell.videoPlayer.currentPlaySecond /  expandedCell.videoPlayer.totalDurationSeconds;
+        [expandedCell.progressBar setProgress:progress animated:YES];
+//        jobObject *job = jobs[indexSelected];
+//        for (int a = 0; a < job.driveTimes.count; a++) {
+//            if ([job.driveTimes[a] intValue] ==expandedCell.videoPlayer.currentPlaySecond) {
+//                [expandedCell.driveScroll setContentOffset:CGPointMake(16+(a*expandedCell.driveButton.frame.size.width), 0)];
+//                break;
+//            }
+//        }
+    }
+
+    
 }
 
 
@@ -346,7 +357,7 @@
         [References cornerRadius:cell.driveButton radius:8.0f];
         if (job.driveSerials.count > 0) {
             [cell.driveButton setTitle:job.driveSerials[0] forState:UIControlStateNormal];
-            cell.driveTime.text = [self timeFormatted:(int)job.driveTimes[0]];
+            cell.driveTime.text = [self timeFormatted:[job.driveTimes[0] intValue]];
             NSData *archivedButton = [NSKeyedArchiver archivedDataWithRootObject: cell.driveButton];
             NSData *archivedTime = [NSKeyedArchiver archivedDataWithRootObject:cell.driveTime];
             for (int a = 1; a < job.driveTimes.count; a++) {
@@ -356,7 +367,7 @@
                 [References cornerRadius:driveButton radius:8.0f];
                 driveButton.alpha = 0;
                 driveTime.alpha = 0;
-                driveTime.text = [self timeFormatted:(int)job.driveTimes[a]];
+                    driveTime.text = [self timeFormatted:[job.driveTimes[a] intValue]];
                 [driveButton setTitle:job.driveSerials[a] forState:UIControlStateNormal];
                 driveButton.frame = CGRectMake(driveButton.frame.origin.x+driveButton.frame.size.width+8, driveButton.frame.origin.y, driveButton.frame.size.width, 48);
                 driveTime.frame = CGRectMake(driveTime.frame.origin.x+driveTime.frame.size.width+8, driveTime.frame.origin.y, driveTime.frame.size.width, driveTime.frame.size.height);
@@ -436,7 +447,7 @@
                 archivedTime = [NSKeyedArchiver archivedDataWithRootObject:driveTime];
             }
         }
-        
+        cell.mapView = [[MKMapView alloc] init];
         return cell;
     }
     

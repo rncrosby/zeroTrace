@@ -6,6 +6,7 @@
 //  Copyright © 2017 fully toasted. All rights reserved.
 //
 
+#import <MapKit/MapKit.h>
 #import <UIKit/UIKit.h>
 #import <CloudKit/CloudKit.h>
 #import "clientCell.h"
