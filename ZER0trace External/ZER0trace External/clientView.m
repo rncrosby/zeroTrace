@@ -191,7 +191,8 @@
                 cell.progressBar.alpha = 0;
                 cell.videoControls.alpha = 0;
                 cell.driveScroll.alpha = 0;
-                
+                cell.playTime.alpha = 0;
+                cell.totalTime.alpha = 0;
                 cell.videoView.frame = CGRectMake(cell.videoView.frame.origin.x, cell.videoView.frame.origin.y, cell.videoView.frame.size.width, cell.videoView.frame.size.height/2);
                 cell.videoPlayer.frame = CGRectMake(-20, -30, cell.videoView.frame.size.width+40, cell.videoView.frame.size.height+40);
                 cell.timeCompleted.text = @"JOB COMPLETED 4 HOURS AGO";
@@ -227,6 +228,8 @@
                 cell.progressBar.alpha = 1;
                 cell.videoControls.alpha = 1;
                 cell.driveScroll.alpha = 1;
+                cell.playTime.alpha = 1;
+                cell.totalTime.alpha = 1;
                 cell.timeCompleted.text = @"TAP TO RETURN";
                 cell.videoView.frame = CGRectMake(cell.videoView.frame.origin.x, cell.videoView.frame.origin.y, cell.videoView.frame.size.width, cell.videoView.frame.size.height*2);
                 cell.videoPlayer.frame = CGRectMake(-40, -70, cell.videoView.frame.size.width+80, cell.videoView.frame.size.height+140);
@@ -239,6 +242,8 @@
                 cellDos.progressBar.alpha = 0;
                 cellDos.videoControls.alpha = 0;
                 cellDos.driveScroll.alpha = 0;
+                cellDos.playTime.alpha = 0;
+                cellDos.totalTime.alpha = 0;
                 cellDos.timeCompleted.text = @"JOB COMPLETED 4 HOURS AGO";
                 cellDos.videoView.frame = CGRectMake(cellDos.videoView.frame.origin.x, cellDos.videoView.frame.origin.y, cellDos.videoView.frame.size.width, cellDos.videoView.frame.size.height/2);
                 cellDos.videoPlayer.frame = CGRectMake(-20, -20, cellDos.videoView.frame.size.width+40, cellDos.videoView.frame.size.height+40);
@@ -261,29 +266,42 @@
 
 -(void)videoProgressManager {
     if (indexSelected != -1) {
-        float progress = expandedCell.videoPlayer.currentPlaySecond /  expandedCell.videoPlayer.totalDurationSeconds;
-        [expandedCell.progressBar setProgress:progress animated:YES];
-//        jobObject *job = jobs[indexSelected];
-//        for (int a = 0; a < job.driveTimes.count; a++) {
-//            if ([job.driveTimes[a] intValue] ==expandedCell.videoPlayer.currentPlaySecond) {
-//                [expandedCell.driveScroll setContentOffset:CGPointMake(16+(a*expandedCell.driveButton.frame.size.width), 0)];
-//                break;
-//            }
-//        }
+        if (videoPlaying == true) {
+            float progress = expandedCell.videoPlayer.currentPlaySecond / expandedCell.videoPlayer.totalDurationSeconds;
+            int increment = expandedCell.progressBar.frame.size.width/expandedCell.videoPlayer.totalDurationSeconds;
+            if (expandedCell.playTime.frame.origin.x < expandedCell.progressBar.frame.size.width - expandedCell.playTime.frame.size.width) {
+                [UIView animateWithDuration:1.0f animations:^(void){
+                    expandedCell.playTime.frame = CGRectMake(expandedCell.playTime.frame.origin.x+increment, expandedCell.playTime.frame.origin.y, expandedCell.playTime.frame.size.width, expandedCell.playTime.frame.size.height);
+                                [expandedCell.progressBar setProgress:progress];
+                }];
+            }
+            jobObject *job = jobs[indexSelected];
+            expandedCell.playTime.text = [NSString stringWithFormat:@"%@",[self timeFormatted:(int)expandedCell.videoPlayer.currentPlaySecond]];
+            for (int a = 1; a < job.driveTimes.count; a++) {
+                if ([job.driveTimes[a] intValue] -1 == (int)expandedCell.videoPlayer.currentPlaySecond) {
+                        [expandedCell.driveScroll setContentOffset:CGPointMake(expandedCell.driveScroll.contentOffset.x+173+8, 0) animated:YES];
+                    
+                }
+            }
+        }
+        }
     }
 
-    
-}
+
 
 
 -(void)playVideo {
     if (videoPlaying == false) {
         [expandedCell.videoPlayer play];
-        [NSTimer scheduledTimerWithTimeInterval:1.0f
-                                         target:self selector:@selector(videoProgressManager) userInfo:nil repeats:YES];
+        if (expandedCell.hasPlayedVideo.boolValue == [NSNumber numberWithBool:NO].boolValue) {
+            [NSTimer scheduledTimerWithTimeInterval:1.0f
+                                             target:self selector:@selector(videoProgressManager) userInfo:nil repeats:YES];
+            expandedCell.hasPlayedVideo = [NSNumber numberWithBool:YES];
+        }
         [expandedCell.playButton setImage:[UIImage imageNamed:@"pause.png"] forState:UIControlStateNormal];
         [References tintUIButton:expandedCell.playButton color:expandedCell.drives.textColor];
         videoPlaying = true;
+        expandedCell.totalTime.text = [NSString stringWithFormat:@"%@",[self timeFormatted:(int)expandedCell.videoPlayer.totalDurationSeconds]];
     } else {
         [expandedCell.videoPlayer pause];
         [expandedCell.playButton setImage:[UIImage imageNamed:@"play.png"] forState:UIControlStateNormal];
@@ -310,6 +328,8 @@
         }
         [cell.schedulejOB addTarget:self action:@selector(newJob) forControlEvents:UIControlEventTouchUpInside];
         return cell;
+    } else {
+        
     }
     if (indexPath.section == 1) {
         static NSString *simpleTableIdentifier = @"clientCell";
@@ -419,7 +439,10 @@
         [cell.videoPlayer setIsMuted:YES];
         cell.videoPlayer.videoUrl = job.videoURL; // mp4 playable
         [cell.videoPlayer prepare];
+        cell.playTime.text = @"00:00";
+        cell.totalTime.text = @"00:00";
         [cell.progressBar setProgress:0];
+        cell.hasPlayedVideo = [NSNumber numberWithBool:NO];
         [cell.videoPlayer setUserInteractionEnabled:FALSE];
         [References cornerRadius:cell.videoView radius:12.0f];
         [References tintUIButton:cell.playButton color:cell.drives.textColor];
@@ -432,6 +455,7 @@
             NSData *archivedTime = [NSKeyedArchiver archivedDataWithRootObject:cell.driveTime];
             for (int a = 1; a < job.driveTimes.count; a++) {
                 UIButton *driveButton = [NSKeyedUnarchiver unarchiveObjectWithData: archivedButton];
+                driveButton.tag = a;
                 [driveButton setFont:[UIFont boldSystemFontOfSize:20.0f]];
                 UILabel *driveTime = [NSKeyedUnarchiver unarchiveObjectWithData: archivedTime];
                 [References cornerRadius:driveButton radius:8.0f];
@@ -448,6 +472,8 @@
             }
         }
         cell.mapView = [[MKMapView alloc] init];
+        [References blurView:cell.playTime];
+        [References cornerRadius:cell.playTime radius:5.0f];
         return cell;
     }
     

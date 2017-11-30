@@ -43,6 +43,7 @@
     bool isSearching,hideStatusBar;
     __weak IBOutlet UITextField *searchField;
     __weak IBOutlet UIButton *searchButton;
+    float lastProgress;
 }
 - (IBAction)searchButton:(id)sender;
 

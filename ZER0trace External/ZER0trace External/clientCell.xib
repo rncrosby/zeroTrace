@@ -85,7 +85,7 @@ job code</string>
                         <nil key="highlightedColor"/>
                     </label>
                     <progressView opaque="NO" alpha="0.0" contentMode="scaleToFill" verticalHuggingPriority="750" misplaced="YES" progress="0.5" id="Doz-iY-yeF">
-                        <rect key="frame" x="64" y="351" width="317" height="2"/>
+                        <rect key="frame" x="64" y="351" width="286" height="2"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="progressTintColor" red="1" green="0.090196078431372548" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
                     </progressView>
@@ -116,6 +116,20 @@ job code</string>
                             </label>
                         </subviews>
                     </scrollView>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="00:15" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="x2a-ga-aHm">
+                        <rect key="frame" x="64" y="334" width="25" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="8"/>
+                        <color key="textColor" red="0.57045853140000002" green="0.57047235969999999" blue="0.57046490910000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="1:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EX9-tb-5WW">
+                        <rect key="frame" x="350" y="343" width="48" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
+                        <color key="textColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </tableViewCellContentView>
             <connections>
@@ -128,9 +142,11 @@ job code</string>
                 <outlet property="drives" destination="Ho8-YV-blt" id="ULn-4D-c6d"/>
                 <outlet property="mapView" destination="lqi-gW-lvM" id="A6T-Un-nxf"/>
                 <outlet property="playButton" destination="2Bd-oF-NEE" id="MK5-5o-aoG"/>
+                <outlet property="playTime" destination="x2a-ga-aHm" id="2fR-sn-KUj"/>
                 <outlet property="progressBar" destination="Doz-iY-yeF" id="iqK-0d-UgX"/>
                 <outlet property="time" destination="rB2-wn-81P" id="awC-jM-QoH"/>
                 <outlet property="timeCompleted" destination="uqi-dc-tSa" id="PE0-S7-vRD"/>
+                <outlet property="totalTime" destination="EX9-tb-5WW" id="Q1a-Vy-Ke8"/>
                 <outlet property="videoControls" destination="Jd3-s9-31c" id="d8r-CO-cRD"/>
                 <outlet property="videoView" destination="Qhz-83-ZEs" id="ge9-um-EIA"/>
             </connections>

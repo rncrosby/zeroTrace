@@ -11,6 +11,7 @@
 #import <CTVideoPlayerView/CTVideoViewCommonHeader.h>
 
 @interface clientCell : UITableViewCell <UICollectionViewDelegate,UICollectionViewDataSource>
+@property (weak, nonatomic) NSNumber *hasPlayedVideo;
 @property (retain, nonatomic) IBOutlet CTVideoView *videoPlayer;
 @property (weak, nonatomic) IBOutlet UILabel *date;
 @property (weak, nonatomic) IBOutlet UILabel *drives;
@@ -26,6 +27,8 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *driveScroll;
 @property (weak, nonatomic) IBOutlet UILabel *driveTime;
 @property (weak, nonatomic) IBOutlet UIButton *driveButton;
+@property (weak, nonatomic) IBOutlet UILabel *playTime;
+@property (weak, nonatomic) IBOutlet UILabel *totalTime;
 
 
 @end
