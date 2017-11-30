@@ -23,6 +23,8 @@
 
 
 - (void)viewDidLoad {
+    [username setText:@"rncrosby@ucsc.edu"];
+    [password setText:@"steelers"];
     currentCard = 0;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -222,13 +224,19 @@
 
 - (IBAction)continueButton:(id)sender {
     if (currentCard == 0) {
+        dispatch_async(dispatch_get_main_queue(), ^{
         [[FIRAuth auth] signInWithEmail:username.text
                                password:password.text
                              completion:^(FIRUser *user, NSError *error) {
                                  if (error) {
-                                     [References toastMessage:error.localizedDescription andView:self andClose:YES];
+                                     
+                                           [References toastMessage:error.localizedDescription andView:self andClose:YES];
+                                   
+                                   
                                      return;
                                  }
+                                 NSLog(@"signed in");
+                                 dispatch_async(dispatch_get_main_queue(), ^{
                                  NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"email = '%@'",username.text]];
                                  CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Clients" predicate:predicate];
                                  CKContainer *container = [CKContainer containerWithIdentifier:@"iCloud.com.fullytoasted.ZER0trace-Internal"];
@@ -270,7 +278,9 @@
                                                                }
                                                                
                                                            }];
+                             });
                              }];
+              });
     }
 }
 @end
