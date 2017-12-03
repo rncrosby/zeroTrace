@@ -117,6 +117,9 @@
 }
 
 -(bool)prefersStatusBarHidden{
+    if (indexSelected != -1) {
+        return YES;
+    }
     return hideStatusBar;
 }
 -(UIStatusBarStyle)preferredStatusBarStyle {
@@ -178,6 +181,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         if (indexSelected == indexPath.row) {
+            [scrollTimer invalidate];
             clientCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             scroll.contentSize = CGSizeMake([References screenWidth],  ogTableHeight+table.frame.origin.y);
             [scroll setContentOffset:CGPointMake(0, (indexPath.row * 308)+(2*45)+table.frame.origin.y+20) animated:YES];
@@ -202,13 +206,16 @@
             }];
             [expandedCell.videoPlayer pause];
             indexSelected = -1;
+            scroll.scrollEnabled = YES;
+            scroll.bounces = YES;
         } else {
+            
+            [scrollTimer invalidate];
             [expandedCell.videoPlayer pause];
             clientCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             expandedCell = cell;
             [expandedCell.playButton addTarget:self action:@selector(playVideo) forControlEvents:UIControlEventTouchUpInside];
             clientCell *cellDos = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexSelected inSection:1]];
-            [cell.videoPlayer prepare];
             if (indexSelected == -1) {
                 scroll.contentSize = CGSizeMake([References screenWidth],  ogTableHeight+table.frame.origin.y-308+[References screenHeight]);
             }
@@ -257,6 +264,8 @@
                 }
             }];
             indexSelected = (int)indexPath.row;
+            scroll.scrollEnabled = NO;
+            scroll.bounces = NO;
         }
         [tableView beginUpdates];
         [tableView endUpdates];
@@ -268,33 +277,46 @@
     if (indexSelected != -1) {
         if (videoPlaying == true) {
             float progress = expandedCell.videoPlayer.currentPlaySecond / expandedCell.videoPlayer.totalDurationSeconds;
-            int increment = expandedCell.progressBar.frame.size.width/expandedCell.videoPlayer.totalDurationSeconds;
             if (expandedCell.playTime.frame.origin.x < expandedCell.progressBar.frame.size.width - expandedCell.playTime.frame.size.width) {
-                [UIView animateWithDuration:1.0f animations:^(void){
-                    expandedCell.playTime.frame = CGRectMake(expandedCell.playTime.frame.origin.x+increment, expandedCell.playTime.frame.origin.y, expandedCell.playTime.frame.size.width, expandedCell.playTime.frame.size.height);
-                                [expandedCell.progressBar setProgress:progress];
-                }];
+                 [expandedCell.progressBar setProgress:progress animated:YES];
             }
-            jobObject *job = jobs[indexSelected];
             expandedCell.playTime.text = [NSString stringWithFormat:@"%@",[self timeFormatted:(int)expandedCell.videoPlayer.currentPlaySecond]];
-            for (int a = 1; a < job.driveTimes.count; a++) {
-                if ([job.driveTimes[a] intValue] -1 == (int)expandedCell.videoPlayer.currentPlaySecond) {
-                        [expandedCell.driveScroll setContentOffset:CGPointMake(expandedCell.driveScroll.contentOffset.x+173+8, 0) animated:YES];
-                    
-                }
-            }
+//            if (disableScrolling != true) {
+//                jobObject *job = jobs[indexSelected];
+//                for (int a = 1; a < job.driveTimes.count; a++) {
+//                    if ([job.driveTimes[a] intValue] -1 == (int)expandedCell.videoPlayer.currentPlaySecond) {
+//                        [expandedCell.driveScroll setContentOffset:CGPointMake(expandedCell.driveScroll.contentOffset.x+173+8, 0) animated:YES];
+//
+//                    }
+//                }
+//            }
+            
         }
         }
+}
+
+-(void)skimToTime:(id)sender{
+    if (videoPlaying == true) {
+        UIButton *time = (UIButton*)sender;
+        [expandedCell.videoPlayer.player seekToTime:CMTimeMakeWithSeconds(time.tag-1, 1000)];
+        float progress = expandedCell.videoPlayer.currentPlaySecond / expandedCell.videoPlayer.totalDurationSeconds;
+        [expandedCell.progressBar setProgress:progress animated:YES];
+    } else {
+        [self playVideo];
+        UIButton *time = (UIButton*)sender;
+        [expandedCell.videoPlayer.player seekToTime:CMTimeMakeWithSeconds(time.tag-1, 1000)];
+        float progress = expandedCell.videoPlayer.currentPlaySecond / expandedCell.videoPlayer.totalDurationSeconds;
+        [expandedCell.progressBar setProgress:progress animated:YES];
     }
-
-
+    
+}
 
 
 -(void)playVideo {
     if (videoPlaying == false) {
         [expandedCell.videoPlayer play];
         if (expandedCell.hasPlayedVideo.boolValue == [NSNumber numberWithBool:NO].boolValue) {
-            [NSTimer scheduledTimerWithTimeInterval:1.0f
+            scrollTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f
                                              target:self selector:@selector(videoProgressManager) userInfo:nil repeats:YES];
             expandedCell.hasPlayedVideo = [NSNumber numberWithBool:YES];
         }
@@ -373,33 +395,32 @@
         [cell.videoPlayer setUserInteractionEnabled:FALSE];
         [References cornerRadius:cell.videoView radius:12.0f];
         [References tintUIButton:cell.playButton color:cell.drives.textColor];
-        cell.driveScroll.contentSize = CGSizeMake((cell.driveButton.frame.origin.x + cell.driveButton.frame.size.width+16)*job.driveTimes.count, cell.driveScroll.contentSize.height);
-        [References cornerRadius:cell.driveButton radius:8.0f];
-        if (job.driveSerials.count > 0) {
-            [cell.driveButton setTitle:job.driveSerials[0] forState:UIControlStateNormal];
-            cell.driveTime.text = [self timeFormatted:[job.driveTimes[0] intValue]];
-            NSData *archivedButton = [NSKeyedArchiver archivedDataWithRootObject: cell.driveButton];
-            NSData *archivedTime = [NSKeyedArchiver archivedDataWithRootObject:cell.driveTime];
-            for (int a = 1; a < job.driveTimes.count; a++) {
-                UIButton *driveButton = [NSKeyedUnarchiver unarchiveObjectWithData: archivedButton];
-                [driveButton setFont:[UIFont boldSystemFontOfSize:20.0f]];
-                UILabel *driveTime = [NSKeyedUnarchiver unarchiveObjectWithData: archivedTime];
-                [References cornerRadius:driveButton radius:8.0f];
-                driveButton.alpha = 0;
-                driveTime.alpha = 0;
-                    driveTime.text = [self timeFormatted:[job.driveTimes[a] intValue]];
-                [driveButton setTitle:job.driveSerials[a] forState:UIControlStateNormal];
-                driveButton.frame = CGRectMake(driveButton.frame.origin.x+driveButton.frame.size.width+8, driveButton.frame.origin.y, driveButton.frame.size.width, 48);
-                driveTime.frame = CGRectMake(driveTime.frame.origin.x+driveTime.frame.size.width+8, driveTime.frame.origin.y, driveTime.frame.size.width, driveTime.frame.size.height);
-                [cell.driveScroll addSubview:driveButton];
-                [cell.driveScroll addSubview:driveTime];
-                archivedButton = [NSKeyedArchiver archivedDataWithRootObject:driveButton];
-                archivedTime = [NSKeyedArchiver archivedDataWithRootObject:driveTime];
-            }
-        }
         if (isSearching == true) {
             cell.timeCompleted.text = [NSString stringWithFormat:@"FOUND %@",searchField.text.uppercaseString];
         }
+        NSData *archivedButton = [NSKeyedArchiver archivedDataWithRootObject:cell.driveButton];
+        NSData *archivedTime = [NSKeyedArchiver archivedDataWithRootObject:cell.driveTime];
+        [cell.driveButton setTitle:[job.driveSerials[0] uppercaseString] forState:UIControlStateNormal];
+        cell.driveButton.tag = [job.driveTimes[0]intValue];
+        [cell.driveButton addTarget:self action:@selector(skimToTime:) forControlEvents:UIControlEventTouchUpInside];
+        cell.driveTime.text = [self timeFormatted:[job.driveTimes[0] intValue]];
+        for (int a = 1; a < job.driveSerials.count; a++) {
+                int shiftDown = 50 * a;
+                UIButton *driveButton = [NSKeyedUnarchiver unarchiveObjectWithData: archivedButton];
+                driveButton.tag = [job.driveTimes[a] intValue];
+                [driveButton addTarget:self action:@selector(skimToTime:) forControlEvents:UIControlEventTouchUpInside];
+                UILabel *driveTime = [NSKeyedUnarchiver unarchiveObjectWithData: archivedTime];
+                driveTime.text = [self timeFormatted:[job.driveTimes[a] intValue]];
+                [driveButton setTitle:[job.driveSerials[a] uppercaseString] forState:UIControlStateNormal];
+                [driveButton.titleLabel setFont:cell.driveButton.titleLabel.font];
+                driveButton.frame = CGRectMake(driveButton.frame.origin.x, shiftDown+16, driveButton.frame.size.width, driveButton.frame.size.height);
+                driveTime.frame = CGRectMake(driveTime.frame.origin.x, shiftDown+4, driveTime.frame.size.width, driveTime.frame.size.height);
+                [cell.driveScroll addSubview:driveButton];
+                [cell.driveScroll addSubview:driveTime];
+
+        }
+        [References cornerRadius:cell.driveScroll radius:10.0f];
+        cell.driveScroll.contentSize = CGSizeMake(cell.driveScroll.frame.size.width, job.driveSerials.count*50);
         return cell;
     } else {
         static NSString *simpleTableIdentifier = @"clientCell";
@@ -410,70 +431,6 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"clientCell" owner:self options:nil];
             cell = [nib objectAtIndex:0];
         }
-        
-        [References cornerRadius:cell.playButton radius:cell.playButton.frame.size.width/2];
-        cell.playButton.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-        [References cornerRadius:cell.mapView radius:12.0f];
-        cell.backgroundColor = [UIColor clearColor];
-        [cell setBackgroundColor:[UIColor clearColor]];
-        jobObject *job = jobs[indexPath.row];
-        cell.date.text = job.dateOfDestruction;
-        cell.drives.text = [NSString stringWithFormat:@"%lu\nDrives",(unsigned long)job.driveSerials.count];
-        //    [References blurView:cell.playButton];
-        [cell.playButton setBackgroundColor:[UIColor lightTextColor]];
-        [References blurView:cell.bottomBlur];
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:cell.videoControls.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];
-        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-        maskLayer.frame = cell.videoControls.bounds;
-        maskLayer.path  = maskPath.CGPath;
-        cell.videoControls.layer.mask = maskLayer;
-        [References cardshadow:cell.playButton];
-        cell.playButton.tag = indexPath.row;
-        cell.mapView.zoomEnabled = false;
-        cell.mapView.scrollEnabled = false;
-        cell.mapView.userInteractionEnabled = false;
-        cell.videoPlayer = [[CTVideoView alloc] init];
-        cell.videoPlayer.frame = CGRectMake(-10,-10,cell.videoView.frame.size.width+20,(cell.videoView.frame.size.height*2)+20);
-        [cell.videoView addSubview:cell.videoPlayer];
-        [cell.videoPlayer setShouldPlayAfterPrepareFinished:NO];
-        [cell.videoPlayer setIsMuted:YES];
-        cell.videoPlayer.videoUrl = job.videoURL; // mp4 playable
-        [cell.videoPlayer prepare];
-        cell.playTime.text = @"00:00";
-        cell.totalTime.text = @"00:00";
-        [cell.progressBar setProgress:0];
-        cell.hasPlayedVideo = [NSNumber numberWithBool:NO];
-        [cell.videoPlayer setUserInteractionEnabled:FALSE];
-        [References cornerRadius:cell.videoView radius:12.0f];
-        [References tintUIButton:cell.playButton color:cell.drives.textColor];
-        cell.driveScroll.contentSize = CGSizeMake((cell.driveButton.frame.origin.x + cell.driveButton.frame.size.width+16)*job.driveTimes.count, cell.driveScroll.contentSize.height);
-        [References cornerRadius:cell.driveButton radius:8.0f];
-        if (job.driveSerials.count > 0) {
-            [cell.driveButton setTitle:job.driveSerials[0] forState:UIControlStateNormal];
-            cell.driveTime.text = [self timeFormatted:(int)job.driveTimes[0]];
-            NSData *archivedButton = [NSKeyedArchiver archivedDataWithRootObject: cell.driveButton];
-            NSData *archivedTime = [NSKeyedArchiver archivedDataWithRootObject:cell.driveTime];
-            for (int a = 1; a < job.driveTimes.count; a++) {
-                UIButton *driveButton = [NSKeyedUnarchiver unarchiveObjectWithData: archivedButton];
-                driveButton.tag = a;
-                [driveButton setFont:[UIFont boldSystemFontOfSize:20.0f]];
-                UILabel *driveTime = [NSKeyedUnarchiver unarchiveObjectWithData: archivedTime];
-                [References cornerRadius:driveButton radius:8.0f];
-                driveButton.alpha = 0;
-                driveTime.alpha = 0;
-                driveTime.text = [self timeFormatted:(int)job.driveTimes[a]];
-                [driveButton setTitle:job.driveSerials[a] forState:UIControlStateNormal];
-                driveButton.frame = CGRectMake(driveButton.frame.origin.x+driveButton.frame.size.width+8, driveButton.frame.origin.y, driveButton.frame.size.width, 48);
-                driveTime.frame = CGRectMake(driveTime.frame.origin.x+driveTime.frame.size.width+8, driveTime.frame.origin.y, driveTime.frame.size.width, driveTime.frame.size.height);
-                [cell.driveScroll addSubview:driveButton];
-                [cell.driveScroll addSubview:driveTime];
-                archivedButton = [NSKeyedArchiver archivedDataWithRootObject:driveButton];
-                archivedTime = [NSKeyedArchiver archivedDataWithRootObject:driveTime];
-            }
-        }
-        cell.mapView = [[MKMapView alloc] init];
-        [References blurView:cell.playTime];
-        [References cornerRadius:cell.playTime radius:5.0f];
         return cell;
     }
     

@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import "driveCell.h"
+#import "jobObject.h"
 #import <CTVideoPlayerView/CTVideoViewCommonHeader.h>
 
-@interface clientCell : UITableViewCell <UICollectionViewDelegate,UICollectionViewDataSource>
+@interface clientCell : UITableViewCell
 @property (weak, nonatomic) NSNumber *hasPlayedVideo;
 @property (retain, nonatomic) IBOutlet CTVideoView *videoPlayer;
 @property (weak, nonatomic) IBOutlet UILabel *date;

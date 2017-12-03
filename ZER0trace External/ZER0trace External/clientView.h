@@ -22,7 +22,9 @@
 #import "newJobCell.h"
 
 @interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate> {
-    bool videoPlaying;
+    NSTimer *scrollTimer;
+    bool videoPlaying,disableScrolling;
+    int probableResult;
     clientCell *expandedCell;
     CGRect ogCellShadow,ogCellCard,ogBottomBlur;
     int ogTableHeight;
