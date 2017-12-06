@@ -31,7 +31,6 @@
 }
 
 -(void)getPendingAccounts {
-
     [ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         NSDictionary *accounts = snapshot.value;
         if (![[NSString stringWithFormat:@"%@",accounts] isEqualToString:@"<null>"]) {

@@ -20,6 +20,7 @@
 		AD1F565C1F8EB8AC00C9F33F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD1F565B1F8EB8AC00C9F33F /* AVFoundation.framework */; };
 		AD1F56631F8EC27500C9F33F /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1F56601F8EC26100C9F33F /* pause.png */; };
 		AD1F56641F8EC27500C9F33F /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1F56611F8EC26200C9F33F /* play.png */; };
+		AD415A631FD4FD8C00F350B6 /* upcomingJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = AD415A621FD4FD8C00F350B6 /* upcomingJobObject.m */; };
 		AD41F5A51FC4C9F70027B007 /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = AD41F5A41FC4C9F70027B007 /* menu.png */; };
 		AD41F5A71FC4CA6D0027B007 /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = AD41F5A61FC4CA6D0027B007 /* search.png */; };
 		AD41F5A91FC4CCB40027B007 /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = AD41F5A81FC4CCB40027B007 /* cancel.png */; };
@@ -42,6 +43,10 @@
 		ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = ADDFAA161FC383AB00C1F1D3 /* shred.mp4 */; };
 		ADDFAA1A1FC3899B00C1F1D3 /* blr.jpg in Resources */ = {isa = PBXBuildFile; fileRef = ADDFAA191FC3899B00C1F1D3 /* blr.jpg */; };
 		ADE9B7B91FC39F760078DE1D /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = ADE9B7B71FC39F750078DE1D /* plus.png */; };
+		ADF15C621FD510C90005226F /* upcomingJobCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ADF15C601FD510C80005226F /* upcomingJobCell.m */; };
+		ADF15C631FD510C90005226F /* upcomingJobCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADF15C611FD510C80005226F /* upcomingJobCell.xib */; };
+		ADF15C651FD511320005226F /* more.png in Resources */ = {isa = PBXBuildFile; fileRef = ADF15C641FD511320005226F /* more.png */; };
+		ADF15C661FD5113E0005226F /* fullscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = AD1F566A1F8ED0A700C9F33F /* fullscreen.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,9 +69,12 @@
 		AD1F56601F8EC26100C9F33F /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
 		AD1F56611F8EC26200C9F33F /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		AD1F566A1F8ED0A700C9F33F /* fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullscreen.png; sourceTree = "<group>"; };
+		AD415A611FD4FD8C00F350B6 /* upcomingJobObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = upcomingJobObject.h; sourceTree = "<group>"; };
+		AD415A621FD4FD8C00F350B6 /* upcomingJobObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = upcomingJobObject.m; sourceTree = "<group>"; };
 		AD41F5A41FC4C9F70027B007 /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
 		AD41F5A61FC4CA6D0027B007 /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
 		AD41F5A81FC4CCB40027B007 /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
+		AD58F6251FD4C1A800494B14 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		AD845EDB1FBA61DA00F5B965 /* NSData+CommonCrypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CommonCrypto.m"; sourceTree = "<group>"; };
 		AD845EDC1FBA61DA00F5B965 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
 		AD845EDD1FBA61DB00F5B965 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
@@ -100,6 +108,10 @@
 		ADDFAA171FC383E800C1F1D3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		ADDFAA191FC3899B00C1F1D3 /* blr.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blr.jpg; sourceTree = "<group>"; };
 		ADE9B7B71FC39F750078DE1D /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
+		ADF15C5F1FD510C80005226F /* upcomingJobCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = upcomingJobCell.h; sourceTree = "<group>"; };
+		ADF15C601FD510C80005226F /* upcomingJobCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = upcomingJobCell.m; sourceTree = "<group>"; };
+		ADF15C611FD510C80005226F /* upcomingJobCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = upcomingJobCell.xib; sourceTree = "<group>"; };
+		ADF15C641FD511320005226F /* more.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more.png; sourceTree = "<group>"; };
 		DE9230446DDE54DF4A6EE290 /* Pods-ZER0trace External.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZER0trace External.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZER0trace External/Pods-ZER0trace External.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,6 +142,7 @@
 		6FF90382E1972151008D6ED1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AD58F6251FD4C1A800494B14 /* CoreLocation.framework */,
 				AD84A84B1FCD1BEF003A79FC /* QuartzCore.framework */,
 				ADDFAA171FC383E800C1F1D3 /* MediaPlayer.framework */,
 				AD845EEF1FBA656C00F5B965 /* Foundation.framework */,
@@ -144,6 +157,7 @@
 		AD1F56621F8EC26800C9F33F /* images */ = {
 			isa = PBXGroup;
 			children = (
+				ADF15C641FD511320005226F /* more.png */,
 				AD41F5A81FC4CCB40027B007 /* cancel.png */,
 				AD41F5A61FC4CA6D0027B007 /* search.png */,
 				AD41F5A41FC4C9F70027B007 /* menu.png */,
@@ -224,6 +238,11 @@
 				ADA32E981FCE103F000B9BBA /* newJobCell.xib */,
 				ADC4CEFA1FD4AD8500D727F6 /* newJobView.h */,
 				ADC4CEFB1FD4AD8500D727F6 /* newJobView.m */,
+				AD415A611FD4FD8C00F350B6 /* upcomingJobObject.h */,
+				AD415A621FD4FD8C00F350B6 /* upcomingJobObject.m */,
+				ADF15C5F1FD510C80005226F /* upcomingJobCell.h */,
+				ADF15C601FD510C80005226F /* upcomingJobCell.m */,
+				ADF15C611FD510C80005226F /* upcomingJobCell.xib */,
 			);
 			path = "ZER0trace External";
 			sourceTree = "<group>";
@@ -296,9 +315,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADF15C661FD5113E0005226F /* fullscreen.png in Resources */,
 				ADA32E9A1FCE103F000B9BBA /* newJobCell.xib in Resources */,
 				AD8A114D1FCBA8DC007FD807 /* headerView.xib in Resources */,
 				ADDFAA1A1FC3899B00C1F1D3 /* blr.jpg in Resources */,
+				ADF15C631FD510C90005226F /* upcomingJobCell.xib in Resources */,
 				ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */,
 				AD1F56631F8EC27500C9F33F /* pause.png in Resources */,
 				AD41F5A91FC4CCB40027B007 /* cancel.png in Resources */,
@@ -307,6 +328,7 @@
 				ADE9B7B91FC39F760078DE1D /* plus.png in Resources */,
 				AD1F56551F8EAADB00C9F33F /* References.h in Resources */,
 				AD1F56491F8EA58000C9F33F /* GoogleService-Info.plist in Resources */,
+				ADF15C651FD511320005226F /* more.png in Resources */,
 				AD92C4591F8EA33100454285 /* LaunchScreen.storyboard in Resources */,
 				AD41F5A71FC4CA6D0027B007 /* search.png in Resources */,
 				AD845EEE1FBA62EF00F5B965 /* logo.png in Resources */,
@@ -383,6 +405,8 @@
 				AD845EE61FBA61DC00F5B965 /* AESCrypt.m in Sources */,
 				AD1F56541F8EAACA00C9F33F /* References.m in Sources */,
 				AD845EE41FBA61DC00F5B965 /* NSString+Base64.m in Sources */,
+				ADF15C621FD510C90005226F /* upcomingJobCell.m in Sources */,
+				AD415A631FD4FD8C00F350B6 /* upcomingJobObject.m in Sources */,
 				AD1F56581F8EB5E100C9F33F /* jobObject.m in Sources */,
 				AD92C45C1F8EA33100454285 /* main.m in Sources */,
 				AD1F56501F8EA92500C9F33F /* clientCell.m in Sources */,

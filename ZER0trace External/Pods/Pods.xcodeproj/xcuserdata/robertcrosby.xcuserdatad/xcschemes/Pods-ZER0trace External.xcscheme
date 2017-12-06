@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'F2A1492CC02B5421A1854DCA36E1B9E9'
+               BlueprintIdentifier = 'E5E078D1AF16CDB1347EF028E3888FC7'
                BlueprintName = 'Pods-ZER0trace External'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libPods-ZER0trace External.a'>

@@ -12,25 +12,29 @@
 #import "clientCell.h"
 #import "References.h"
 #import "jobObject.h"
-#import "jobView.h"
 #import <ZXMultiFormatWriter.h>
 #import <ZXImage.h>
 #import <AVFoundation/AVFoundation.h>
 #import <QuartzCore/CAAnimation.h>
+#import <FirebaseDatabase/FIRDatabaseReference.h>
 #import "headerView.h"
 #import <CTVideoPlayerView/CTVideoViewCommonHeader.h>
 #import "newJobCell.h"
+#import "newJobView.h"
+#import "upcomingJobObject.h"
+#import "upcomingJobCell.h"
 
 @interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate> {
     NSTimer *scrollTimer;
     bool videoPlaying,disableScrolling;
+    
     int probableResult;
     clientCell *expandedCell;
     CGRect ogCellShadow,ogCellCard,ogBottomBlur;
     int ogTableHeight;
     int indexSelected;
     int jobCountTotal;
-    NSMutableArray *jobs,*savedJobs;
+    NSMutableArray *upcomingJobs,*jobs,*savedJobs;
     __weak IBOutlet UILabel *clientName;
     __weak IBOutlet UILabel *clientInfo;
     __weak IBOutlet UILabel *driveCount;
@@ -47,6 +51,7 @@
     __weak IBOutlet UIButton *searchButton;
     float lastProgress;
 }
+@property (strong, nonatomic) FIRDatabaseReference *ref;
 - (IBAction)searchButton:(id)sender;
 
 @end

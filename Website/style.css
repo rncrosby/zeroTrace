@@ -305,7 +305,7 @@ p.TitleTextAbstract {
 
 p.subTitleText {
   font-family: 'Roboto', sans-serif;
-  margin-right: ;
+  margin-right: 0;
   color: white;
   font-weight: 300;
   font-size: 1.5vw;

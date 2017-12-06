@@ -15,11 +15,13 @@
 @implementation clientView
 
 - (void)viewDidLoad {
+    upcomingJobs = [[NSMutableArray alloc] init];
     videoPlaying = false;
     indexSelected = -1;
     isSearching = false;
     hideStatusBar = false;
-    [self getClientJobs];
+    self.ref = [[FIRDatabase database] reference];
+    [self getUpcomingJobs];
     [super viewDidLoad];
     clientName.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"client"];
     clientInfo.text = @"Your last job was completed about 4 hours ago";
@@ -28,6 +30,7 @@
     [References cornerRadius:searchButton radius:searchButton.frame.size.width/2];
     [References tintUIButton:searchButton color:clientInfo.textColor];
     searchButton.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
+
 //    [searchBar addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
     // Do any additional setup after loading the view.
 }
@@ -100,7 +103,7 @@
         
     }
     [table reloadData];
-    ogTableHeight = table.frame.origin.y + ((intComplete + intUpcoming) * 308) + (2 * 45)+60;
+    ogTableHeight = table.frame.origin.y + ((intComplete * 308) + (intUpcoming * 121)) + (2 * 45)+60;
     if (intUpcoming == 0) {
         ogTableHeight = ogTableHeight + 92;
     }
@@ -132,10 +135,10 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        if (intUpcoming == 0 && isSearching == false) {
+        if (intUpcoming == 0) {
             return 1;
         }
-        return intUpcoming;
+        return 1;
     } else {
         return intComplete;
     }
@@ -145,6 +148,8 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0 && intUpcoming == 0) {
         return 92;
+    } else if (indexPath.section == 0) {
+        return 121;
     }
     if (indexPath.row == indexSelected) {
         return [References screenHeight];
@@ -180,11 +185,14 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        nil;
+    } else {
         if (indexSelected == indexPath.row) {
             [scrollTimer invalidate];
             clientCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             scroll.contentSize = CGSizeMake([References screenWidth],  ogTableHeight+table.frame.origin.y);
-            [scroll setContentOffset:CGPointMake(0, (indexPath.row * 308)+(2*45)+table.frame.origin.y+20) animated:YES];
+            [scroll setContentOffset:CGPointMake(0, (indexPath.row * 308)+(intUpcoming * 121) +(2*45)+table.frame.origin.y-20) animated:YES];
             [UIView animateWithDuration: 0.25 animations: ^{
                 for (UIView *subview in cell.driveScroll.subviews)
                 {
@@ -222,7 +230,7 @@
             if (intUpcoming == 0) {
                 [scroll setContentOffset:CGPointMake(0, (indexPath.row * 308)+(2*45)+table.frame.origin.y+92) animated:YES];
             } else {
-                [scroll setContentOffset:CGPointMake(0, ((indexPath.row+intUpcoming) * 308)+(2*45)+table.frame.origin.y) animated:YES];
+                [scroll setContentOffset:CGPointMake(0, ((indexPath.row * 308) + (intUpcoming * 121))+(2*45)+table.frame.origin.y) animated:YES];
             }
             
             [UIView animateWithDuration: 0.25 animations: ^{
@@ -270,7 +278,7 @@
         [tableView beginUpdates];
         [tableView endUpdates];
     
-    
+    }
 }
 
 -(void)videoProgressManager {
@@ -334,7 +342,9 @@
 }
 
 -(void)newJob{
-    [References toastMessage:@"Coming Soon" andView:self andClose:NO];
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    newJobView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"newJobView"];
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -350,10 +360,87 @@
         }
         [cell.schedulejOB addTarget:self action:@selector(newJob) forControlEvents:UIControlEventTouchUpInside];
         return cell;
-    } else {
+    } else if (indexPath.section == 0 && intUpcoming > 0){
+        static NSString *simpleTableIdentifier = @"upcomingJobCell";
         
-    }
-    if (indexPath.section == 1) {
+        upcomingJobCell *cell = (upcomingJobCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"upcomingJobCell" owner:self options:nil];
+            cell = [nib objectAtIndex:0];
+        }
+        int width = 16 + (cell.calanderButton.frame.size.width * upcomingJobs.count) + 8;
+        if (width < [References screenWidth]) {
+            width = [References screenWidth];
+        }
+        cell.scrollView.contentSize = CGSizeMake(width, cell.scrollView.frame.size.height);
+        NSData *archivedButton = [NSKeyedArchiver archivedDataWithRootObject:cell.calanderButton];
+        NSData *archivedMonth = [NSKeyedArchiver archivedDataWithRootObject:cell.calendarMonth];
+        NSData *archivedDate = [NSKeyedArchiver archivedDataWithRootObject:cell.calendarDate];
+        int currentX = 16;
+        for (int a = 0; a < upcomingJobs.count; a++) {
+            upcomingJobObject *job = upcomingJobs[a];
+            if (a == 0) {
+                NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:job.date.doubleValue];
+                NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                [dateFormat setDateFormat:@"MMM"];
+                cell.calendarMonth.text = [[dateFormat stringFromDate:date] uppercaseString];
+                cell.calendarMonth.userInteractionEnabled = NO;
+                cell.calendarDate.userInteractionEnabled = NO;
+                [dateFormat setDateFormat:@"d"];
+                cell.calendarDate.text = [dateFormat stringFromDate:date];
+                UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:cell.calendarMonth.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(10.0, 10.0)];
+                CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                maskLayer.frame = cell.calendarMonth.bounds;
+                maskLayer.path  = maskPath.CGPath;
+                cell.calanderButton.tag = a;
+                [cell.calanderButton addTarget:self action:@selector(upcomingMore:) forControlEvents:UIControlEventTouchUpInside];
+                cell.calendarMonth.layer.mask = maskLayer;
+                [References cornerRadius:cell.calanderButton radius:10.0f];
+                currentX = currentX + cell.calanderButton.frame.size.width + 8;
+            } else {
+                UIButton *calanderButton = [NSKeyedUnarchiver unarchiveObjectWithData: archivedButton];
+                UILabel *calendarMonth = [NSKeyedUnarchiver unarchiveObjectWithData: archivedMonth];
+                UILabel *calendarDate = [NSKeyedUnarchiver unarchiveObjectWithData: archivedDate];
+                calendarMonth.userInteractionEnabled = NO;
+                calendarDate.userInteractionEnabled = NO;
+                calendarDate.frame = CGRectMake(currentX, cell.calendarDate.frame.origin.y, cell.calendarDate.frame.size.width, cell.calendarDate.frame.size.height);
+                calendarMonth.frame = CGRectMake(currentX, cell.calendarMonth.frame.origin.y, cell.calendarMonth.frame.size.width, cell.calendarMonth.frame.size.height);
+                calanderButton.frame = CGRectMake(currentX, cell.calanderButton.frame.origin.y, cell.calanderButton.frame.size.width, cell.calanderButton.frame.size.height);
+                NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:job.date.doubleValue];
+                NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                [dateFormat setDateFormat:@"MMM"];
+                calendarMonth.text = [[dateFormat stringFromDate:date] uppercaseString];
+                [dateFormat setDateFormat:@"d"];
+                calendarDate.text = [dateFormat stringFromDate:date];
+                UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:calendarMonth.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(10.0, 10.0)];
+                CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                maskLayer.frame = calendarMonth.bounds;
+                maskLayer.path  = maskPath.CGPath;
+                calendarMonth.layer.mask = maskLayer;
+                [References cornerRadius:calanderButton radius:10.0f];
+                [cell.scrollView addSubview:calanderButton];
+                [cell.scrollView addSubview:calendarDate];
+                [cell.scrollView addSubview:calendarMonth];
+                calanderButton.tag = a;
+                [calanderButton addTarget:self action:@selector(upcomingMore:) forControlEvents:UIControlEventTouchUpInside];
+                currentX = currentX + calanderButton.frame.size.width + 8;
+            }
+        }
+        UIButton *calanderButton = [NSKeyedUnarchiver unarchiveObjectWithData: archivedButton];
+        UILabel *calendarDate = [NSKeyedUnarchiver unarchiveObjectWithData: archivedDate];
+        calendarDate.frame = CGRectMake(currentX, cell.calanderButton.frame.origin.y, cell.calanderButton.frame.size.width, cell.calanderButton.frame.size.height);
+        [calendarDate setTextColor:[[UIColor grayColor] colorWithAlphaComponent:0.5]];
+        [calendarDate setFont:[UIFont systemFontOfSize:50.0f weight:UIFontWeightLight]];
+        [calendarDate setText:@"+"];
+        calanderButton.frame = CGRectMake(currentX, cell.calanderButton.frame.origin.y, cell.calanderButton.frame.size.width, cell.calanderButton.frame.size.height);
+        [References cornerRadius:calanderButton radius:10.0f];
+        [calanderButton addTarget:self action:@selector(newJob) forControlEvents:UIControlEventTouchUpInside];
+        [cell.scrollView addSubview:calanderButton];
+        [cell.scrollView addSubview:calendarDate];
+        cell.backgroundColor = [UIColor clearColor];
+        return cell;
+    } else {
         static NSString *simpleTableIdentifier = @"clientCell";
         
         clientCell *cell = (clientCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
@@ -374,7 +461,7 @@
         //    [References blurView:cell.playButton];
         [cell.playButton setBackgroundColor:[UIColor lightTextColor]];
         [References blurView:cell.bottomBlur];
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:cell.videoControls.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:cell.videoControls.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(12.0, 12.0)];
         CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
         maskLayer.frame = cell.videoControls.bounds;
         maskLayer.path  = maskPath.CGPath;
@@ -422,16 +509,6 @@
         [References cornerRadius:cell.driveScroll radius:10.0f];
         cell.driveScroll.contentSize = CGSizeMake(cell.driveScroll.frame.size.width, job.driveSerials.count*50);
         return cell;
-    } else {
-        static NSString *simpleTableIdentifier = @"clientCell";
-        
-        clientCell *cell = (clientCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"clientCell" owner:self options:nil];
-            cell = [nib objectAtIndex:0];
-        }
-        return cell;
     }
     
 }
@@ -468,72 +545,7 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
                                                            CKRecord *record = results[a];
                                                            NSString *date = [record valueForKey:@"jobDate"];
                                                            NSString *code = [record valueForKey:@"code"];
-                                                           if (date.length < 1) {
-                                                               NSDate *dateM =[record objectForKey:@"modifiedAt"];
-                                                               NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
-                                                               [formatter setDateFormat:@"EEEE MMM d"];
-                                                               NSString *dateString = [formatter stringFromDate:dateM];
-                                                               date = dateString;
-                                                               intUpcoming = intUpcoming + 1;
-                                                               if (a == 0) {
-                                                                   NSTimeInterval secondsBetween = [dateM timeIntervalSinceDate:[NSDate date]];
-                                                                   int secondDifference = (int)secondsBetween;
-                                                                   int dateDifference = secondDifference / 86400;
-                                                                   if (dateDifference > 6) {
-                                                                       int weekDifference = dateDifference / 7;
-                                                                       if (weekDifference < 2) {
-                                                                           machineLearningLabel = [NSString stringWithFormat:@"Your next job is scheduled for about %i week from now.",weekDifference];
-                                                                       } else {
-                                                                           machineLearningLabel = [NSString stringWithFormat:@"Your next job is scheduled for about %i weeks from now.",weekDifference];
-                                                                       }
-                                                                   } else if (dateDifference >= 1){
-                                                                       if (dateDifference < 2) {
-                                                                           machineLearningLabel = [NSString stringWithFormat:@"Your next job is scheduled for about %i day from now.",dateDifference];
-                                                                       } else {
-                                                                           machineLearningLabel = [NSString stringWithFormat:@"Your next job is scheduled for about %i days from now.",dateDifference];
-                                                                       }
-                                                                   } else {
-                                                                       int hourDifference = secondDifference / 60;
-                                                                       if (hourDifference < 2) {
-                                                                           machineLearningLabel = [NSString stringWithFormat:@"Your next job is scheduled for %i hour from now.",hourDifference];
-                                                                       } else {
-                                                                           machineLearningLabel = [NSString stringWithFormat:@"Your next job is scheduled for %i hours from now.",hourDifference];
-                                                                       }
-                                                                       
-                                                                   }
-                                                               }
-                                                           } else {
                                                                intComplete = intComplete + 1;
-                                                               if (a == 0) {
-                                                                   NSDate *dateM =[record objectForKey:@"modifiedAt"];
-                                                                   NSTimeInterval secondsBetween = [dateM timeIntervalSinceDate:[NSDate date]];
-                                                                   int secondDifference = (int)secondsBetween;
-                                                                   int dateDifference = secondDifference / 86400;
-                                                                   if (dateDifference > 6) {
-                                                                       int weekDifference = dateDifference / 7;
-                                                                       if (weekDifference < 2) {
-                                                                           machineLearningLabel = [NSString stringWithFormat:@"Your last job was completed about %i week ago.",weekDifference];
-                                                                       } else {
-                                                                           machineLearningLabel = [NSString stringWithFormat:@"Your last job was completed about %i weeks ago..",weekDifference];
-                                                                       }
-                                                                   } else if (dateDifference >= 1){
-                                                                       if (dateDifference < 2) {
-                                                                           machineLearningLabel = [NSString stringWithFormat:@"Your last job was completed about %i day ago.",dateDifference];
-                                                                       } else {
-                                                                           machineLearningLabel = [NSString stringWithFormat:@"Your last job was completed about %i days ago.",dateDifference];
-                                                                       }
-                                                                   } else {
-                                                                       int hourDifference = secondDifference / 60;
-                                                                       if (hourDifference < 2) {
-                                                                           machineLearningLabel = [NSString stringWithFormat:@"Your last job was completed about %i hour ago.",hourDifference];
-                                                                       } else {
-                                                                           machineLearningLabel = [NSString stringWithFormat:@"Your last job was completed about %i hours ago",hourDifference];
-                                                                       }
-                                                                       
-                                                                   }
-                                                               }
-                                                              
-                                                           }
                                                            
                                                            for (int a = 0; a < date.length; a++) {
                                                                if ([date characterAtIndex:a] == ' ') {
@@ -552,14 +564,14 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
                                                            [jobs addObject:job];
                                                            [savedJobs addObject:job];
                                                        } dispatch_sync(dispatch_get_main_queue(), ^{
-                                                           clientInfo.text = machineLearningLabel;
+                                                           intUpcoming = upcomingJobs.count;
                                                            [table reloadData];
-                                                           ogTableHeight = table.frame.origin.y + ((intComplete + intUpcoming) * 308) + (2 * 45)+32;
+                                                           ogTableHeight = table.frame.origin.y + ((intComplete * 308) + (intUpcoming * 121)) + (2 * 45)+32;
                                                            if (intUpcoming == 0) {
                                                                ogTableHeight = ogTableHeight + 92;
                                                            }
                                                            scroll.contentSize = CGSizeMake([References screenWidth], ogTableHeight);
-                                                           table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y, [References screenWidth], ((intComplete + intUpcoming) * 308)+(2*45)+1000);
+                                                           table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y, [References screenWidth], ((intComplete * 308) + (intUpcoming * 121))+(2*45)+1000);
                                                        });
                                                        
                                                    }];
@@ -653,6 +665,46 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
 
 -(UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
     return UIStatusBarAnimationSlide;
+}
+
+-(void)getUpcomingJobs {
+    [_ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        NSDictionary *Djobs = snapshot.value;
+        Djobs = [Djobs objectForKey:@"upcomingJobs"];
+        upcomingJobs = [[NSMutableArray alloc] init];
+        NSArray *matches = [Djobs allValues];
+        for (int a = 0; a < matches.count; a++) {
+            if ([[matches[a] objectForKey:@"client"] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]]) {
+                upcomingJobObject *job = [[upcomingJobObject alloc] initWithType:[matches[a] objectForKey:@"code"] forClient:[matches[a] objectForKey:@"client"] withLat:[matches[a] objectForKey:@"lat"] andLon:[matches[a] objectForKey:@"long"] andDrives:[matches[a] objectForKey:@"drives"] on:[matches[a] objectForKey:@"date"] withText:[matches[a] objectForKey:@"dateText"]];
+                [upcomingJobs addObject:job];
+            }
+        }
+        [self getClientJobs];
+    }];
+    
+}
+
+-(void)upcomingMore:(id)sender {
+    UIButton *button = (UIButton*)sender;
+    upcomingJobObject *job = upcomingJobs[button.tag];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:job.dateText message:@"This job has not been confirmed yet." preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Modify Job Details" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+        // Ok action example
+    }];
+    UIAlertAction *shareJob = [UIAlertAction actionWithTitle:@"Share Job Details" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+        // Ok action example
+    }];
+    UIAlertAction *callAction = [UIAlertAction actionWithTitle:@"Call ZER0trace" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+        // Ok action example
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action){
+        // Other action
+    }];
+    [alert addAction:okAction];
+    [alert addAction:shareJob];
+    [alert addAction:callAction];
+    [alert addAction:cancelAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (NSString *)timeFormatted:(int)totalSeconds
