@@ -15,6 +15,9 @@
 @implementation clientView
 
 - (void)viewDidLoad {
+    menuShowing = false;
+    [References tintUIButton:menu color:[UIColor blackColor]];
+    hasReloaded = false;
     upcomingJobs = [[NSMutableArray alloc] init];
     videoPlaying = false;
     indexSelected = -1;
@@ -37,40 +40,68 @@
 
 - (IBAction)searchButton:(id)sender {
     if (isSearching == true) {
-        intUpcoming = 0;
-        intComplete = 0;
-        [jobs removeAllObjects];
-        jobs = [[NSMutableArray alloc] init];
-        for (int a = 0; a < savedJobs.count; a++) {
-            jobObject *job = savedJobs[a];
-            if (job.driveSerials.count < 1) {
-                intUpcoming = intUpcoming + 1;
-            } else {
-                intComplete = intComplete + 1;
-            }
-            [jobs addObject:job];
-        }
-        ogTableHeight = table.frame.origin.y + ((intComplete + intUpcoming) * 308) + (2 * 45)+32;
-        if (intUpcoming == 0) {
-            ogTableHeight = ogTableHeight + 92;
-        }
-        isSearching = false;
-        [table reloadData];
-        scroll.contentSize = CGSizeMake([References screenWidth], ogTableHeight);
-        table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y, [References screenWidth], ((intComplete + intUpcoming) * 308)+(2*45)+1000);
         [searchButton setImage:[UIImage imageNamed:@"search.png"] forState:UIControlStateNormal];
         [References tintUIButton:searchButton color:clientInfo.textColor];
         searchButton.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
-        
         [searchField setText:@""];
         [searchField resignFirstResponder];
     } else {
         [table reloadData];
         [searchField becomeFirstResponder];
         isSearching = true;
-        
     }
 
+}
+
+- (IBAction)toggleMenu:(id)sender {
+    int fromXChanger = [References screenWidth]-32-menu.frame.size.width;
+    
+    if (menuShowing == false) {
+        menuLogo.frame = CGRectMake(8-[References screenWidth], clientName.frame.origin.y, menuLogo.frame.size.width, menuLogo.frame.size.height);
+        menuShowing = true;
+        [UIView animateWithDuration:0.5f animations:^(void){
+            menu.transform = CGAffineTransformMakeRotation(M_PI);
+            [self shiftView:clientName by:fromXChanger];
+            [self shiftView:clientInfo by:fromXChanger];
+            [self shiftView:searchField by:fromXChanger];
+            [self shiftView:searchButton by:fromXChanger];
+            [self shiftView:table by:fromXChanger];
+            [self shiftView:menu by:fromXChanger];
+            menuLogo.frame = CGRectMake(menuLogo.frame.origin.x+[References screenWidth], clientName.frame.origin.y, menuLogo.frame.size.width, menuLogo.frame.size.height);
+            clientName.alpha = 0.5;
+            clientInfo.alpha = 0.5;
+            searchField.alpha = 0.5;
+            searchButton.alpha = 0.5;
+            table.alpha = 0.5;
+        } completion:^(bool completion){
+            table.userInteractionEnabled = false;
+            searchField.userInteractionEnabled = false;
+        }];
+} else {
+    menuShowing = false;
+    [UIView animateWithDuration:0.5f animations:^(void){
+        menu.transform = CGAffineTransformMakeRotation(-2*M_PI);
+        menuLogo.frame = CGRectMake(menuLogo.frame.origin.x-[References screenWidth], clientName.frame.origin.y, menuLogo.frame.size.width, menuLogo.frame.size.height);
+        [self shiftView:clientName by:-1*fromXChanger];
+        [self shiftView:clientInfo by:-1*fromXChanger];
+        [self shiftView:searchField by:-1*fromXChanger];
+        [self shiftView:searchButton by:-1*fromXChanger];
+        [self shiftView:table by:-1*fromXChanger];
+         [self shiftView:menu by:-1*fromXChanger];
+        clientName.alpha = 1;
+        clientInfo.alpha = 1;
+        searchField.alpha = 1;
+        searchButton.alpha = 1;
+        table.alpha = 1;
+    } completion:^(bool completion){
+        table.userInteractionEnabled = true;
+        searchField.userInteractionEnabled = true;
+    }];
+}
+}
+
+-(void)shiftView:(UIView*)view by:(CGFloat)pixels {
+    view.frame = CGRectMake(view.frame.origin.x+pixels, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
 }
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
@@ -83,34 +114,8 @@
 }
 
 -(bool)textFieldShouldReturn:(UITextField *)textField {
-    intUpcoming = 0;
-    intComplete = 0;
-    [jobs removeAllObjects];
-    jobs = [[NSMutableArray alloc] init];
-    for (int a = 0; a < savedJobs.count; a++) {
-        jobObject *job = savedJobs[a];
-            for (int b = 0; b < job.driveSerials.count; b++) {
-                    if ([job.driveSerials[b] containsString:textField.text]) {
-                        if (job.driveSerials.count < 1) {
-                            intUpcoming = intUpcoming + 1;
-                        } else {
-                            intComplete = intComplete + 1;
-                        }
-                        [jobs addObject:job];
-                        
-                }
-        }
-        
-    }
-    [table reloadData];
-    ogTableHeight = table.frame.origin.y + ((intComplete * 308) + (intUpcoming * 121)) + (2 * 45)+60;
-    if (intUpcoming == 0) {
-        ogTableHeight = ogTableHeight + 92;
-    }
-    scroll.contentSize = CGSizeMake([References screenWidth], ogTableHeight);
-    table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y, [References screenWidth], ((intComplete + intUpcoming) * 308)+(2*45)+1000);
-    [textField resignFirstResponder];
-    [scroll setContentOffset:CGPointMake(0, -20) animated:YES];
+     [textField resignFirstResponder];
+   
     return true;
 }
 
@@ -123,7 +128,12 @@
     if (indexSelected != -1) {
         return YES;
     }
-    return hideStatusBar;
+    if (menuShowing == true) {
+        return FALSE;
+    } else {
+        
+        return hideStatusBar;
+    }
 }
 -(UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleDefault;
@@ -192,7 +202,7 @@
             [scrollTimer invalidate];
             clientCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             scroll.contentSize = CGSizeMake([References screenWidth],  ogTableHeight+table.frame.origin.y);
-            [scroll setContentOffset:CGPointMake(0, (indexPath.row * 308)+(intUpcoming * 121) +(2*45)+table.frame.origin.y-20) animated:YES];
+            [scroll setContentOffset:CGPointMake(0, (indexPath.row * 308)+121 +(2*45)+table.frame.origin.y-20) animated:YES];
             [UIView animateWithDuration: 0.25 animations: ^{
                 for (UIView *subview in cell.driveScroll.subviews)
                 {
@@ -230,7 +240,7 @@
             if (intUpcoming == 0) {
                 [scroll setContentOffset:CGPointMake(0, (indexPath.row * 308)+(2*45)+table.frame.origin.y+92) animated:YES];
             } else {
-                [scroll setContentOffset:CGPointMake(0, ((indexPath.row * 308) + (intUpcoming * 121))+(2*45)+table.frame.origin.y) animated:YES];
+                [scroll setContentOffset:CGPointMake(0, ((indexPath.row * 308) + 121)+(2*45)+table.frame.origin.y) animated:YES];
             }
             
             [UIView animateWithDuration: 0.25 animations: ^{
@@ -359,6 +369,7 @@
             cell = [nib objectAtIndex:0];
         }
         [cell.schedulejOB addTarget:self action:@selector(newJob) forControlEvents:UIControlEventTouchUpInside];
+        cell.backgroundColor = [UIColor clearColor];
         return cell;
     } else if (indexPath.section == 0 && intUpcoming > 0){
         static NSString *simpleTableIdentifier = @"upcomingJobCell";
@@ -369,12 +380,9 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"upcomingJobCell" owner:self options:nil];
             cell = [nib objectAtIndex:0];
         }
-        int width = 16 + (cell.calanderButton.frame.size.width * upcomingJobs.count) + 8;
-        if (width < [References screenWidth]) {
-            width = [References screenWidth];
-        }
-        cell.scrollView.contentSize = CGSizeMake(width, cell.scrollView.frame.size.height);
+
         NSData *archivedButton = [NSKeyedArchiver archivedDataWithRootObject:cell.calanderButton];
+        NSData *archivedShadow = [NSKeyedArchiver archivedDataWithRootObject:cell.shadow];
         NSData *archivedMonth = [NSKeyedArchiver archivedDataWithRootObject:cell.calendarMonth];
         NSData *archivedDate = [NSKeyedArchiver archivedDataWithRootObject:cell.calendarDate];
         int currentX = 16;
@@ -387,6 +395,7 @@
                 cell.calendarMonth.text = [[dateFormat stringFromDate:date] uppercaseString];
                 cell.calendarMonth.userInteractionEnabled = NO;
                 cell.calendarDate.userInteractionEnabled = NO;
+                [References cardshadow:cell.shadow];
                 [dateFormat setDateFormat:@"d"];
                 cell.calendarDate.text = [dateFormat stringFromDate:date];
                 UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:cell.calendarMonth.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(10.0, 10.0)];
@@ -402,8 +411,11 @@
                 UIButton *calanderButton = [NSKeyedUnarchiver unarchiveObjectWithData: archivedButton];
                 UILabel *calendarMonth = [NSKeyedUnarchiver unarchiveObjectWithData: archivedMonth];
                 UILabel *calendarDate = [NSKeyedUnarchiver unarchiveObjectWithData: archivedDate];
+                UILabel *shadow = [NSKeyedUnarchiver unarchiveObjectWithData: archivedShadow];
+                [References cardshadow:shadow];
                 calendarMonth.userInteractionEnabled = NO;
                 calendarDate.userInteractionEnabled = NO;
+                shadow.frame = CGRectMake(currentX+7, shadow.frame.origin.y, shadow.frame.size.width, shadow.frame.size.height);
                 calendarDate.frame = CGRectMake(currentX, cell.calendarDate.frame.origin.y, cell.calendarDate.frame.size.width, cell.calendarDate.frame.size.height);
                 calendarMonth.frame = CGRectMake(currentX, cell.calendarMonth.frame.origin.y, cell.calendarMonth.frame.size.width, cell.calendarMonth.frame.size.height);
                 calanderButton.frame = CGRectMake(currentX, cell.calanderButton.frame.origin.y, cell.calanderButton.frame.size.width, cell.calanderButton.frame.size.height);
@@ -419,6 +431,7 @@
                 maskLayer.path  = maskPath.CGPath;
                 calendarMonth.layer.mask = maskLayer;
                 [References cornerRadius:calanderButton radius:10.0f];
+                [cell.scrollView addSubview:shadow];
                 [cell.scrollView addSubview:calanderButton];
                 [cell.scrollView addSubview:calendarDate];
                 [cell.scrollView addSubview:calendarMonth];
@@ -436,8 +449,13 @@
         calanderButton.frame = CGRectMake(currentX, cell.calanderButton.frame.origin.y, cell.calanderButton.frame.size.width, cell.calanderButton.frame.size.height);
         [References cornerRadius:calanderButton radius:10.0f];
         [calanderButton addTarget:self action:@selector(newJob) forControlEvents:UIControlEventTouchUpInside];
+        UILabel *shadow = [NSKeyedUnarchiver unarchiveObjectWithData: archivedShadow];
+        [References cardshadow:shadow];
+        shadow.frame = CGRectMake(currentX+7, shadow.frame.origin.y, shadow.frame.size.width, shadow.frame.size.height);
+        [cell.scrollView addSubview:shadow];
         [cell.scrollView addSubview:calanderButton];
         [cell.scrollView addSubview:calendarDate];
+        cell.scrollView.contentSize = CGSizeMake(calanderButton.frame.origin.x+calanderButton.frame.size.width+16, cell.scrollView.frame.size.height);
         cell.backgroundColor = [UIColor clearColor];
         return cell;
     } else {
@@ -566,12 +584,14 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
                                                        } dispatch_sync(dispatch_get_main_queue(), ^{
                                                            intUpcoming = upcomingJobs.count;
                                                            [table reloadData];
-                                                           ogTableHeight = table.frame.origin.y + ((intComplete * 308) + (intUpcoming * 121)) + (2 * 45)+32;
+                                                           ogTableHeight = table.frame.origin.y + ((intComplete * 308)+121) + (2 * 45)+32;
                                                            if (intUpcoming == 0) {
                                                                ogTableHeight = ogTableHeight + 92;
                                                            }
                                                            scroll.contentSize = CGSizeMake([References screenWidth], ogTableHeight);
-                                                           table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y, [References screenWidth], ((intComplete * 308) + (intUpcoming * 121))+(2*45)+1000);
+                                                           table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y, [References screenWidth], ((intComplete * 308) + 121)+(2*45)+1000);
+                                                           [self machineLearning];
+                                                           [self HashTheDrives];
                                                        });
                                                        
                                                    }];
@@ -634,33 +654,44 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
 //}
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView.contentOffset.y > oldY) {
-        // sscrolling down
-        if (scrollView.contentOffset.y > clientName.frame.origin.y) {
-            hideStatusBar = true;
-            [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                [self setNeedsStatusBarAppearanceUpdate];
-            } completion:^(bool finished){
-                if (finished) {
-                    nil;
-                }
-            }];
-        }
+    if (scrollView.tag == 1) {
+        
     } else {
-        if (scrollView.contentOffset.y < clientName.frame.origin.y) {
-            hideStatusBar = false;
-            
-            [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                [self setNeedsStatusBarAppearanceUpdate];
-            } completion:^(bool finished){
-                if (finished) {
-                    nil;
+        if (scrollView.contentOffset.y > oldY) {
+            // sscrolling down
+            if (scrollView.contentOffset.y > (clientName.frame.origin.y-20)) {
+                if (hideStatusBar != true) {
+                    hideStatusBar = true;
+                    [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                        [self setNeedsStatusBarAppearanceUpdate];
+                    } completion:^(bool finished){
+                        if (finished) {
+                            nil;
+                        }
+                    }];
                 }
-            }];
+                
+            }
+        } else {
+            if (scrollView.contentOffset.y < (clientName.frame.origin.y+20)) {
+                if (hideStatusBar != false) {
+                    hideStatusBar = false;
+                    
+                    [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                        [self setNeedsStatusBarAppearanceUpdate];
+                    } completion:^(bool finished){
+                        if (finished) {
+                            nil;
+                        }
+                    }];
+                }
+                
+            }
+            // scrolling up
         }
-        // scrolling up
+        oldY = scrollView.contentOffset.y;
     }
-    oldY = scrollView.contentOffset.y;
+    
 }
 
 -(UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
@@ -669,17 +700,25 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
 
 -(void)getUpcomingJobs {
     [_ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        NSDictionary *Djobs = snapshot.value;
-        Djobs = [Djobs objectForKey:@"upcomingJobs"];
-        upcomingJobs = [[NSMutableArray alloc] init];
-        NSArray *matches = [Djobs allValues];
-        for (int a = 0; a < matches.count; a++) {
-            if ([[matches[a] objectForKey:@"client"] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]]) {
-                upcomingJobObject *job = [[upcomingJobObject alloc] initWithType:[matches[a] objectForKey:@"code"] forClient:[matches[a] objectForKey:@"client"] withLat:[matches[a] objectForKey:@"lat"] andLon:[matches[a] objectForKey:@"long"] andDrives:[matches[a] objectForKey:@"drives"] on:[matches[a] objectForKey:@"date"] withText:[matches[a] objectForKey:@"dateText"]];
-                [upcomingJobs addObject:job];
+        if (hasReloaded == false) {
+            hasReloaded = true;
+            NSDictionary *Djobs = snapshot.value;
+            Djobs = [Djobs objectForKey:@"upcomingJobs"];
+            upcomingJobs = [[NSMutableArray alloc] init];
+            [upcomingJobs removeAllObjects];
+            NSArray *matches = [Djobs allValues];
+            for (int a = 0; a < matches.count; a++) {
+                if ([[matches[a] objectForKey:@"client"] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]]) {
+                    upcomingJobObject *job = [[upcomingJobObject alloc] initWithType:[matches[a] objectForKey:@"code"] forClient:[matches[a] objectForKey:@"client"] withLat:[matches[a] objectForKey:@"location-lat"] andLon:[matches[a] objectForKey:@"location-lon"] andDrives:[matches[a] objectForKey:@"drives"] on:[matches[a] objectForKey:@"date"] withText:[matches[a] objectForKey:@"dateText"]];
+                    [upcomingJobs addObject:job];
+                }
             }
+            [self getClientJobs];
+        } else {
+            NSLog(@"please refresh!!!");
+            [table reloadData];
         }
-        [self getClientJobs];
+        
     }];
     
 }
@@ -688,9 +727,6 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
     UIButton *button = (UIButton*)sender;
     upcomingJobObject *job = upcomingJobs[button.tag];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:job.dateText message:@"This job has not been confirmed yet." preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Modify Job Details" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
-        // Ok action example
-    }];
     UIAlertAction *shareJob = [UIAlertAction actionWithTitle:@"Share Job Details" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
         // Ok action example
     }];
@@ -700,12 +736,85 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action){
         // Other action
     }];
-    [alert addAction:okAction];
     [alert addAction:shareJob];
     [alert addAction:callAction];
     [alert addAction:cancelAction];
     [self presentViewController:alert animated:YES completion:nil];
 }
+
+-(void)machineLearning {
+    if (intUpcoming > 0) {
+        NSString *timeInterval;
+        upcomingJobObject *job = upcomingJobs[0];
+        NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:job.date.doubleValue];
+        NSTimeInterval secondsBetween = [date timeIntervalSinceDate:[NSDate date]];
+        int numberOfDays = secondsBetween / 86400;
+        if (numberOfDays < 1) {
+            timeInterval = @"Today";
+        } else {
+            if (numberOfDays >= 7) {
+                int weeks = numberOfDays/7;
+                if (weeks > 1){
+                    timeInterval = [NSString stringWithFormat:@"%i weeks from now",weeks];
+                } else {
+                    
+                    timeInterval = [NSString stringWithFormat:@"%i week from now",weeks];
+                }
+            } else {
+                if (numberOfDays == 1) {
+                    timeInterval = [NSString stringWithFormat:@"%i day from now",numberOfDays];
+                } else {
+                timeInterval = [NSString stringWithFormat:@"%i days from now",numberOfDays];
+                }
+            }
+        }
+        CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+        [geocoder reverseGeocodeLocation:[[CLLocation alloc] initWithLatitude:job.lat.doubleValue longitude:job.lon.doubleValue]
+                       completionHandler:^(NSArray *placemarks, NSError *error){
+                           if(!error){
+                               CLPlacemark *placeMark = placemarks[0];
+                               clientInfo.text =[NSString stringWithFormat:@"Your next job is scheduled for %@ at %@",timeInterval,[NSString stringWithFormat:@"%@ %@",placeMark.subThoroughfare,placeMark.thoroughfare]];
+                           }
+                           else{
+                               NSLog(@"There was a reverse geocoding error\n%@", [error localizedDescription]);
+                           }
+                       }
+         ];
+        
+    } else {
+        clientInfo.text =[NSString stringWithFormat:@"You have no upcoming jobs, schedule your next job below."];
+    }
+}
+
+-(void)HashTheDrives{
+    driveTotal = 0;
+    hashedSerials = [NSMapTable mapTableWithKeyOptions:NSMapTableStrongMemory
+                                                 valueOptions:NSMapTableStrongMemory];
+    for (int a = 0; a < jobs.count; a++) {
+        jobObject *tJob = jobs[a];
+        for (int b = 0; b < tJob.driveSerials.count; b++) {
+            NSString *serial = tJob.driveSerials[b];
+            driveTotal++;
+            driveObject *drive = [[driveObject alloc] initWithType:tJob.driveSerials[b] andIndex:[NSNumber numberWithInt:b] andJob:[NSNumber numberWithInt:a]];
+            [hashedSerials setObject:drive forKey:[NSNumber numberWithInteger:serial.hash]];
+        }
+    }
+    for (driveObject *drive in [[hashedSerials keyEnumerator] allObjects]) {
+        NSLog(@"%@",drive.serial);
+    }
+    destructionCount.text = [NSString stringWithFormat:@"%lu\ndestructions",jobs.count];
+    driveCount.text = [NSString stringWithFormat:@"%i\ndrives",driveTotal];
+}
+
+-(void)addDrive:(driveObject*)headDrive appendDrive:(driveObject*)appendDrive{
+    driveObject *drive = headDrive;
+    while (drive.nextDrive != NULL) {
+        drive = drive.nextDrive;
+    }
+    drive.nextDrive = appendDrive;
+    appendDrive.previousDrive = drive;
+}
+
 
 - (NSString *)timeFormatted:(int)totalSeconds
 {

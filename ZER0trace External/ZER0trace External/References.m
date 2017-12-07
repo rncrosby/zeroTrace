@@ -224,7 +224,7 @@
     [view setBackgroundColor:[UIColor clearColor]];
     UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
     UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-    blurEffectView.frame =CGRectMake(-500, -500, 5000, 2000);
+    blurEffectView.frame =CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
     
     [view addSubview:blurEffectView];
     [view sendSubviewToBack:blurEffectView];

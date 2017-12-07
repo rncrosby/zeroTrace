@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *calanderButton;
 @property (weak, nonatomic) IBOutlet UILabel *calendarMonth;
 @property (weak, nonatomic) IBOutlet UILabel *calendarDate;
+@property (weak, nonatomic) IBOutlet UILabel *shadow;
 
 
 @end

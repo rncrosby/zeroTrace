@@ -17,10 +17,18 @@
                 <rect key="frame" x="0.0" y="0.0" width="414" height="120.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="AjA-eZ-iOU">
+                    <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="AjA-eZ-iOU">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="121"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5uz-iG-FxZ">
+                                <rect key="frame" x="23" y="17" width="86" height="86"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wua-1a-fQa">
                                 <rect key="frame" x="16" y="10" width="100" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -50,6 +58,7 @@
                 <outlet property="calendarDate" destination="pIA-Lw-Xpm" id="f3a-wy-KLR"/>
                 <outlet property="calendarMonth" destination="UIi-Lo-XxW" id="1bj-3J-rDU"/>
                 <outlet property="scrollView" destination="AjA-eZ-iOU" id="xDC-Su-CN5"/>
+                <outlet property="shadow" destination="5uz-iG-FxZ" id="eJS-wF-itR"/>
             </connections>
             <point key="canvasLocation" x="-2154" y="30.5"/>
         </tableViewCell>

@@ -210,12 +210,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="1406"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="dMj-n0-QfD">
+                            <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="dMj-n0-QfD">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" text="Oracle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GIq-BA-mRm">
-                                        <rect key="frame" x="16" y="8" width="382" height="36"/>
+                                        <rect key="frame" x="62" y="8" width="336" height="36"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="35"/>
                                         <color key="textColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -228,35 +228,8 @@
                                         <color key="textColor" red="0.57414853570000002" green="0.57416242360000003" blue="0.57415497299999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fi7-GX-LeP">
-                                        <rect key="frame" x="16" y="106" width="113" height="45"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <string key="text">1.2 million
-drives</string>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Sd6-qD-eOc">
-                                        <rect key="frame" x="161" y="106" width="113" height="45"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <string key="text">2.5
-hours</string>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0wo-fL-Gr7">
-                                        <rect key="frame" x="285" y="106" width="113" height="45"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <string key="text">15
-destructions</string>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="tpH-uQ-sxP">
-                                        <rect key="frame" x="0.0" y="209" width="414" height="507"/>
+                                    <tableView opaque="NO" contentMode="scaleToFill" misplaced="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="tpH-uQ-sxP">
+                                        <rect key="frame" x="0.0" y="157" width="414" height="559"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <inset key="contentInset" minX="0.0" minY="8" maxX="0.0" maxY="0.0"/>
@@ -267,7 +240,7 @@ destructions</string>
                                         </connections>
                                     </tableView>
                                     <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" placeholder="Search" textAlignment="natural" minimumFontSize="17" id="wig-lN-NhO">
-                                        <rect key="frame" x="16" y="159" width="382" height="42"/>
+                                        <rect key="frame" x="16" y="107" width="382" height="42"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="textColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -278,11 +251,19 @@ destructions</string>
                                         </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WhJ-rN-pvo">
-                                        <rect key="frame" x="359" y="163" width="35" height="35"/>
+                                        <rect key="frame" x="359" y="111" width="35" height="35"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" image="search.png"/>
                                         <connections>
                                             <action selector="searchButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rQ9-x7-o50"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Juv-GO-3Bz">
+                                        <rect key="frame" x="16" y="11" width="30" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="menu.png"/>
+                                        <connections>
+                                            <action selector="toggleMenu:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vfd-jH-eL7"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -290,6 +271,10 @@ destructions</string>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="NMY-Os-ZjD"/>
                                 </connections>
                             </scrollView>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" image="logo.png" id="bzm-6b-bEQ">
+                                <rect key="frame" x="7" y="766" width="188" height="102"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -298,9 +283,8 @@ destructions</string>
                     <connections>
                         <outlet property="clientInfo" destination="kE2-sm-9PN" id="z8H-vQ-W2f"/>
                         <outlet property="clientName" destination="GIq-BA-mRm" id="FOm-qS-vMe"/>
-                        <outlet property="destructionCount" destination="0wo-fL-Gr7" id="BGJ-kA-U0l"/>
-                        <outlet property="driveCount" destination="fi7-GX-LeP" id="3yp-EF-l3W"/>
-                        <outlet property="filmRuntime" destination="Sd6-qD-eOc" id="7Vg-A8-bfo"/>
+                        <outlet property="menu" destination="Juv-GO-3Bz" id="xV2-mY-Xfx"/>
+                        <outlet property="menuLogo" destination="bzm-6b-bEQ" id="Cns-Zy-RC3"/>
                         <outlet property="scroll" destination="dMj-n0-QfD" id="l09-Dg-Z02"/>
                         <outlet property="searchButton" destination="WhJ-rN-pvo" id="9qS-Pj-cpa"/>
                         <outlet property="searchField" destination="wig-lN-NhO" id="Wh5-sI-743"/>
@@ -489,6 +473,8 @@ destructions</string>
         </scene>
     </scenes>
     <resources>
+        <image name="logo.png" width="1600" height="529"/>
+        <image name="menu.png" width="100" height="100"/>
         <image name="search.png" width="100" height="100"/>
     </resources>
     <color key="tintColor" red="1" green="0.090196080505847931" blue="0.26666668057441711" alpha="1" colorSpace="calibratedRGB"/>

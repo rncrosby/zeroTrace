@@ -38,13 +38,15 @@
     [References cardshadow:card];
     cardOrigin = scroll.bounds;
     scroll.frame = CGRectMake(0, scroll.frame.origin.y+[References screenHeight], [References screenWidth], [References screenHeight]);
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"client"]) {
+    [[NSUserDefaults standardUserDefaults] setObject:@"99999" forKey:@"clientCode"];
+    [[NSUserDefaults standardUserDefaults] setObject:@"UCSC" forKey:@"client"];
+//    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"client"]) {
         [UIView animateWithDuration:1.0f animations:^(void){
             header.text = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]];
             subHeader.hidden = YES;
         } completion:^(bool complete){
         }];
-    }
+//    }
 }
 
 -(void)viewDidAppear:(BOOL)animated {

@@ -27,9 +27,10 @@ img#social:hover {
   top: 27px;
 }
 
+/*
 img#logo {
   cursor: pointer;
-  position: fixed;
+  position: absolute;
   top: 0px;
   padding-top: 16px;
   padding-bottom: 5px;
@@ -40,14 +41,13 @@ img#logo {
   height: 66.125px;
   display: inline;
   z-index: 5;
-  background-color: black;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
+*/
 
 a.navBarLinks {
-  position: fixed;
   left: 382px;
-  height: 87.125px;
+  line-height: 15px;
   margin-top:0px;
   top: 0px;
   display: inline;
@@ -55,7 +55,6 @@ a.navBarLinks {
   padding-right: 0px;
   z-index: 100;
   color: white;
-  line-height: 87.125px;
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
   font-size: 20;

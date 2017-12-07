@@ -23,11 +23,14 @@
 #import "newJobView.h"
 #import "upcomingJobObject.h"
 #import "upcomingJobCell.h"
+#import <MapKit/MapKit.h>
+#import "driveObject.h"
 
 @interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate> {
+    NSMapTable *hashedSerials;
     NSTimer *scrollTimer;
     bool videoPlaying,disableScrolling;
-    
+    bool hasReloaded;
     int probableResult;
     clientCell *expandedCell;
     CGRect ogCellShadow,ogCellCard,ogBottomBlur;
@@ -41,6 +44,8 @@
     __weak IBOutlet UITableView *table;
     __weak IBOutlet UILabel *filmRuntime;
     __weak IBOutlet UILabel *destructionCount;
+    __weak IBOutlet UIButton *menu;
+    int driveTotal, hourFootage, destructions;
     //    __weak IBOutlet UITextField *searchBar;
 //    __weak IBOutlet UIButton *searchButton;
     NSString *machineLearningLabel;
@@ -50,8 +55,14 @@
     __weak IBOutlet UITextField *searchField;
     __weak IBOutlet UIButton *searchButton;
     float lastProgress;
+    BOOL menuShowing;
+    
+    // menu views
+    
+    __weak IBOutlet UIImageView *menuLogo;
 }
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 - (IBAction)searchButton:(id)sender;
-
+- (IBAction)toggleMenu:(id)sender;
+-(void)addDrive:(driveObject*)headDrive appendDrive:(driveObject*)appendDrive;
 @end
