@@ -1,103 +1,182 @@
 <html>
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="jquery.js"></script>
   <script src="script.js"></script>
+  <title>ZER0trace</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
-  <link rel="stylesheet" href="data.css">
   <link rel="stylesheet" href="style.css">
-  <title>ZER0trace Data Destruction</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <script>
+  if (screen.width < 600) {
+    window.location.href = 'mobile/index.html';
+  }
+  </script>
 </head>
-<body style="background-color: black;">
-  <img id="logo" onclick="window.location.href = 'index.html';" src="logo.png"/><a class="navBarLinks" href="data.html">Data Destruction</a><a class="navBarLinks" style="left:550px;" href="certification.html">Certification</a><a class="navBarLinks" style="left:680px;" href="logistics.html">Logistics</a><a class="navBarLinks" href="mobile.html" style="left:780px;">Mobile Suite</a></a><a class="navBarClient"  onclick="openPortal();">Client Portal</a>
-  <!-- <img id="social" src="twitter.png" style="right: 290px;background: red;
-background: -webkit-linear-gradient(left top, #40C4FF , #0091EA);
-background: -o-linear-gradient(bottom right, #40C4FF, #0091EA);
-background: -moz-linear-gradient(bottom right, #40C4FF, #0091EA);
-background: linear-gradient(to bottom right, #40C4FF , #0091EA);"/>
-<img id="social" src="facebook.png" style="right: 340px;background: red;
-background: -webkit-linear-gradient(left top, #448AFF , #2962FF);
-background: -o-linear-gradient(bottom right, #448AFF, #2962FF);
-background: -moz-linear-gradient(bottom right, #448AFF, #2962FF);
-background: linear-gradient(to bottom right, #448AFF , #2962FF);"/>
-<img id="social" src="phone.png" style="right: 390px;background: red;
-background: -webkit-linear-gradient(left top, #69F0AE , #00C853);
-background: -o-linear-gradient(bottom right, #69F0AE, #00C853);
-background: -moz-linear-gradient(bottom right, #69F0AE, #00C853);
-background: linear-gradient(to bottom right, #69F0AE , #00C853);"/>
-<img id="social" src="email.png" style="right: 440px;background: red;
-background: -webkit-linear-gradient(left top, #18FFFF , #00B8D4);
-background: -o-linear-gradient(bottom right, #18FFFF, #00B8D4);
-background: -moz-linear-gradient(bottom right, #18FFFF, #00B8D4);
-background: linear-gradient(to bottom right, #18FFFF , #00B8D4);"/> -->
-<div class="container" style="margin-top:75px;padding-bottom:-1000px;margin-bottom:-100px;">
-  <div class="block" id="blockA" style="z-index: 1;padding-left: 0px;">
-    <p class="title">Clear</p>
-    <p class="description">Applies logical techniques to sanitize data in all user-addressable storage locations for protection against simple noninvasive data recovery techniques.</p>
-    <p class="subtitle">When?</p>
-    <p class="description">Hardware remains relevant and in good condition; redeploy extending return on investment</p>
-    <p class="subtitle">How?</p>
-    <p class="description">Utilize standard Read/Write commands to rewrite with a new value or using a menu option to reset the device to the factory state (where rewriting is not supported).</p>
-    <a class="modifier" onclick="action('A');">See How</a>
-    <img class="blockImage" src="original.png"/>
+<body>
+  <img id="logo" onclick="window.location.href = 'index.html';" src="logo.png"/><a class="navBarLinks" href="data.html">Data Destruction</a><a class="navBarLinks" style="left:550px;" href="certification.html">Certification</a><a class="navBarLinks" style="left:680px;" href="logistics.html">Logistics</a><a class="navBarLinks" href="mobile.html" style="left:780px;">Mobile Suite</a><a class="navBarLinks" onclick="openPortal();" style="left:910px;">Client Portal</a>
+
+  <div class="container">
+    <div class="subPage" style="background-color: rgba(0,0,0,0.5);">
+      <p class="TitleText" id="titleText" style="padding-left:1%; color: white;">Find out which destruction<br>is right for you.</p><br><br><br>
+      <p class="subTitleText" style="padding-left:1%; margin-top:-120px; color: white; margin-right: 40%; line-height: 40px;">
+        Data destruction for your company shouldn't be a hassle. ZER0trace's data destruction is fine-tuned to your companies data destruction needs.
+        We offer a pre-selected assortment of data erasure needs as well as being able to cater to any special requests. Find out below which destruction method is right for you.
+        <br><br><br>
+        <a class="clients" onclick="document.getElementById('clear').scrollIntoView(false);" style="margin-left:0%;background: red;
+    background: -webkit-linear-gradient(left top, #82B1FF , #2979FF);
+    background: -o-linear-gradient(bottom right, #82B1FF, #2979FF);
+    background: -moz-linear-gradient(bottom right, #82B1FF, #2979FF);
+    background: linear-gradient(to bottom right, #82B1FF , #2979FF);
+      color: white;">Clear</a>
+    <a class="clients" onclick="document.getElementById('purge').scrollIntoView(false);"style="margin-left:32px;background: red;
+  background: -webkit-linear-gradient(left top, #FF1744 , #D50000);
+  background: -o-linear-gradient(bottom right, #FF1744, #D50000);
+  background: -moz-linear-gradient(bottom right, #FF1744, #D50000);
+  background: linear-gradient(to bottom right, #FF1744 , #D50000);
+  color: white;">Purge</a>
+  <a class="clients" onclick="document.getElementById('destroy').scrollIntoView(false);"style="margin-left:32px;background: red;
+  background: -webkit-linear-gradient(left top, #424242 , #212121);
+  background: -o-linear-gradient(bottom right, #424242, #212121);
+  background: -moz-linear-gradient(bottom right, #424242, #212121);
+  background: linear-gradient(to bottom right, #424242 , #212121);
+  color: white;">Destroy</a>
+        <br>
+
+    </div>
+    <div class="pageSeperator" style="background-color:#D50000;">
+      <a class="moreInfo"  onclick="document.getElementById('footer').scrollIntoView(false);"  style="padding-left:32px;">Want To Speak With Us? Get In Touch.</a>
+    </div>
+    <div class="subPage" id="clear" style="background-color: rgba(255,255,255,0.75);">
+      <p class="TitleText" style="padding-left:32px; color: black; margin-top: 25px;">Clear</p>
+      <p class="subTitleText" style="padding-left:32px; margin-top:-40px; color: black; margin-right: 40%; line-height: 40px;">
+        Applies logical techniques to sanitize data in all user-addressable storage locations for protection against simple noninvasive data recovery techniques.<br><br>
+        <b><i>When?</i></b><br><br>
+        Hardware remains relevant and in good condition; redeploy extending return on investment<br><br>
+        <b><i>How?</i></b><br><br>
+        Utilize standard Read/Write commands to rewrite with a new value or using a menu option to reset the device to the factory state (where rewriting is not supported).
+        <br><br><br></p>
+    </div>
+    <!-- <div class="pageSeperator" style="background-color:rgba(0, 0, 0, 0.9);">
+      <a class="moreInfo" href="mobile.html" style="padding-left:32px;">Learn About Our Mobile Technologies</a>
+    </div> -->
+    <div class="subPage" id="purge" style="background-color: rgba(0,0,0,0.4);">
+      <p class="TitleText" style="padding-left:32px; color: white;">Purge</p>
+      <p class="subTitleText" style="padding-left:32px; margin-top:-55px; color: white; margin-right: 40%; line-height: 40px;">
+        Applies physical or logical techniques that render target data recovery infeasible using state-of-the art laboratory techniques.<br><br>
+        <b><i>When?</i></b><br><br>
+        Hardware will be returned to lessor at end of lease OR Hardware has residual value and can be sold to offset replacement cost<br><br>
+        <b><i>How?</i></b><br><br>
+        Overwrite (aka wipe; erase) the storage media with new data utilizing specially developed and certified destruction software to perform 1 or more overwrite passes with various schemas.
+      </p><br>
+
+    </div>
+    <div class="subPage" id="destroy" style="background-color: rgba(0,0,0,0.6);">
+      <p class="TitleText" style="padding-left:32px; color: white;">Destroy</p>
+      <p class="subTitleText" style="padding-left:32px; margin-top:-55px; color: white; margin-right: 40%; line-height: 40px;">
+        Renders target data recovery (using state-of-the-art laboratory techniques) infeasible and results in the subsequent inability to use the media for storage of data.<br><br>
+        <b><i>When?</i></b><br><br>
+        Hardware is obsolete, has no further use or value or is damaged; recycle raw materials AND/OR contains extremely sensitive or classified information AND/OR is mandated by corporate/company/agency rule/policy<br><br>
+        <b><i>How?</i></b><br><br>
+        Degaussing with NSA EPL-D certified and calibrated equipment; shred demagnetized drives to 3/4"(19mm) particles.
+      </p><br>
+
+    </div>
+    <div class="pageSeperator" id="footer" style="background-color:rgba(255, 255, 255, 1);height: 90px;padding-top: 150px;padding-bottom: 150px;padding-left:0px;">
+      <div class="row" style="content: "";
+    display: table;
+    clear: both;">
+  <div class="column" style="float: left;
+    width: 25%;">
+    <div style="padding-left:102px;">
+    <img href="index.html" src="http://www.portal-zer0trace.com/smallLogo.png" style="max-width: 125px; height: auto;display: in-line; margin-top: -80;"/><br><br>
+    <p class="subTitleText" style="color: #757575;display: in-line; font-weight: 400; font-size: 16px;padding-left: 0px;margin-left:0px;line-height:20px;">ZER0trace LLC.<br>4062 Watts St.<br>Emeryville, CA 94608<br>(800) 992-4135</p>
   </div>
-  <div class="block" id="blockB" style="background-color: #D50000;z-index: 0;padding-left: 0px;">
-    <p class="title" style="color: white;">Clear</p>
-    <p class="description"style="color: white;">Applies logical techniques to sanitize data in all user-addressable storage locations for protection against simple noninvasive data recovery techniques.</p>
-    <p class="subtitle"style="color: white;">When?</p>
-    <p class="description"style="color: white;">Hardware remains relevant and in good condition; redeploy extending return on investment</p>
-    <p class="subtitle"style="color: white;">How?</p>
-    <p class="description"style="color: white;">Utilize standard Read/Write commands to rewrite with a new value or using a menu option to reset the device to the factory state (where rewriting is not supported).</p>
-    <a class="modifier" onclick="action('A');"style="color: white;">See How</a>
-    <img class="blockImage" src="clear.png"/>
   </div>
-  <div class="seperator" style="position: absolute; top: 650px; width:100%;height:50px;background-color: black;">
+  <div class="column" style="float: right;
+    width: auto;
+    padding-right:102px;">
+    <form style="margin-top: -125px;"action="https://formspree.io/rcros97@me.com"
+        method="POST">
+        <p style="
+        color: rgb(3,3,3);
+        font-family: 'Roboto', sans-serif;
+          font-weight: 100;
+          font-size: 25;
+          line-height:5px;
+          text-align: right;
+          margin-bottom:10px;">Reach Out</p>
+          <p style="
+          text-align: right;
+          color: rgb(100,100,100);
+          font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            font-size: 15;
+            line-height:15px;
+            margin-bottom:10px;">We'll get back to you as soon as possible</p>
+      <input style="
+      background-color:rgba(0,0,0,0.05);
+      border: 0;
+      width: 400px;
+      height:40px;
+      border-radius: 5px;
+      outline: none;
+      padding: 5px 10px 5px 10px;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
+      font-size: 20;
+      " placeholder="Name" type="text" name="name">
+      <input style="
+      margin-top: 10px;
+      background-color:rgba(0,0,0,0.05);
+      width: 400px;
+      border: 0;
+      height:40px;
+      border-radius: 5px;
+      outline: none;
+      padding: 5px 10px 5px 10px;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
+      font-size: 20;
+      "  placeholder="Email" type="email" name="_replyto"><br>
+      <textarea  style="
+      margin-top: 10px;
+      background-color:rgba(0,0,0,0.05);
+      width: 805px;
+      border: 0;
+      resize: none;
+      height:120px;
+      border-radius: 5px;
+      outline: none;
+      padding: 5px 10px 5px 10px;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
+      font-size: 20;
+      "  name="message" placeholder="Your message"></textarea><br>
+  <button class="sendEmail" style="
+  margin-left:405px;
+  margin-top: 10px;
+  background-color:rgba(0,0,0,0.05);
+  width: 400px;
+  border: 0;
+  resize: none;
+  height:40px;
+  border-radius: 5px;
+  outline: none;
+  padding: 5px 10px 5px 10px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 20;
+  " type="submit">Send</button><input type="hidden" name="_next" value="http://www.portal-zer0trace.com/email.html" />
+  </form></div>
+
+    </div>
+
   </div>
-  <div class="block" id="blockC" style="z-index: 1;top: 700px;">
-    <p class="title">Purge</p>
-    <p class="description">Applies physical or logical techniques that render target data recovery infeasible using state-of-the art laboratory techniques.</p>
-    <p class="subtitle">When?</p>
-    <p class="description">Hardware will be returned to lessor at end of lease OR Hardware has residual value and can be sold to offset replacement cost</p>
-    <p class="subtitle">How?</p>
-    <p class="description">Overwrite (aka wipe; erase) the storage media with new data utilizing specially developed and certified destruction software to perform 1 or more overwrite passes with various schemas.</p>
-    <a class="modifier" onclick="action('C');">See How</a>
-    <img class="blockImage" src="original.png"/>
-  </div>
-  <div class="block" id="blockD" style="background-color: #D50000;z-index: 0;top: 700px;">
-    <p class="title" style="color: white;">Purge</p>
-    <p class="description"style="color: white;">Applies physical or logical techniques that render target data recovery infeasible using state-of-the art laboratory techniques.</p>
-    <p class="subtitle"style="color: white;">When?</p>
-    <p class="description"style="color: white;">Hardware will be returned to lessor at end of lease OR Hardware has residual value and can be sold to offset replacement cost</p>
-    <p class="subtitle"style="color: white;">How?</p>
-    <p class="description"style="color: white;">Overwrite (aka wipe; erase) the storage media with new data utilizing specially developed and certified destruction software to perform 1 or more overwrite passes with various schemas.</p>
-    <a class="modifier" onclick="action('C');"style="color: white;">See How</a>
-    <img class="blockImage" src="purge.png"/>
-  </div>
-  <div class="seperator" style="position: absolute; top: 650px; width:100%;height:50px;background-color: black;">
-  </div>
-  <div class="block" id="blockE" style="z-index: 1;top: 1400px;padding-bottom:200px;">
-    <p class="title">Destroy</p>
-    <p class="description">Renders target data recovery (using state-of-the-art laboratory techniques) infeasible and results in the subsequent inability to use the media for storage of data.</p>
-    <p class="subtitle">When?</p>
-    <p class="description">Hardware is obsolete, has no further use or value or is damaged; recycle raw materials AND/OR contains extremely sensitive or classified information AND/OR is mandated by corporate/company/agency rule/policy</p>
-    <p class="subtitle">How?</p>
-    <p class="description">Degaussing with NSA EPL-D certified and calibrated equipment; shred demagnetized drives to 3/4"(19mm) particles.</p>
-    <a class="modifier" onclick="action('E');">See How</a>
-    <img class="blockImage" src="original.png"/>
-  </div>
-  <div class="block" id="blockF" style="background-color: #D50000;z-index: 0;top: 1400px;padding-bottom:200px;">
-    <p class="title" style="color: white;">Destroy</p>
-    <p class="description"style="color: white;">Renders target data recovery (using state-of-the-art laboratory techniques) infeasible and results in the subsequent inability to use the media for storage of data.</p>
-    <p class="subtitle"style="color: white;">When?</p>
-    <p class="description"style="color: white;">Hardware is obsolete, has no further use or value or is damaged; recycle raw materials AND/OR contains extremely sensitive or classified information AND/OR is mandated by corporate/company/agency rule/policy</p>
-    <p class="subtitle"style="color: white;">How?</p>
-    <p class="description"style="color: white;">Degaussing with NSA EPL-D certified and calibrated equipment; shred demagnetized drives to 3/4"(19mm) particles.</p>
-    <a class="modifier" onclick="action('E');"style="color: white;">See How</a>
-    <img class="blockImage" src="destroy.png"/>
-  </div>
-<br><br><br><br><br><br><br>
+  <div class="fullscreen-bg">
+    <video loop muted autoplay poster="shred.jpg" class="fullscreen-bg__video">
+        <source src="shred.webm" type="video/webm">
+        <source src="shred.mp4" type="video/mp4">
+    </video>
 </div>
-
-
 </body>
 </html>

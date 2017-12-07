@@ -1,28 +1,6 @@
-function action(block) {
-  if (block == 'A') {
-    var a = document.getElementById('blockA');
-    if (a.style.width == '0px') {
-      a.style.width = '100%';
-    } else {
-      a.style.width = '0px';
-    }
-  }
-  if (block == 'C') {
-    var a = document.getElementById('blockC');
-    if (a.style.width == '0px') {
-      a.style.width = '100%';
-    } else {
-      a.style.width = '0px';
-    }
-  }
-  if (block == 'E') {
-    var a = document.getElementById('blockE');
-    if (a.style.width == '0px') {
-      a.style.width = '100%';
-    } else {
-      a.style.width = '0px';
-    }
-  }
+function scrollTo(id){
+  alert(id);
+  document.getElementById(id).scrollIntoView();
 }
 
 function openPortal() {
