@@ -15,6 +15,7 @@
     self = [super init];
     if(self)
     {
+        hashValue = [serial hash];
         self.serial = serial;
         self.index = indexInJob;
         self.job = job;
@@ -22,21 +23,16 @@
     return self;
 }
 
--(id) copyWithZone: (NSZone *) zone {
-    driveObject *driveCopy = [[driveObject allocWithZone: zone] init];
-    driveCopy.serial = _serial;
-    driveCopy.index = _index;
-    driveCopy.job = _job;
-    return driveCopy;
+-(BOOL)compareHash:(NSInteger)otherHash {
+    if (hashValue == otherHash) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
-- (BOOL)isEqual:(id)other {
-    NSString *drive = (NSString*)other;
-    if ([self.serial isEqualToString:drive]) {
-        return YES;
-    } else {
-        return NO;
-    }
+-(void)printHash {
+    NSLog(@"%lu",hashValue);
 }
 
 @end

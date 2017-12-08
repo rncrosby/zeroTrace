@@ -215,7 +215,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" text="Oracle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GIq-BA-mRm">
-                                        <rect key="frame" x="62" y="8" width="336" height="36"/>
+                                        <rect key="frame" x="16" y="8" width="382" height="36"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="35"/>
                                         <color key="textColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -258,23 +258,11 @@
                                             <action selector="searchButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rQ9-x7-o50"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Juv-GO-3Bz">
-                                        <rect key="frame" x="16" y="11" width="30" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="menu.png"/>
-                                        <connections>
-                                            <action selector="toggleMenu:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vfd-jH-eL7"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="NMY-Os-ZjD"/>
                                 </connections>
                             </scrollView>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" image="logo.png" id="bzm-6b-bEQ">
-                                <rect key="frame" x="7" y="766" width="188" height="102"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -283,8 +271,6 @@
                     <connections>
                         <outlet property="clientInfo" destination="kE2-sm-9PN" id="z8H-vQ-W2f"/>
                         <outlet property="clientName" destination="GIq-BA-mRm" id="FOm-qS-vMe"/>
-                        <outlet property="menu" destination="Juv-GO-3Bz" id="xV2-mY-Xfx"/>
-                        <outlet property="menuLogo" destination="bzm-6b-bEQ" id="Cns-Zy-RC3"/>
                         <outlet property="scroll" destination="dMj-n0-QfD" id="l09-Dg-Z02"/>
                         <outlet property="searchButton" destination="WhJ-rN-pvo" id="9qS-Pj-cpa"/>
                         <outlet property="searchField" destination="wig-lN-NhO" id="Wh5-sI-743"/>
@@ -473,8 +459,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="logo.png" width="1600" height="529"/>
-        <image name="menu.png" width="100" height="100"/>
         <image name="search.png" width="100" height="100"/>
     </resources>
     <color key="tintColor" red="1" green="0.090196080505847931" blue="0.26666668057441711" alpha="1" colorSpace="calibratedRGB"/>

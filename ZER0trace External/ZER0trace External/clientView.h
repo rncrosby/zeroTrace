@@ -27,7 +27,7 @@
 #import "driveObject.h"
 
 @interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate> {
-    NSMapTable *hashedSerials;
+    NSMutableArray *hashedSerials;
     NSTimer *scrollTimer;
     bool videoPlaying,disableScrolling;
     bool hasReloaded;

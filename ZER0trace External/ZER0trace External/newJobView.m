@@ -208,7 +208,9 @@
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Is This information Correct?" message:[NSString stringWithFormat:@"\n%@ %@\n%@, %@\n\n%@\n\n%i Drives\n",placeMarkSelected.subThoroughfare,placeMarkSelected.thoroughfare,placeMarkSelected.locality,placeMarkSelected.administrativeArea,finalDateText,driveCount] preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Confirm Destruction" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
                     // Ok action example
-                    [[[ref child:@"upcomingJobs"] child:[References randomIntWithLength:5]] setValue:@{
+                    NSString *code =[References randomIntWithLength:5];
+                    [[[ref child:@"upcomingJobs"] child:code] setValue:@{
+                                                                         @"code" : code,
                                                                                                        @"client": [[NSUserDefaults standardUserDefaults] objectForKey:@"client"],
                                                                                                        @"date": [NSNumber numberWithDouble:[selectedDate timeIntervalSince1970]],
                                                                                                        @"dateText" : finalDateText,

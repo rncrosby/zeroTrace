@@ -108,15 +108,87 @@
     [searchButton setImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
     [References tintUIButton:searchButton color:clientInfo.textColor];
     searchButton.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
-    [scroll setContentOffset:CGPointMake(0, searchField.frame.origin.y-8) animated:YES];
+    [scroll setContentOffset:CGPointMake(0, searchField.frame.origin.y-16) animated:YES];
     isSearching = true;
+    [textField setText:@"6456787543"];
     return true;
 }
 
 -(bool)textFieldShouldReturn:(UITextField *)textField {
      [textField resignFirstResponder];
-   
+    for (int a = 0; a < hashedSerials.count; a++) {
+        if ([(driveObject*)hashedSerials[a] compareHash:textField.text.hash] == TRUE) {
+            driveObject *drive = hashedSerials[a];
+            int scrollY = table.frame.origin.y + 80 + (drive.job.integerValue * 308);
+            if (intUpcoming == 0) {
+                scrollY += 92;
+            } else {
+                scrollY += 121;
+            }
+            [scroll setContentOffset:CGPointMake(0, scrollY) animated:YES];
+            [self openCell:drive.job.integerValue];
+            NSLog(@"found match");
+            break;
+        } else {
+            if (a == hashedSerials.count - 1) {
+                [References fullScreenToast:[NSString stringWithFormat:@"%@ Not Found",textField.text] inView:self withSuccess:NO andClose:NO];
+            }
+        }
+    }
     return true;
+}
+
+-(void)openCell:(NSInteger)row {
+    [scrollTimer invalidate];
+    [expandedCell.videoPlayer pause];
+    clientCell *cell = [table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:1]];
+    expandedCell = cell;
+    [expandedCell.playButton addTarget:self action:@selector(playVideo) forControlEvents:UIControlEventTouchUpInside];
+    clientCell *cellDos = [table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexSelected inSection:1]];
+    
+    [UIView animateWithDuration: 0.25 animations: ^{
+        for (UIView *subview in cell.driveScroll.subviews)
+        {
+            subview.alpha = 1;
+        }
+        cell.playButton.alpha = 1;
+        cell.videoView.alpha = 1;
+        cell.progressBar.alpha = 1;
+        cell.videoControls.alpha = 1;
+        cell.driveScroll.alpha = 1;
+        cell.playTime.alpha = 1;
+        cell.totalTime.alpha = 1;
+        cell.timeCompleted.text = @"TAP TO RETURN";
+        cell.videoView.frame = CGRectMake(cell.videoView.frame.origin.x, cell.videoView.frame.origin.y, cell.videoView.frame.size.width, cell.videoView.frame.size.height*2);
+        cell.videoPlayer.frame = CGRectMake(-40, -70, cell.videoView.frame.size.width+80, cell.videoView.frame.size.height+140);
+        cell.drives.frame = CGRectMake(cell.drives.frame.origin.x, cell.videoControls.frame.origin.y-cell.drives.frame.size.height-8, cell.drives.frame.size.width, cell.drives.frame.size.height);
+        cell.code.frame = CGRectMake(cell.code.frame.origin.x, cell.videoControls.frame.origin.y-cell.code.frame.size.height-8, cell.code.frame.size.width, cell.code.frame.size.height);
+        cell.time.frame = CGRectMake(cell.time.frame.origin.x, cell.videoControls.frame.origin.y-cell.time.frame.size.height-8, cell.time.frame.size.width, cell.time.frame.size.height);
+        
+        cellDos.videoView.alpha = 0;
+        cellDos.playButton.alpha = 0;
+        cellDos.progressBar.alpha = 0;
+        cellDos.videoControls.alpha = 0;
+        cellDos.driveScroll.alpha = 0;
+        cellDos.playTime.alpha = 0;
+        cellDos.totalTime.alpha = 0;
+        cellDos.timeCompleted.text = @"JOB COMPLETED 4 HOURS AGO";
+        cellDos.videoView.frame = CGRectMake(cellDos.videoView.frame.origin.x, cellDos.videoView.frame.origin.y, cellDos.videoView.frame.size.width, cellDos.videoView.frame.size.height/2);
+        cellDos.videoPlayer.frame = CGRectMake(-20, -20, cellDos.videoView.frame.size.width+40, cellDos.videoView.frame.size.height+40);
+        cellDos.drives.frame = CGRectMake(cellDos.drives.frame.origin.x, cellDos.mapView.frame.origin.y+8+cell.mapView.frame.size.height, cellDos.drives.frame.size.width, cellDos.drives.frame.size.height);
+        cellDos.code.frame = CGRectMake(cellDos.code.frame.origin.x, cellDos.mapView.frame.origin.y+8+cell.mapView.frame.size.height, cellDos.code.frame.size.width, cellDos.code.frame.size.height);
+        cellDos.time.frame = CGRectMake(cellDos.time.frame.origin.x, cellDos.mapView.frame.origin.y+8+cell.mapView.frame.size.height, cellDos.time.frame.size.width, cellDos.time.frame.size.height);
+        for (UIView *subview in cellDos.driveScroll.subviews)
+            
+        {
+            subview.alpha = 0;
+        }
+    }];
+    indexSelected = row;;
+    scroll.scrollEnabled = NO;
+    scroll.bounces = NO;
+    [table beginUpdates];
+    [table endUpdates];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -709,6 +781,7 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
             NSArray *matches = [Djobs allValues];
             for (int a = 0; a < matches.count; a++) {
                 if ([[matches[a] objectForKey:@"client"] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]]) {
+                    NSLog(@"%@",matches);
                     upcomingJobObject *job = [[upcomingJobObject alloc] initWithType:[matches[a] objectForKey:@"code"] forClient:[matches[a] objectForKey:@"client"] withLat:[matches[a] objectForKey:@"location-lat"] andLon:[matches[a] objectForKey:@"location-lon"] andDrives:[matches[a] objectForKey:@"drives"] on:[matches[a] objectForKey:@"date"] withText:[matches[a] objectForKey:@"dateText"]];
                     [upcomingJobs addObject:job];
                 }
@@ -727,18 +800,25 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
     UIButton *button = (UIButton*)sender;
     upcomingJobObject *job = upcomingJobs[button.tag];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:job.dateText message:@"This job has not been confirmed yet." preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel Job" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action){
+        FIRDatabaseReference *objectRef = [_ref child:@"upcomingJobs"];
+        NSLog(@"%@",job.code);
+        objectRef = [objectRef child:job.code];
+//        [objectRef removeValue];
+    }];
     UIAlertAction *shareJob = [UIAlertAction actionWithTitle:@"Share Job Details" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
         // Ok action example
     }];
     UIAlertAction *callAction = [UIAlertAction actionWithTitle:@"Call ZER0trace" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
         // Ok action example
     }];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action){
+    UIAlertAction *doneAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action){
         // Other action
     }];
+    [alert addAction:cancelAction];
     [alert addAction:shareJob];
     [alert addAction:callAction];
-    [alert addAction:cancelAction];
+    [alert addAction:doneAction];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
@@ -787,20 +867,14 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
 }
 
 -(void)HashTheDrives{
+    hashedSerials = [[NSMutableArray alloc] init];
     driveTotal = 0;
-    hashedSerials = [NSMapTable mapTableWithKeyOptions:NSMapTableStrongMemory
-                                                 valueOptions:NSMapTableStrongMemory];
     for (int a = 0; a < jobs.count; a++) {
         jobObject *tJob = jobs[a];
         for (int b = 0; b < tJob.driveSerials.count; b++) {
-            NSString *serial = tJob.driveSerials[b];
+            [hashedSerials addObject:[[driveObject alloc] initWithType:tJob.driveSerials[b] andIndex:[NSNumber numberWithInt:b] andJob:[NSNumber numberWithInt:a]]];
             driveTotal++;
-            driveObject *drive = [[driveObject alloc] initWithType:tJob.driveSerials[b] andIndex:[NSNumber numberWithInt:b] andJob:[NSNumber numberWithInt:a]];
-            [hashedSerials setObject:drive forKey:[NSNumber numberWithInteger:serial.hash]];
         }
-    }
-    for (driveObject *drive in [[hashedSerials keyEnumerator] allObjects]) {
-        NSLog(@"%@",drive.serial);
     }
     destructionCount.text = [NSString stringWithFormat:@"%lu\ndestructions",jobs.count];
     driveCount.text = [NSString stringWithFormat:@"%i\ndrives",driveTotal];

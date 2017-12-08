@@ -8,16 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
-@interface driveObject : NSObject <NSCopying>
-
+@interface driveObject : NSObject {
+    NSInteger hashValue;
+}
 @property (nonatomic, strong) NSNumber *index;
 @property (nonatomic, strong) NSNumber *job;
 @property (nonatomic, strong) NSString* serial;
 @property (nonatomic, strong) driveObject* nextDrive;
 @property (nonatomic, strong) driveObject* previousDrive;
 
+-(BOOL)compareHash:(NSInteger)otherHash;
+-(void)printHash;
 -(instancetype)initWithType:(NSString*)serial andIndex:(NSNumber*)indexInJob andJob:(NSNumber*)job;
--(id) copyWithZone: (NSZone *) zone;
-- (BOOL)isEqual:(id)other;
 
 @end
