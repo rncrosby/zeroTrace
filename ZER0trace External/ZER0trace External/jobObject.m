@@ -10,10 +10,11 @@
 
 @implementation jobObject
 
--(instancetype)initWithType:(NSURL*)videoURL andTimes:(NSArray*)driveTimes andSerials:(NSArray*)driveSerials andDate:(NSString*)date andCode:(NSString*)jobCode{
+-(instancetype)initWithType:(NSURL*)videoURL andTimes:(NSArray*)driveTimes andSerials:(NSArray*)driveSerials andDate:(NSString*)date andCode:(NSString*)jobCode andLocation:(CLLocation*)location {
     self = [super init];
     if(self)
     {
+        self.location = location;
         self.videoURL = videoURL;
         self.driveTimes = driveTimes;
         self.driveSerials = driveSerials;

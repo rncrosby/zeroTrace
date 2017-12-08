@@ -7,16 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @interface jobObject : NSObject
 
 @property (nonatomic, strong) NSURL* videoURL;
 @property (nonatomic, strong) NSString *dateOfDestruction;
+@property (nonatomic, strong) CLLocation *location;
 @property (nonatomic, strong) NSArray* driveTimes;
 @property (nonatomic, strong) NSArray* driveSerials;
 @property (nonatomic, strong) NSString *jobCode;
 
--(instancetype)initWithType:(NSURL*)videoURL andTimes:(NSArray*)driveTimes andSerials:(NSArray*)driveSerials andDate:(NSString*)date andCode:(NSString*)jobCode;
+-(instancetype)initWithType:(NSURL*)videoURL andTimes:(NSArray*)driveTimes andSerials:(NSArray*)driveSerials andDate:(NSString*)date andCode:(NSString*)jobCode andLocation:(CLLocation*)location;
 
 
 @end

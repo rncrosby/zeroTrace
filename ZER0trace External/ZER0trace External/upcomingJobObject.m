@@ -10,7 +10,7 @@
 
 @implementation upcomingJobObject
 
--(instancetype)initWithType:(NSString*)code forClient:(NSString*)client withLat:(NSNumber*)lat andLon:(NSNumber*)lon andDrives:(NSNumber*)drives on:(NSNumber*)date withText:(NSString*)dateText{
+-(instancetype)initWithType:(NSNumber*)code forClient:(NSString*)client withLat:(NSNumber*)lat andLon:(NSNumber*)lon andDrives:(NSNumber*)drives on:(NSNumber*)date withText:(NSString*)dateText{
     self = [super init];
     if(self)
     {

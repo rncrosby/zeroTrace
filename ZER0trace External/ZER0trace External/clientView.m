@@ -280,6 +280,8 @@
                 {
                     subview.alpha = 0;
                 }
+                cell.drives.alpha = 1;
+                cell.code.alpha = 1;
                 cell.videoView.alpha = 0;
                 cell.playButton.alpha = 0;
                 cell.progressBar.alpha = 0;
@@ -290,9 +292,6 @@
                 cell.videoView.frame = CGRectMake(cell.videoView.frame.origin.x, cell.videoView.frame.origin.y, cell.videoView.frame.size.width, cell.videoView.frame.size.height/2);
                 cell.videoPlayer.frame = CGRectMake(-20, -30, cell.videoView.frame.size.width+40, cell.videoView.frame.size.height+40);
                 cell.timeCompleted.text = @"JOB COMPLETED 4 HOURS AGO";
-                cell.drives.frame = CGRectMake(cell.drives.frame.origin.x, cell.mapView.frame.origin.y+cell.mapView.frame.size.height+8, cell.drives.frame.size.width, cell.drives.frame.size.height);
-                cell.code.frame = CGRectMake(cell.code.frame.origin.x, cell.mapView.frame.origin.y+8+cell.mapView.frame.size.height, cell.code.frame.size.width, cell.code.frame.size.height);
-                cell.time.frame = CGRectMake(cell.time.frame.origin.x, cell.mapView.frame.origin.y+8+cell.mapView.frame.size.height, cell.time.frame.size.width, cell.time.frame.size.height);
             }];
             [expandedCell.videoPlayer pause];
             indexSelected = -1;
@@ -320,6 +319,8 @@
                 {
                     subview.alpha = 1;
                 }
+                cell.drives.alpha = 0;
+                cell.code.alpha = 0;
                 cell.playButton.alpha = 1;
                 cell.videoView.alpha = 1;
                 cell.progressBar.alpha = 1;
@@ -330,10 +331,8 @@
                 cell.timeCompleted.text = @"TAP TO RETURN";
                 cell.videoView.frame = CGRectMake(cell.videoView.frame.origin.x, cell.videoView.frame.origin.y, cell.videoView.frame.size.width, cell.videoView.frame.size.height*2);
                 cell.videoPlayer.frame = CGRectMake(-40, -70, cell.videoView.frame.size.width+80, cell.videoView.frame.size.height+140);
-                cell.drives.frame = CGRectMake(cell.drives.frame.origin.x, cell.videoControls.frame.origin.y-cell.drives.frame.size.height-8, cell.drives.frame.size.width, cell.drives.frame.size.height);
-                cell.code.frame = CGRectMake(cell.code.frame.origin.x, cell.videoControls.frame.origin.y-cell.code.frame.size.height-8, cell.code.frame.size.width, cell.code.frame.size.height);
-                cell.time.frame = CGRectMake(cell.time.frame.origin.x, cell.videoControls.frame.origin.y-cell.time.frame.size.height-8, cell.time.frame.size.width, cell.time.frame.size.height);
-                
+                cell.drives.alpha = 1;
+                cell.code.alpha = 1;
                 cellDos.videoView.alpha = 0;
                 cellDos.playButton.alpha = 0;
                 cellDos.progressBar.alpha = 0;
@@ -344,9 +343,6 @@
                 cellDos.timeCompleted.text = @"JOB COMPLETED 4 HOURS AGO";
                 cellDos.videoView.frame = CGRectMake(cellDos.videoView.frame.origin.x, cellDos.videoView.frame.origin.y, cellDos.videoView.frame.size.width, cellDos.videoView.frame.size.height/2);
                 cellDos.videoPlayer.frame = CGRectMake(-20, -20, cellDos.videoView.frame.size.width+40, cellDos.videoView.frame.size.height+40);
-                cellDos.drives.frame = CGRectMake(cellDos.drives.frame.origin.x, cellDos.mapView.frame.origin.y+8+cell.mapView.frame.size.height, cellDos.drives.frame.size.width, cellDos.drives.frame.size.height);
-                cellDos.code.frame = CGRectMake(cellDos.code.frame.origin.x, cellDos.mapView.frame.origin.y+8+cell.mapView.frame.size.height, cellDos.code.frame.size.width, cellDos.code.frame.size.height);
-                cellDos.time.frame = CGRectMake(cellDos.time.frame.origin.x, cellDos.mapView.frame.origin.y+8+cell.mapView.frame.size.height, cellDos.time.frame.size.width, cellDos.time.frame.size.height);
                 for (UIView *subview in cellDos.driveScroll.subviews)
                 
                 {
@@ -543,9 +539,11 @@
         [References cornerRadius:cell.playButton radius:cell.playButton.frame.size.width/2];
         cell.playButton.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
         [References cornerRadius:cell.mapView radius:12.0f];
+        
         cell.backgroundColor = [UIColor clearColor];
         [cell setBackgroundColor:[UIColor clearColor]];
         jobObject *job = jobs[indexPath.row];
+        
         cell.date.text = job.dateOfDestruction;
         cell.drives.text = [NSString stringWithFormat:@"%lu\nDrives",(unsigned long)job.driveSerials.count];
         //    [References blurView:cell.playButton];
@@ -596,6 +594,12 @@
                 [cell.driveScroll addSubview:driveTime];
 
         }
+        MKCoordinateRegion mapRegion;
+        mapRegion.center = job.location.coordinate;
+        mapRegion.span.latitudeDelta = 4.0;
+        mapRegion.span.longitudeDelta = 4.0;
+        [cell.mapView setRegion:mapRegion animated: YES];
+        cell.code.text = [NSString stringWithFormat:@"%@\njob code",job.jobCode];
         [References cornerRadius:cell.driveScroll radius:10.0f];
         cell.driveScroll.contentSize = CGSizeMake(cell.driveScroll.frame.size.width, job.driveSerials.count*50);
         return cell;
@@ -650,7 +654,14 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
                                                            NSArray *driveTimes = [record objectForKey:@"driveTimes"];
                                                            NSArray *driveSerials = [record objectForKey:@"driveSerials"];
                                                            NSURL *videoURL = [NSURL URLWithString:[record valueForKey:@"videoURL"]];
-                                                           jobObject *job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:date andCode:code];
+                                                           CLLocation *location = [record objectForKey:@"location"];
+                                                           jobObject *job;
+                                                           if (location != NULL) {
+                                                               job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:date andCode:code andLocation:[[CLLocation alloc] initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude]];
+                                                           } else {
+                                                               job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:date andCode:code andLocation:[[CLLocation alloc] initWithLatitude:50.0 longitude:50.0]];
+                                                           }
+                                                           
                                                            [jobs addObject:job];
                                                            [savedJobs addObject:job];
                                                        } dispatch_sync(dispatch_get_main_queue(), ^{
@@ -781,8 +792,8 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
             NSArray *matches = [Djobs allValues];
             for (int a = 0; a < matches.count; a++) {
                 if ([[matches[a] objectForKey:@"client"] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]]) {
-                    NSLog(@"%@",matches);
-                    upcomingJobObject *job = [[upcomingJobObject alloc] initWithType:[matches[a] objectForKey:@"code"] forClient:[matches[a] objectForKey:@"client"] withLat:[matches[a] objectForKey:@"location-lat"] andLon:[matches[a] objectForKey:@"location-lon"] andDrives:[matches[a] objectForKey:@"drives"] on:[matches[a] objectForKey:@"date"] withText:[matches[a] objectForKey:@"dateText"]];
+                    NSLog(@"%@",matches[a]);
+                    upcomingJobObject *job = [[upcomingJobObject alloc] initWithType:[matches[a] valueForKey:@"code"] forClient:[matches[a] objectForKey:@"client"] withLat:[matches[a] objectForKey:@"location-lat"] andLon:[matches[a] objectForKey:@"location-lon"] andDrives:[matches[a] objectForKey:@"drives"] on:[matches[a] objectForKey:@"date"] withText:[matches[a] objectForKey:@"dateText"]];
                     [upcomingJobs addObject:job];
                 }
             }
@@ -801,10 +812,11 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
     upcomingJobObject *job = upcomingJobs[button.tag];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:job.dateText message:@"This job has not been confirmed yet." preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel Job" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action){
-        FIRDatabaseReference *objectRef = [_ref child:@"upcomingJobs"];
-        NSLog(@"%@",job.code);
-        objectRef = [objectRef child:job.code];
-//        [objectRef removeValue];
+        FIRDatabaseReference *objectRef = [[_ref child:@"upcomingJobs"] child:[NSString stringWithFormat:@"%@",job.code]];
+        [objectRef removeValue];
+        [upcomingJobs removeObjectAtIndex:button.tag];
+        [table reloadData];
+        [self machineLearning];
     }];
     UIAlertAction *shareJob = [UIAlertAction actionWithTitle:@"Share Job Details" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
         // Ok action example

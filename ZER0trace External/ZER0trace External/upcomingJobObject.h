@@ -10,7 +10,7 @@
 
 @interface upcomingJobObject : NSObject
 
-@property (nonatomic, strong) NSString* code;
+@property (nonatomic, weak) NSNumber* code;
 @property (nonatomic, strong) NSNumber *lat;
 @property (nonatomic, strong) NSNumber* lon;
 @property (nonatomic, strong) NSNumber* drives;
@@ -18,6 +18,6 @@
 @property (nonatomic, strong) NSString* dateText;
 @property (nonatomic, strong) NSString *client;
 
--(instancetype)initWithType:(NSString*)code forClient:(NSString*)client withLat:(NSNumber*)lat andLon:(NSNumber*)lon andDrives:(NSNumber*)drives on:(NSNumber*)date withText:(NSString*)dateText;
+-(instancetype)initWithType:(NSNumber*)code forClient:(NSString*)client withLat:(NSNumber*)lat andLon:(NSNumber*)lon andDrives:(NSNumber*)drives on:(NSNumber*)date withText:(NSString*)dateText;
 
 @end
