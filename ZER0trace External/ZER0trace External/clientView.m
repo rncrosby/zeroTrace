@@ -24,7 +24,7 @@
     isSearching = false;
     hideStatusBar = false;
     self.ref = [[FIRDatabase database] reference];
-    [self getUpcomingJobs];
+    [self getUpcomingJobs:false];
     [super viewDidLoad];
     clientName.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"client"];
     clientInfo.text = @"Your last job was completed about 4 hours ago";
@@ -33,10 +33,37 @@
     [References cornerRadius:searchButton radius:searchButton.frame.size.width/2];
     [References tintUIButton:searchButton color:clientInfo.textColor];
     searchButton.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7);
-
-//    [searchBar addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
+    
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(testRefresh:) forControlEvents:UIControlEventValueChanged];
+    [scroll addSubview:refreshControl];
+    //    [searchBar addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
     // Do any additional setup after loading the view.
 }
+
+- (void)testRefresh:(UIRefreshControl *)refreshControl
+{
+    refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing data..."];
+    hasReloaded = false;
+    [self getUpcomingJobs:true];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        [NSThread sleepForTimeInterval:3];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"MMM d, h:mm a"];
+            NSString *lastUpdate = [NSString stringWithFormat:@"Last updated on %@", [formatter stringFromDate:[NSDate date]]];
+            
+            refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:lastUpdate];
+            
+            [refreshControl endRefreshing];
+            
+            NSLog(@"refresh end");
+        });
+    });
+}
+
 
 - (IBAction)searchButton:(id)sender {
     if (isSearching == true) {
@@ -158,13 +185,14 @@
         cell.driveScroll.alpha = 1;
         cell.playTime.alpha = 1;
         cell.totalTime.alpha = 1;
+        cell.drives.alpha = 0;
+        cell.code.alpha = 0;
         cell.timeCompleted.text = @"TAP TO RETURN";
         cell.videoView.frame = CGRectMake(cell.videoView.frame.origin.x, cell.videoView.frame.origin.y, cell.videoView.frame.size.width, cell.videoView.frame.size.height*2);
         cell.videoPlayer.frame = CGRectMake(-40, -70, cell.videoView.frame.size.width+80, cell.videoView.frame.size.height+140);
-        cell.drives.frame = CGRectMake(cell.drives.frame.origin.x, cell.videoControls.frame.origin.y-cell.drives.frame.size.height-8, cell.drives.frame.size.width, cell.drives.frame.size.height);
-        cell.code.frame = CGRectMake(cell.code.frame.origin.x, cell.videoControls.frame.origin.y-cell.code.frame.size.height-8, cell.code.frame.size.width, cell.code.frame.size.height);
         cell.time.frame = CGRectMake(cell.time.frame.origin.x, cell.videoControls.frame.origin.y-cell.time.frame.size.height-8, cell.time.frame.size.width, cell.time.frame.size.height);
-        
+        cellDos.drives.alpha = 1;
+        cellDos.code.alpha = 1;
         cellDos.videoView.alpha = 0;
         cellDos.playButton.alpha = 0;
         cellDos.progressBar.alpha = 0;
@@ -175,8 +203,6 @@
         cellDos.timeCompleted.text = @"JOB COMPLETED 4 HOURS AGO";
         cellDos.videoView.frame = CGRectMake(cellDos.videoView.frame.origin.x, cellDos.videoView.frame.origin.y, cellDos.videoView.frame.size.width, cellDos.videoView.frame.size.height/2);
         cellDos.videoPlayer.frame = CGRectMake(-20, -20, cellDos.videoView.frame.size.width+40, cellDos.videoView.frame.size.height+40);
-        cellDos.drives.frame = CGRectMake(cellDos.drives.frame.origin.x, cellDos.mapView.frame.origin.y+8+cell.mapView.frame.size.height, cellDos.drives.frame.size.width, cellDos.drives.frame.size.height);
-        cellDos.code.frame = CGRectMake(cellDos.code.frame.origin.x, cellDos.mapView.frame.origin.y+8+cell.mapView.frame.size.height, cellDos.code.frame.size.width, cellDos.code.frame.size.height);
         cellDos.time.frame = CGRectMake(cellDos.time.frame.origin.x, cellDos.mapView.frame.origin.y+8+cell.mapView.frame.size.height, cellDos.time.frame.size.width, cellDos.time.frame.size.height);
         for (UIView *subview in cellDos.driveScroll.subviews)
             
@@ -291,7 +317,7 @@
                 cell.totalTime.alpha = 0;
                 cell.videoView.frame = CGRectMake(cell.videoView.frame.origin.x, cell.videoView.frame.origin.y, cell.videoView.frame.size.width, cell.videoView.frame.size.height/2);
                 cell.videoPlayer.frame = CGRectMake(-20, -30, cell.videoView.frame.size.width+40, cell.videoView.frame.size.height+40);
-                cell.timeCompleted.text = @"JOB COMPLETED 4 HOURS AGO";
+                cell.timeCompleted.text = [self timeSinceCompletion:cell.jobDate];
             }];
             [expandedCell.videoPlayer pause];
             indexSelected = -1;
@@ -331,8 +357,8 @@
                 cell.timeCompleted.text = @"TAP TO RETURN";
                 cell.videoView.frame = CGRectMake(cell.videoView.frame.origin.x, cell.videoView.frame.origin.y, cell.videoView.frame.size.width, cell.videoView.frame.size.height*2);
                 cell.videoPlayer.frame = CGRectMake(-40, -70, cell.videoView.frame.size.width+80, cell.videoView.frame.size.height+140);
-                cell.drives.alpha = 1;
-                cell.code.alpha = 1;
+                cell.drives.alpha = 0;
+                cell.code.alpha = 0;
                 cellDos.videoView.alpha = 0;
                 cellDos.playButton.alpha = 0;
                 cellDos.progressBar.alpha = 0;
@@ -340,7 +366,9 @@
                 cellDos.driveScroll.alpha = 0;
                 cellDos.playTime.alpha = 0;
                 cellDos.totalTime.alpha = 0;
-                cellDos.timeCompleted.text = @"JOB COMPLETED 4 HOURS AGO";
+                cellDos.drives.alpha = 1;
+                cellDos.code.alpha = 1;
+                cellDos.timeCompleted.text = [self timeSinceCompletion:cellDos.jobDate];
                 cellDos.videoView.frame = CGRectMake(cellDos.videoView.frame.origin.x, cellDos.videoView.frame.origin.y, cellDos.videoView.frame.size.width, cellDos.videoView.frame.size.height/2);
                 cellDos.videoPlayer.frame = CGRectMake(-20, -20, cellDos.videoView.frame.size.width+40, cellDos.videoView.frame.size.height+40);
                 for (UIView *subview in cellDos.driveScroll.subviews)
@@ -549,11 +577,6 @@
         //    [References blurView:cell.playButton];
         [cell.playButton setBackgroundColor:[UIColor lightTextColor]];
         [References blurView:cell.bottomBlur];
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:cell.videoControls.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(12.0, 12.0)];
-        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-        maskLayer.frame = cell.videoControls.bounds;
-        maskLayer.path  = maskPath.CGPath;
-        cell.videoControls.layer.mask = maskLayer;
         [References cardshadow:cell.playButton];
         cell.playButton.tag = indexPath.row;
         cell.mapView.zoomEnabled = false;
@@ -570,9 +593,6 @@
         [cell.videoPlayer setUserInteractionEnabled:FALSE];
         [References cornerRadius:cell.videoView radius:12.0f];
         [References tintUIButton:cell.playButton color:cell.drives.textColor];
-        if (isSearching == true) {
-            cell.timeCompleted.text = [NSString stringWithFormat:@"FOUND %@",searchField.text.uppercaseString];
-        }
         NSData *archivedButton = [NSKeyedArchiver archivedDataWithRootObject:cell.driveButton];
         NSData *archivedTime = [NSKeyedArchiver archivedDataWithRootObject:cell.driveTime];
         [cell.driveButton setTitle:[job.driveSerials[0] uppercaseString] forState:UIControlStateNormal];
@@ -594,6 +614,12 @@
                 [cell.driveScroll addSubview:driveTime];
 
         }
+        [References blurView:cell.bottomBlur];
+        UIBezierPath *bottomMask = [UIBezierPath bezierPathWithRoundedRect:cell.bottomBlur.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(12.0, 12.0)];
+        CAShapeLayer *bottomLayer = [[CAShapeLayer alloc] init];
+        bottomLayer.frame = cell.bottomBlur.bounds;
+        bottomLayer.path  = bottomMask.CGPath;
+        cell.bottomBlur.layer.mask = bottomLayer;
         MKCoordinateRegion mapRegion;
         mapRegion.center = job.location.coordinate;
         mapRegion.span.latitudeDelta = 4.0;
@@ -602,6 +628,8 @@
         cell.code.text = [NSString stringWithFormat:@"%@\njob code",job.jobCode];
         [References cornerRadius:cell.driveScroll radius:10.0f];
         cell.driveScroll.contentSize = CGSizeMake(cell.driveScroll.frame.size.width, job.driveSerials.count*50);
+        cell.jobDate = job.dateObject;
+        cell.timeCompleted.text = [self timeSinceCompletion:cell.jobDate];
         return cell;
     }
     
@@ -657,9 +685,9 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
                                                            CLLocation *location = [record objectForKey:@"location"];
                                                            jobObject *job;
                                                            if (location != NULL) {
-                                                               job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:date andCode:code andLocation:[[CLLocation alloc] initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude]];
+                                                               job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:date andCode:code andLocation:[[CLLocation alloc] initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude] andDateObject:[record valueForKey:@"modificationDate"]];
                                                            } else {
-                                                               job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:date andCode:code andLocation:[[CLLocation alloc] initWithLatitude:50.0 longitude:50.0]];
+                                                               job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:date andCode:code andLocation:[[CLLocation alloc] initWithLatitude:0.0 longitude:0.0] andDateObject:[record valueForKey:@"modificationDate"]];
                                                            }
                                                            
                                                            [jobs addObject:job];
@@ -781,7 +809,7 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
     return UIStatusBarAnimationSlide;
 }
 
--(void)getUpcomingJobs {
+-(void)getUpcomingJobs:(BOOL)isRelaod{
     [_ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         if (hasReloaded == false) {
             hasReloaded = true;
@@ -797,9 +825,15 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
                     [upcomingJobs addObject:job];
                 }
             }
-            [self getClientJobs];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateObject" ascending:TRUE];
+            [upcomingJobs sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            if (isRelaod == false) {
+                [self getClientJobs];
+            } else {
+                intUpcoming = upcomingJobs.count;
+                [table reloadData];
+            }
         } else {
-            NSLog(@"please refresh!!!");
             [table reloadData];
         }
         
@@ -812,6 +846,7 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
     upcomingJobObject *job = upcomingJobs[button.tag];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:job.dateText message:@"This job has not been confirmed yet." preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel Job" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action){
+        intUpcoming--;
         FIRDatabaseReference *objectRef = [[_ref child:@"upcomingJobs"] child:[NSString stringWithFormat:@"%@",job.code]];
         [objectRef removeValue];
         [upcomingJobs removeObjectAtIndex:button.tag];
@@ -832,6 +867,32 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
     [alert addAction:callAction];
     [alert addAction:doneAction];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+-(NSString*)timeSinceCompletion:(NSDate*)jobDate{
+    NSLog(@"date: %@",jobDate);
+    NSString *jobCompleted = @"JOB COMPLETED ";
+    NSTimeInterval secondsBetween = [[NSDate date] timeIntervalSinceDate:jobDate];
+    int numberOfDays = secondsBetween / 86400;
+    if (numberOfDays < 1) {
+        jobCompleted = [jobCompleted stringByAppendingString:@"JUST NOW"];
+    } else {
+        if (numberOfDays >= 7) {
+            int weeks = numberOfDays/7;
+            if (weeks > 1){
+                jobCompleted = [jobCompleted stringByAppendingString:[NSString stringWithFormat:@"%i WEEKS AGO",weeks]];
+            } else {
+                jobCompleted = [jobCompleted stringByAppendingString:[NSString stringWithFormat:@"%i WEEK AGO",weeks]];
+            }
+        } else {
+            if (numberOfDays > 1){
+                jobCompleted = [jobCompleted stringByAppendingString:[NSString stringWithFormat:@"%i DAYS AGO",numberOfDays]];
+            } else {
+                jobCompleted = [jobCompleted stringByAppendingString:[NSString stringWithFormat:@"%i DAY AGO",numberOfDays]];
+            }
+        }
+    }
+    return jobCompleted;
 }
 
 -(void)machineLearning {

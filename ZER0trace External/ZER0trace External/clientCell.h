@@ -12,6 +12,7 @@
 #import <CTVideoPlayerView/CTVideoViewCommonHeader.h>
 
 @interface clientCell : UITableViewCell
+@property (weak, nonatomic) NSDate *jobDate;
 @property (weak, nonatomic) NSNumber *hasPlayedVideo;
 @property (retain, nonatomic) IBOutlet CTVideoView *videoPlayer;
 @property (weak, nonatomic) IBOutlet UILabel *date;

@@ -14,6 +14,7 @@
     self = [super init];
     if(self)
     {
+        self.dateObject = [NSDate dateWithTimeIntervalSince1970:date.doubleValue];
         self.code = code;
         self.client = client;
         self.lat = lat;

@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NSNumber *lat;
 @property (nonatomic, strong) NSNumber* lon;
 @property (nonatomic, strong) NSNumber* drives;
+@property (nonatomic, strong) NSDate *dateObject;
 @property (nonatomic, strong) NSNumber* date;
 @property (nonatomic, strong) NSString* dateText;
 @property (nonatomic, strong) NSString *client;

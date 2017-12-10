@@ -21,7 +21,7 @@
                         <rect key="frame" x="16" y="112" width="382" height="186"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </mapView>
-                    <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GOH-F0-iF1">
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GOH-F0-iF1">
                         <rect key="frame" x="16" y="243" width="382" height="55"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -141,7 +141,7 @@ job code</string>
                 <outlet property="videoControls" destination="Jd3-s9-31c" id="d8r-CO-cRD"/>
                 <outlet property="videoView" destination="Qhz-83-ZEs" id="ge9-um-EIA"/>
             </connections>
-            <point key="canvasLocation" x="-1535" y="-292.5"/>
+            <point key="canvasLocation" x="-1610" y="-306.5"/>
         </tableViewCell>
     </objects>
     <resources>

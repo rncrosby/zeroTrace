@@ -47,13 +47,16 @@
     __weak IBOutlet UIImageView *logo;
     __weak IBOutlet UILabel *scannerSub;
     __weak IBOutlet UIButton *refreshButton;
-    
+    __weak IBOutlet UILabel *unconfirmedJobCount;
+    __weak IBOutlet UIButton *unconfirmedJobButton;
+    int unconfirmedJobInt;
 }
 - (IBAction)createJob:(id)sender;
 - (IBAction)checkScanner:(id)sender;
 - (IBAction)refreshButton:(id)sender;
 - (IBAction)clientManager:(id)sender;
 - (IBAction)searchButton:(id)sender;
+- (IBAction)jobManager:(id)sender;
 
 
 

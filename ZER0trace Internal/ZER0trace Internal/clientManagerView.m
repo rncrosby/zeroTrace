@@ -37,8 +37,10 @@
             [pendingAccounts removeAllObjects];
             pendingAccounts = [[NSMutableArray alloc] init];
             [accounts enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-                accountObject *account = [[accountObject alloc] initWithType:key andClient:[obj valueForKey:@"client"] andCode:[obj valueForKey:@"code"] andContactName:[obj valueForKey:@"client"] andEmail:[obj valueForKey:@"email"] andPhone:[obj valueForKey:@"phone"]];
-                [pendingAccounts addObject:account];
+                if (![key isEqualToString:@"upcomingJobs"]) {
+                    accountObject *account = [[accountObject alloc] initWithType:key andClient:[obj valueForKey:@"client"] andCode:[obj valueForKey:@"code"] andContactName:[obj valueForKey:@"client"] andEmail:[obj valueForKey:@"email"] andPhone:[obj valueForKey:@"phone"]];
+                    [pendingAccounts addObject:account];
+                }
                 // Set stop to YES when you wanted to break the iteration.
             }];
             [clientsTable reloadData];
@@ -123,9 +125,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     return 250;
-    
 }
 
 - (IBAction)closeView:(id)sender {

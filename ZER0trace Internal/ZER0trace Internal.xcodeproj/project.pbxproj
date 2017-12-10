@@ -46,6 +46,8 @@
 		ADB6F7C41F9F1938001A499C /* backspace.png in Resources */ = {isa = PBXBuildFile; fileRef = ADB6F7C31F9F1937001A499C /* backspace.png */; };
 		ADC51BFA1F8C3C6C002DC9D6 /* homeView.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC51BF91F8C3C6C002DC9D6 /* homeView.m */; };
 		ADCFD2601F9EBD6900215AC9 /* manualJobViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCFD25F1F9EBD6900215AC9 /* manualJobViewViewController.m */; };
+		ADD92E7E1FDCB90F00D4A9DE /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = ADD92E7D1FDCB90E00D4A9DE /* calendar.png */; };
+		ADD92E811FDCBC7000D4A9DE /* unconfirmedJobsView.m in Sources */ = {isa = PBXBuildFile; fileRef = ADD92E801FDCBC7000D4A9DE /* unconfirmedJobsView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +110,9 @@
 		ADC51BF91F8C3C6C002DC9D6 /* homeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = homeView.m; sourceTree = "<group>"; };
 		ADCFD25E1F9EBD6900215AC9 /* manualJobViewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = manualJobViewViewController.h; sourceTree = "<group>"; };
 		ADCFD25F1F9EBD6900215AC9 /* manualJobViewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = manualJobViewViewController.m; sourceTree = "<group>"; };
+		ADD92E7D1FDCB90E00D4A9DE /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = calendar.png; sourceTree = "<group>"; };
+		ADD92E7F1FDCBC7000D4A9DE /* unconfirmedJobsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = unconfirmedJobsView.h; sourceTree = "<group>"; };
+		ADD92E801FDCBC7000D4A9DE /* unconfirmedJobsView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = unconfirmedJobsView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +214,8 @@
 				AD9BB82B1FBF90AD00E5CD5A /* clientListCell.h */,
 				AD9BB82C1FBF90AD00E5CD5A /* clientListCell.m */,
 				AD9BB82D1FBF90AD00E5CD5A /* clientListCell.xib */,
+				ADD92E7F1FDCBC7000D4A9DE /* unconfirmedJobsView.h */,
+				ADD92E801FDCBC7000D4A9DE /* unconfirmedJobsView.m */,
 			);
 			path = "ZER0trace Internal";
 			sourceTree = "<group>";
@@ -216,6 +223,7 @@
 		ADB4DC971F95572300245CCA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				ADD92E7D1FDCB90E00D4A9DE /* calendar.png */,
 				AD5809781FC24CA600B6DE38 /* client.png */,
 				AD9BB8341FBFBDFF00E5CD5A /* search.png */,
 				AD9BB8321FBFA9CF00E5CD5A /* cancel.png */,
@@ -305,6 +313,7 @@
 				AD8E37651FBD732A00552292 /* clientManagerCell.xib in Resources */,
 				AD176F261F9D6C71003119CD /* refresh.png in Resources */,
 				AD9BB8351FBFBDFF00E5CD5A /* search.png in Resources */,
+				ADD92E7E1FDCB90F00D4A9DE /* calendar.png in Resources */,
 				AD9BB8331FBFA9D000E5CD5A /* cancel.png in Resources */,
 				ADB4DC961F9551A200245CCA /* light.png in Resources */,
 				AD9BB82F1FBF90AD00E5CD5A /* clientListCell.xib in Resources */,
@@ -392,6 +401,7 @@
 				AD3807331F8C034B007BB8DF /* AppDelegate.m in Sources */,
 				ADB4DC9D1F95766D00245CCA /* pastJobView.m in Sources */,
 				AD8E375D1FBD684300552292 /* accountObject.m in Sources */,
+				ADD92E811FDCBC7000D4A9DE /* unconfirmedJobsView.m in Sources */,
 				ADC51BFA1F8C3C6C002DC9D6 /* homeView.m in Sources */,
 				AD8E37601FBD70D800552292 /* clientManagerView.m in Sources */,
 			);

@@ -17,6 +17,7 @@
 - (void)viewDidLoad {
     performSearch = false;
     [References cornerRadius:clientCount radius:clientCount.frame.size.width/2];
+    [References cornerRadius:unconfirmedJobCount radius:unconfirmedJobCount.frame.size.width/2];
     [createJobs setBackgroundColor:[UIColor clearColor]];
     [recentJobs setBackgroundColor:[UIColor clearColor]];
     [upcomingJobs setBackgroundColor:[UIColor clearColor]];
@@ -612,6 +613,9 @@
     }
 }
 
+- (IBAction)jobManager:(id)sender {
+}
+
 -(void)handleDeleteButton:(id)sender {
     UIButton *button = (UIButton*)sender;
     [self deleteJobAtIndex:(int)button.tag];
@@ -619,7 +623,6 @@
 
 -(void)deleteJobAtIndex:(int)indexInArray{
     jobObject *job = nextJobs[indexInArray];
-    NSLog(@"%@",job.client);
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Confirm Cancellation of Job" message:@"This action is irreversible" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Cancel Job" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             deletingJob = [UIAlertController alertControllerWithTitle:@"Cancelling Job"
@@ -629,6 +632,16 @@
             CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:job.clientCode];
             [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:recordID completionHandler:^(CKRecord *record, NSError *error) {
                 if (error) {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:job.code];
+                        [[CKContainer defaultContainer].publicCloudDatabase deleteRecordWithID:recordID completionHandler:^(CKRecordID *recordID, NSError *error) {
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                [deletingJob dismissViewControllerAnimated:YES completion:nil];
+                                [self getUpcoming:NO];
+                            });
+                        }];
+                        // Update the UI on the main thread.
+                    });
                     return;
                 }
                 dispatch_sync(dispatch_get_main_queue(), ^{
@@ -670,22 +683,67 @@
     [ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         [pendingAccounts removeAllObjects];
         pendingAccounts = [[NSMutableArray alloc] init];
+        unconfirmedJobInt = 0;
         NSDictionary *accounts = snapshot.value;
         if (![[NSString stringWithFormat:@"%@",accounts] isEqualToString:@"<null>"]) {
             [accounts enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-                accountObject *account = [[accountObject alloc] initWithType:key andClient:[obj valueForKey:@"client"] andCode:[obj valueForKey:@"code"] andContactName:[obj valueForKey:@"client"] andEmail:[obj valueForKey:@"email"] andPhone:[obj valueForKey:@"phone"]];
-                [pendingAccounts addObject:account];
+                if (![key isEqualToString:@"upcomingJobs"]) {
+                    accountObject *account = [[accountObject alloc] initWithType:key andClient:[obj valueForKey:@"client"] andCode:[obj valueForKey:@"code"] andContactName:[obj valueForKey:@"client"] andEmail:[obj valueForKey:@"email"] andPhone:[obj valueForKey:@"phone"]];
+                    [pendingAccounts addObject:account];
+                } else {
+                    unconfirmedJobInt++;
+                }
                 // Set stop to YES when you wanted to break the iteration.
             }];
             if (pendingAccounts.count < 1) {
-                [UIView animateWithDuration:0.25 animations:^(void){
-                    refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
-                    searchButton.frame = CGRectMake(clientManagerButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
-                }];
+                if (unconfirmedJobInt < 1) {
+                    unconfirmedJobButton.alpha = 0;
+                    unconfirmedJobCount.alpha = 0;
+                    unconfirmedJobButton.enabled = false;
+                    unconfirmedJobButton.hidden = true;
+                    unconfirmedJobCount.hidden = true;
+                    [UIView animateWithDuration:0.25 animations:^(void){
+                        refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
+                        searchButton.frame = CGRectMake(clientManagerButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
+                    }];
+                } else {
+                    unconfirmedJobCount.text =[NSString stringWithFormat:@"%lu",(unsigned long)unconfirmedJobInt];
+                    unconfirmedJobButton.alpha = 1;
+                    unconfirmedJobCount.alpha = 1;
+                    unconfirmedJobButton.enabled = true;
+                    unconfirmedJobButton.hidden = false;
+                    unconfirmedJobCount.hidden = false;
+                    [UIView animateWithDuration:0.25 animations:^(void){
+                        refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
+                        searchButton.frame = CGRectMake(unconfirmedJobButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
+                        unconfirmedJobCount.frame = CGRectMake(clientCount.frame.origin.x, unconfirmedJobCount.frame.origin.y, unconfirmedJobCount.frame.size.width, unconfirmedJobCount.frame.size.height);
+                        unconfirmedJobButton.frame = CGRectMake(clientManagerButton.frame.origin.x, unconfirmedJobButton.frame.origin.y, unconfirmedJobButton.frame.size.width, unconfirmedJobButton.frame.size.height);
+                    }];
+                }
+                
                 clientManagerButton.enabled = false;
                 clientManagerButton.alpha = 0.0f;
                 clientCount.hidden = true;
             } else {
+                if (unconfirmedJobInt < 1) {
+                    unconfirmedJobButton.alpha = 0;
+                    unconfirmedJobCount.alpha = 0;
+                    unconfirmedJobButton.enabled = false;
+                    unconfirmedJobButton.hidden = true;
+                    unconfirmedJobCount.hidden = true;
+                    [UIView animateWithDuration:0.25 animations:^(void){
+                        refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
+                        searchButton.frame = CGRectMake(unconfirmedJobButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
+                    }];
+                } else {
+                    unconfirmedJobCount.text =[NSString stringWithFormat:@"%lu",(unsigned long)unconfirmedJobInt];
+                    unconfirmedJobButton.alpha = 1;
+                    unconfirmedJobCount.alpha = 1;
+                    unconfirmedJobButton.enabled = true;
+                    unconfirmedJobButton.hidden = false;
+                    unconfirmedJobCount.hidden = false;
+                }
+                
                 clientManagerButton.enabled = true;
                 clientCount.hidden = false;
                 clientManagerButton.alpha = 1.0f;

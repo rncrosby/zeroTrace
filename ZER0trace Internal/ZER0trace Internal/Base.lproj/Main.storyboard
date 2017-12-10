@@ -201,14 +201,6 @@
                                 <rect key="frame" x="347" y="25" width="330" height="71"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fUi-r8-33C">
-                                <rect key="frame" x="898" y="45" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" backgroundImage="refresh-light.png"/>
-                                <connections>
-                                    <action selector="refreshButton:" destination="H82-MJ-fmV" eventType="touchUpInside" id="cqr-p2-xYB"/>
-                                </connections>
-                            </button>
                             <textField hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Connecting..." textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" id="1Hw-ye-081">
                                 <rect key="frame" x="20" y="45" width="336" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -238,14 +230,6 @@
                                     <action selector="checkScanner:" destination="H82-MJ-fmV" eventType="touchUpInside" id="yeA-Av-HYr"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HlR-Qm-caA">
-                                <rect key="frame" x="936" y="45" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="search.png"/>
-                                <connections>
-                                    <action selector="searchButton:" destination="H82-MJ-fmV" eventType="touchUpInside" id="rZk-Oq-a5F"/>
-                                </connections>
-                            </button>
                             <textField hidden="YES" opaque="NO" alpha="0.0" tag="2" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="left" contentVerticalAlignment="fill" placeholder="Search by Client or Code" textAlignment="center" clearsOnBeginEditing="YES" adjustsFontSizeToFit="NO" minimumFontSize="17" id="1dd-83-at6">
                                 <rect key="frame" x="236" y="46" width="553" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -261,8 +245,24 @@
                                     <outlet property="delegate" destination="H82-MJ-fmV" id="Ix9-8r-ZOr"/>
                                 </connections>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fUi-r8-33C">
+                                <rect key="frame" x="860" y="50" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="refresh-light.png"/>
+                                <connections>
+                                    <action selector="refreshButton:" destination="H82-MJ-fmV" eventType="touchUpInside" id="cqr-p2-xYB"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HlR-Qm-caA">
+                                <rect key="frame" x="898" y="50" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="search.png"/>
+                                <connections>
+                                    <action selector="searchButton:" destination="H82-MJ-fmV" eventType="touchUpInside" id="rZk-Oq-a5F"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KEB-Kh-O0c">
-                                <rect key="frame" x="974" y="45" width="30" height="30"/>
+                                <rect key="frame" x="974" y="50" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="client.png">
                                     <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -272,9 +272,28 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="15x-MW-Zqw">
-                                <rect key="frame" x="990" y="36" width="23" height="23"/>
+                                <rect key="frame" x="990" y="41" width="23" height="23"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.70440274477005005" green="0.18128180503845215" blue="0.10175552219152451" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GZE-ee-1hb">
+                                <rect key="frame" x="936" y="50" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="calendar.png">
+                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="clientManager:" destination="H82-MJ-fmV" eventType="touchUpInside" id="zCo-Oz-672"/>
+                                    <action selector="jobManager:" destination="H82-MJ-fmV" eventType="touchUpInside" id="UgO-AE-6P6"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="987-TK-qYD">
+                                <rect key="frame" x="952" y="41" width="23" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.70440274479999998" green="0.18128180499999999" blue="0.1017555222" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -299,6 +318,8 @@
                         <outlet property="scrollView" destination="0cU-YB-cdk" id="jLF-is-Ypx"/>
                         <outlet property="search" destination="1dd-83-at6" id="RMR-Sb-y3S"/>
                         <outlet property="searchButton" destination="HlR-Qm-caA" id="r3G-jd-Se7"/>
+                        <outlet property="unconfirmedJobButton" destination="GZE-ee-1hb" id="bcU-S0-lWM"/>
+                        <outlet property="unconfirmedJobCount" destination="987-TK-qYD" id="EFt-G7-RND"/>
                         <outlet property="upcomingJobs" destination="APS-2I-4mq" id="05f-gW-yft"/>
                     </connections>
                 </viewController>
@@ -942,6 +963,7 @@ October 8</string>
     </scenes>
     <resources>
         <image name="backspace.png" width="75" height="75"/>
+        <image name="calendar.png" width="100" height="100"/>
         <image name="client.png" width="100" height="100"/>
         <image name="light.png" width="1600" height="529"/>
         <image name="refresh-light.png" width="75" height="75"/>
