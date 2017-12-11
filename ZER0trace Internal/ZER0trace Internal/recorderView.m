@@ -16,6 +16,7 @@
 
 
 - (void)viewDidLoad {
+    [_job printObject];
     clipCount = 0;
     statusBar.backgroundColor = [UIColor clearColor];
     [References blurView:statusBar];
@@ -23,8 +24,8 @@
     [References blurView:statusBarReal];
     [References blurView:drivesCollectionBlur];
     [References cornerRadius:drivesCollectionBlur radius:16.0f];
-    clientCode.text = [_jobRecord valueForKey:@"code"];
-    code = [_jobRecord valueForKey:@"code"];
+    clientCode.text = _job.code;
+    code = _job.code;
     beforeRecording = true;
     completeView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]);
     [References fadeIn:completeView];
@@ -42,7 +43,7 @@
     NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MM_dd_yyy"];
     NSString *dateString = [formatter stringFromDate:[NSDate date]];
-    jobName.text = [NSString stringWithFormat:@"%@-%@",[_jobRecord valueForKey:@"client"],dateString];
+    jobName.text = [NSString stringWithFormat:@"%@-%@",_job.client,dateString];
     // Do any additional setup after loading the view, typically from a nib.
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
@@ -328,32 +329,40 @@
         [driveSerials addObject:drive.serial];
         [driveTimes addObject:drive.time];
     }
-    [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:[[CKRecordID alloc]initWithRecordName:[_jobRecord valueForKey:@"code"]] completionHandler:^(CKRecord *record, NSError *error) {
-        
-        if (error) {
-            return;
+    FIRDatabaseReference *reference = [[[[FIRDatabase database] reference] child:@"upcomingJobs"]  child:[NSString stringWithFormat:@"%@",_job.code]];
+    [reference removeValueWithCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+        if (!error) {
+                CKRecord *record = [[CKRecord alloc] initWithRecordType:@"Job" recordID:[[CKRecordID alloc]initWithRecordName:_job.code]];
+                record[@"location"] = _job.location;
+                record[@"client"] = _job.clientName;
+                record[@"clientCode"] = _job.client;
+                record[@"code"] = _job.code;
+                record[@"email"] = _job.email;
+                record[@"jobDate"] = @"Date";
+                record[@"signatueURL"] = signatureURL.absoluteString;
+                record[@"signatureData"] = signatureData;
+                record[@"videoURL"] = downloadURL.absoluteString;
+                record[@"driveSerials"] = driveSerials;
+                record[@"driveTimes"] = driveTimes;
+                record[@"dateCompleted"] = [NSDate date];
+                NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"EEEE, MMMM d"];
+                record[@"jobDate"] = [formatter stringFromDate:[NSDate date]];
+                [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
+                    if (error) {
+                        NSLog(@"%@",error.localizedDescription);
+                    } else {
+                        saveProgress = saveProgress+1;
+                        if (saveProgress == 2) {
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                [References fadeIn:confirmDestructionButton];
+                            });
+                        }
+                    }
+                }];
+        } else {
+            NSLog(@"%@",error.localizedDescription);
         }
-        record[@"signatueURL"] = signatureURL.absoluteString;
-        record[@"signatureData"] = signatureData;
-        record[@"videoURL"] = downloadURL.absoluteString;
-        record[@"driveSerials"] = driveSerials;
-        record[@"driveTimes"] = driveTimes;
-        record[@"dateCompleted"] = [NSDate date];
-        NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"EEEE, MMMM d"];
-        record[@"jobDate"] = [formatter stringFromDate:[NSDate date]];
-        [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
-            if (error) {
-                NSLog(@"%@",error.localizedDescription);
-            } else {
-                saveProgress = saveProgress+1;
-                if (saveProgress == 2) {
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        [References fadeIn:confirmDestructionButton];
-                    });
-                }
-            }
-        }];
     }];
     
 }
@@ -517,7 +526,7 @@
         signatureSub.hidden = YES;
         [signatureView setUserInteractionEnabled:NO];
         [self uploadFile:fileURL withName:[NSString stringWithFormat:@"%@.mp4",jobName.text]];
-        clientCode.text = [_jobRecord valueForKey:@"code"];
+        clientCode.text = _job.code;
         isRecording = FALSE;
         [recorderTime invalidate];
         completeView.alpha = 0;

@@ -7,7 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "References.h"
+#import "unconfirmedJobsCell.h"
+#import <FirebaseDatabase/FIRDatabaseReference.h>
+#import "unconfirmedJobObject.h"
 
-@interface unconfirmedJobsView : UIViewController
+@interface unconfirmedJobsView : UIViewController <UITableViewDelegate,UITableViewDataSource> {
+    NSMutableArray *unconfirmedJobs;
+    __weak IBOutlet UITableView *table;
+    __weak IBOutlet UIButton *close;
+    FIRDatabaseReference *ref;
+}
+- (IBAction)closeButton:(id)sender;
 
 @end

@@ -667,7 +667,7 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
                                                            CKRecord *record = results[a];
                                                            NSString *date = [record valueForKey:@"jobDate"];
                                                            NSString *code = [record valueForKey:@"code"];
-                                                               intComplete = intComplete + 1;
+                                                           intComplete = intComplete + 1;
                                                            
                                                            for (int a = 0; a < date.length; a++) {
                                                                if ([date characterAtIndex:a] == ' ') {
@@ -813,29 +813,39 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
     [_ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         if (hasReloaded == false) {
             hasReloaded = true;
-            NSDictionary *Djobs = snapshot.value;
-            Djobs = [Djobs objectForKey:@"upcomingJobs"];
-            upcomingJobs = [[NSMutableArray alloc] init];
-            [upcomingJobs removeAllObjects];
-            NSArray *matches = [Djobs allValues];
-            for (int a = 0; a < matches.count; a++) {
-                if ([[matches[a] objectForKey:@"client"] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]]) {
-                    NSLog(@"%@",matches[a]);
-                    upcomingJobObject *job = [[upcomingJobObject alloc] initWithType:[matches[a] valueForKey:@"code"] forClient:[matches[a] objectForKey:@"client"] withLat:[matches[a] objectForKey:@"location-lat"] andLon:[matches[a] objectForKey:@"location-lon"] andDrives:[matches[a] objectForKey:@"drives"] on:[matches[a] objectForKey:@"date"] withText:[matches[a] objectForKey:@"dateText"]];
-                    [upcomingJobs addObject:job];
+            if (![[NSString stringWithFormat:@"%@",snapshot.value]  isEqualToString:@"<null>"]) {
+                NSDictionary *Djobs = snapshot.value;
+                if ([Djobs objectForKey:@"upcomingJobs"] != nil) {
+                    Djobs = [Djobs objectForKey:@"upcomingJobs"];
+                    upcomingJobs = [[NSMutableArray alloc] init];
+                    [upcomingJobs removeAllObjects];
+                    NSArray *matches = [Djobs allValues];
+                    for (int a = 0; a < matches.count; a++) {
+                        if ([[matches[a] objectForKey:@"client"] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"code"]]) {
+                            NSLog(@"%@",matches[a]);
+                            upcomingJobObject *job = [[upcomingJobObject alloc] initWithType:[matches[a] valueForKey:@"code"] forClient:[matches[a] objectForKey:@"client"] withLat:[matches[a] objectForKey:@"location-lat"] andLon:[matches[a] objectForKey:@"location-lon"] andDrives:[matches[a] objectForKey:@"drives"] on:[matches[a] objectForKey:@"date"] withText:[matches[a] objectForKey:@"dateText"]];
+                            [upcomingJobs addObject:job];
+                        }
+                    }
+                    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateObject" ascending:TRUE];
+                    [upcomingJobs sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+                    if (isRelaod == false) {
+                        [self getClientJobs];
+                    } else {
+                        intUpcoming = upcomingJobs.count;
+                        [table reloadData];
+                    }
+                } else {
+                    [table reloadData];
                 }
-            }
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateObject" ascending:TRUE];
-            [upcomingJobs sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-            if (isRelaod == false) {
-                [self getClientJobs];
             } else {
-                intUpcoming = upcomingJobs.count;
-                [table reloadData];
+                intUpcoming = 0;
+                [self getClientJobs];
             }
         } else {
-            [table reloadData];
+            
         }
+            
         
     }];
     

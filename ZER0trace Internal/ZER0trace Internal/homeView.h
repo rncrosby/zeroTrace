@@ -13,14 +13,17 @@
 #import <QRCodeReaderViewController/QRCodeReaderViewController.h>
 #import <QRCodeReaderViewController/QRCodeReader.h>
 #import <CloudKit/CloudKit.h>
+#import "unconfirmedJobsView.h"
 #import "References.h"
 #import "recorderView.h"
 #import "jobObject.h"
 #import <QuartzCore/QuartzCore.h>
 #import "manualJobViewViewController.h"
 #import "accountObject.h"
+#import <MessageUI/MessageUI.h>
+#import "unconfirmedJobObject.h"
 
-@interface homeView : UIViewController <QRCodeReaderDelegate,UITextFieldDelegate,UICollectionViewDelegate,UICollectionViewDataSource> {
+@interface homeView : UIViewController <QRCodeReaderDelegate,UITextFieldDelegate,UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate> {
     UIAlertController *alert,*deletingJob,*refreshingJobs;
     NSMutableArray *pendingAccounts;
     QRCodeReaderViewController *vc;
@@ -38,7 +41,6 @@
     __weak IBOutlet UILabel *noPastJobs;
     __weak IBOutlet UITextField *scannerCheck;
     __weak IBOutlet UIButton *checkScannerButton;
-    FIRDatabaseReference *ref;
     __weak IBOutlet UILabel *clientCount;
     __weak IBOutlet UIButton *clientManagerButton;
     __weak IBOutlet UIButton *searchButton;
@@ -47,10 +49,9 @@
     __weak IBOutlet UIImageView *logo;
     __weak IBOutlet UILabel *scannerSub;
     __weak IBOutlet UIButton *refreshButton;
-    __weak IBOutlet UILabel *unconfirmedJobCount;
-    __weak IBOutlet UIButton *unconfirmedJobButton;
     int unconfirmedJobInt;
 }
+@property (strong, nonatomic) FIRDatabaseReference *ref;
 - (IBAction)createJob:(id)sender;
 - (IBAction)checkScanner:(id)sender;
 - (IBAction)refreshButton:(id)sender;

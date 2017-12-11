@@ -38,15 +38,15 @@
     [References cardshadow:card];
     cardOrigin = scroll.bounds;
     scroll.frame = CGRectMake(0, scroll.frame.origin.y+[References screenHeight], [References screenWidth], [References screenHeight]);
-    [[NSUserDefaults standardUserDefaults] setObject:@"99999" forKey:@"clientCode"];
-    [[NSUserDefaults standardUserDefaults] setObject:@"UCSC" forKey:@"client"];
-//    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"client"]) {
-        [UIView animateWithDuration:1.0f animations:^(void){
-            header.text = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]];
-            subHeader.hidden = YES;
-        } completion:^(bool complete){
-        }];
-//    }
+//    [[NSUserDefaults standardUserDefaults] setObject:@"99999" forKey:@"clientCode"];
+//    [[NSUserDefaults standardUserDefaults] setObject:@"UCSC" forKey:@"client"];
+////    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"client"]) {
+//        [UIView animateWithDuration:1.0f animations:^(void){
+//            header.text = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]];
+//            subHeader.hidden = YES;
+//        } completion:^(bool complete){
+//        }];
+////    }
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -249,6 +249,7 @@
                                                                    CKRecord *record = results[0];
                                                                    NSString *code = [record valueForKey:@"userCode"];
                                                                    NSString *client = [record valueForKey:@"clientName"];
+                                                                   [[NSUserDefaults standardUserDefaults] setObject:[record valueForKey:@"email"] forKey:@"email"];
                                                                    [[NSUserDefaults standardUserDefaults] setObject:code forKey:@"code"];
                                                                    [[NSUserDefaults standardUserDefaults] setObject:client forKey:@"client"];
                                                                    [[NSUserDefaults standardUserDefaults] synchronize];

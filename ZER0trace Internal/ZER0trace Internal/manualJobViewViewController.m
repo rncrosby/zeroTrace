@@ -64,9 +64,7 @@
 
 - (IBAction)next:(id)sender {
         NSString *newCode = [References randomIntWithLength:5];
-        
         NSString *clientCode = code;
-        NSString __block *clientName = @"";
         CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:clientCode];
         [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:recordID completionHandler:^(CKRecord *record, NSError *error) {
             if (error) {
@@ -75,40 +73,33 @@
                 });
                 return;
             }
-            clientName = [record valueForKey:@"clientName"];
-            NSMutableArray *allJobCodes = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobCodes"]];
-            
-            [allJobCodes addObject:newCode];
-            NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"EEEE, MMMM d"];
-            NSMutableArray *allJobDates = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobDates"]];
-            [allJobDates addObject:[formatter stringFromDate:[NSDate date]]];
-            record[@"allJobCodes"] = allJobCodes;
-            record[@"allJobDates"] = allJobDates;
-            [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
-                NSLog(@"%@",error.localizedDescription);
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    CKRecord *newJobRecord = [[CKRecord alloc] initWithRecordType:@"Job" recordID:[[CKRecordID alloc] initWithRecordName:newCode]];
-                    newJobRecord[@"client"] = clientName;
-                    newJobRecord[@"code"] = newCode;
-                    newJobRecord[@"clientCode"] = code;
-                    [[CKContainer defaultContainer].publicCloudDatabase saveRecord:newJobRecord completionHandler:^(CKRecord *record, NSError *error) {
-                        if (!error) {
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                [self dismissViewControllerAnimated:YES completion:^{
-                                    [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshJobs" object:nil userInfo:nil];
-                                }];
-                            });
-                        } else {
-                            NSLog(@"%@",error.localizedDescription);
-                        }
-                        
-                    }];
-                });
-            }];
+            NSString *clientName = [record valueForKey:@"clientName"];
+            NSString *email = [record valueForKey:@"email"];
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setDateFormat:@"EEEE, MMMM"];
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            numberFormatter.numberStyle = NSNumberFormatterOrdinalStyle;
+            NSString *dateTextTemp = [dateFormat stringFromDate:[NSDate date]];
+            [dateFormat setDateFormat:@"d"];
+            NSString *numberFormatted = [numberFormatter stringFromNumber:@([[dateFormat stringFromDate:[NSDate date]] intValue])];
+            NSString *finalDateText = [NSString stringWithFormat:@"%@ %@",dateTextTemp,numberFormatted];
+            FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:@"upcomingJobs"];
+            [[ref child:newCode] setValue:@{
+                                                                 @"confirmed" : [NSNumber numberWithInt:0],
+                                                                 @"email" : email,
+                                                                 @"code" : newCode,
+                                                                 @"clientName" : clientName,
+                                                                 @"client": clientCode,
+                                                                 @"date": [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]],
+                                                                 @"dateText" : finalDateText,
+                                                                 @"location-lat": [NSNumber numberWithFloat:0.0],
+                                                                 @"location-lon": [NSNumber numberWithFloat:0.0],
+                                                                 @"drives": [NSNumber numberWithInteger:100],
+                                                                 } withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+                                                                     [self dismissViewControllerAnimated:YES completion:nil];
+                                                                 }];
         }];
         //compare the current password and do action here
-        
 }
 
 

@@ -26,6 +26,9 @@
 		AD8E37601FBD70D800552292 /* clientManagerView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8E375F1FBD70D800552292 /* clientManagerView.m */; };
 		AD8E37641FBD732A00552292 /* clientManagerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8E37621FBD732A00552292 /* clientManagerCell.m */; };
 		AD8E37651FBD732A00552292 /* clientManagerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD8E37631FBD732A00552292 /* clientManagerCell.xib */; };
+		AD9187FE1FDCD17D00020EAF /* unconfirmedJobsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9187FC1FDCD17D00020EAF /* unconfirmedJobsCell.m */; };
+		AD9187FF1FDCD17D00020EAF /* unconfirmedJobsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD9187FD1FDCD17D00020EAF /* unconfirmedJobsCell.xib */; };
+		AD9188021FDCD4AC00020EAF /* unconfirmedJobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9188011FDCD4AC00020EAF /* unconfirmedJobObject.m */; };
 		AD94B4471F8C38710050F34B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD94B4461F8C38710050F34B /* QuartzCore.framework */; };
 		AD9BB82E1FBF90AD00E5CD5A /* clientListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9BB82C1FBF90AD00E5CD5A /* clientListCell.m */; };
 		AD9BB82F1FBF90AD00E5CD5A /* clientListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD9BB82D1FBF90AD00E5CD5A /* clientListCell.xib */; };
@@ -84,6 +87,12 @@
 		AD8E37611FBD732A00552292 /* clientManagerCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = clientManagerCell.h; sourceTree = "<group>"; };
 		AD8E37621FBD732A00552292 /* clientManagerCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = clientManagerCell.m; sourceTree = "<group>"; };
 		AD8E37631FBD732A00552292 /* clientManagerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = clientManagerCell.xib; sourceTree = "<group>"; };
+		AD9187FB1FDCD17D00020EAF /* unconfirmedJobsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = unconfirmedJobsCell.h; sourceTree = "<group>"; };
+		AD9187FC1FDCD17D00020EAF /* unconfirmedJobsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = unconfirmedJobsCell.m; sourceTree = "<group>"; };
+		AD9187FD1FDCD17D00020EAF /* unconfirmedJobsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = unconfirmedJobsCell.xib; sourceTree = "<group>"; };
+		AD9188001FDCD4AC00020EAF /* unconfirmedJobObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = unconfirmedJobObject.h; sourceTree = "<group>"; };
+		AD9188011FDCD4AC00020EAF /* unconfirmedJobObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = unconfirmedJobObject.m; sourceTree = "<group>"; };
+		AD9188031FDCD6E200020EAF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		AD94B4461F8C38710050F34B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		AD9BB82B1FBF90AD00E5CD5A /* clientListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = clientListCell.h; sourceTree = "<group>"; };
 		AD9BB82C1FBF90AD00E5CD5A /* clientListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = clientListCell.m; sourceTree = "<group>"; };
@@ -145,6 +154,7 @@
 		99A8A86E4C36B5BE7BD226D9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AD9188031FDCD6E200020EAF /* CoreLocation.framework */,
 				AD5809771FC23FFE00B6DE38 /* MessageUI.framework */,
 				ADA3BDE81F9699B000B34AB2 /* GLKit.framework */,
 				ADA3BDE61F9698C000B34AB2 /* OpenGLES.framework */,
@@ -216,6 +226,11 @@
 				AD9BB82D1FBF90AD00E5CD5A /* clientListCell.xib */,
 				ADD92E7F1FDCBC7000D4A9DE /* unconfirmedJobsView.h */,
 				ADD92E801FDCBC7000D4A9DE /* unconfirmedJobsView.m */,
+				AD9187FB1FDCD17D00020EAF /* unconfirmedJobsCell.h */,
+				AD9187FC1FDCD17D00020EAF /* unconfirmedJobsCell.m */,
+				AD9187FD1FDCD17D00020EAF /* unconfirmedJobsCell.xib */,
+				AD9188001FDCD4AC00020EAF /* unconfirmedJobObject.h */,
+				AD9188011FDCD4AC00020EAF /* unconfirmedJobObject.m */,
 			);
 			path = "ZER0trace Internal";
 			sourceTree = "<group>";
@@ -313,6 +328,7 @@
 				AD8E37651FBD732A00552292 /* clientManagerCell.xib in Resources */,
 				AD176F261F9D6C71003119CD /* refresh.png in Resources */,
 				AD9BB8351FBFBDFF00E5CD5A /* search.png in Resources */,
+				AD9187FF1FDCD17D00020EAF /* unconfirmedJobsCell.xib in Resources */,
 				ADD92E7E1FDCB90F00D4A9DE /* calendar.png in Resources */,
 				AD9BB8331FBFA9D000E5CD5A /* cancel.png in Resources */,
 				ADB4DC961F9551A200245CCA /* light.png in Resources */,
@@ -397,9 +413,11 @@
 				AD8E37641FBD732A00552292 /* clientManagerCell.m in Sources */,
 				AD9BB82E1FBF90AD00E5CD5A /* clientListCell.m in Sources */,
 				ADCFD2601F9EBD6900215AC9 /* manualJobViewViewController.m in Sources */,
+				AD9187FE1FDCD17D00020EAF /* unconfirmedJobsCell.m in Sources */,
 				AD3807411F8C034B007BB8DF /* main.m in Sources */,
 				AD3807331F8C034B007BB8DF /* AppDelegate.m in Sources */,
 				ADB4DC9D1F95766D00245CCA /* pastJobView.m in Sources */,
+				AD9188021FDCD4AC00020EAF /* unconfirmedJobObject.m in Sources */,
 				AD8E375D1FBD684300552292 /* accountObject.m in Sources */,
 				ADD92E811FDCBC7000D4A9DE /* unconfirmedJobsView.m in Sources */,
 				ADC51BFA1F8C3C6C002DC9D6 /* homeView.m in Sources */,

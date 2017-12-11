@@ -17,7 +17,6 @@
 - (void)viewDidLoad {
     performSearch = false;
     [References cornerRadius:clientCount radius:clientCount.frame.size.width/2];
-    [References cornerRadius:unconfirmedJobCount radius:unconfirmedJobCount.frame.size.width/2];
     [createJobs setBackgroundColor:[UIColor clearColor]];
     [recentJobs setBackgroundColor:[UIColor clearColor]];
     [upcomingJobs setBackgroundColor:[UIColor clearColor]];
@@ -27,44 +26,6 @@
     scrollView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]);
     [super viewDidLoad];
     // Create the reader object
-    QRCodeReader *reader = [QRCodeReader readerWithMetadataObjectTypes:@[AVMetadataObjectTypeQRCode]];
-    
-    // Instantiate the view controller
-    vc = [QRCodeReaderViewController readerWithCancelButtonTitle:@"Cancel" codeReader:reader startScanningAtLoad:YES showSwitchCameraButton:NO showTorchButton:NO];
-    
-    // Set the presentation style
-    vc.modalPresentationStyle =  UIModalPresentationFormSheet;
-    
-    // Define the delegate receiver
-    vc.delegate = self;
-    // Or use blocks
-    [reader setCompletionWithBlock:^(NSString *resultAsString) {
-        [vc dismissViewControllerAnimated:YES completion:^(void) {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"code = '%@'",resultAsString]];
-            CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
-            [[CKContainer defaultContainer].publicCloudDatabase performQuery:query
-                                                                inZoneWithID:nil
-                                                           completionHandler:^(NSArray *results, NSError *error) {
-                                                               if (results.count > 0) {
-                                                                   CKRecord *record = results[0];    dispatch_sync(dispatch_get_main_queue(), ^{
-                                                                           UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-                                                                           recorderView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"recorderView"];
-                                                                           controller.jobRecord = record;
-                                                                           //menu is only an example
-                                                                           [self presentViewController:controller animated:YES completion:nil];
-                                                                       // Update the UI on the main thread.
-                                                                   });
-                                                                   
-                                                               } else {
-                                                                   dispatch_sync(dispatch_get_main_queue(), ^{
-                                                                       [References toastMessage:@"Error" andView:self andClose:NO];
-                                                                       // Update the UI on the main thread.
-                                                                   });
-                                                                   
-                                                               }
-                                                           }];
-        }];
-    }];
     [self getUpcoming:NO];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createdNewJob) name:@"refreshJobs" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -83,6 +44,7 @@
     });
     [search addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
     [self checkFiles];
+    [self getUpcomingJobs];
     // Do any additional setup after loading the view.
 }
 
@@ -114,7 +76,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-    ref = [[FIRDatabase database] reference];
+    _ref = [[FIRDatabase database] reference];
 }
 
 - (void) keyboardWillShow:(NSNotification *)notification
@@ -229,7 +191,7 @@
         static NSString *identifier = @"Cell";
         UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
         UILabel *card = (UILabel *)[cell viewWithTag:1];
-        jobObject *job = nextJobs[indexPath.row];
+        unconfirmedJobObject *job = nextJobs[indexPath.row];
         UILabel *client = (UILabel *)[cell viewWithTag:2];
         UILabel *code = (UILabel *)[cell viewWithTag:3];
         UIButton *deleteJob = (UIButton*)[cell viewWithTag:11];
@@ -238,11 +200,19 @@
         maskLayer.frame = self.view.bounds;
         maskLayer.path  = maskPath.CGPath;
         deleteJob.layer.mask = maskLayer;
-        client.text = job.client;
+        client.text = job.clientName;
         code.text = job.code;
+        
         [References cornerRadius:card radius:24.0f];
         deleteJob.tag = (int)indexPath.row;
-        [deleteJob addTarget:self action:@selector(handleDeleteButton:) forControlEvents:UIControlEventTouchUpInside];
+        if (job.isConfirmed.intValue == 1) {
+            [deleteJob setTitle:@"Cancel Job" forState:UIControlStateNormal];
+            [deleteJob addTarget:self action:@selector(handleDeleteButton:) forControlEvents:UIControlEventTouchUpInside];
+        } else {
+            [deleteJob setTitle:@"Confirm Job" forState:UIControlStateNormal];
+            [deleteJob addTarget:self action:@selector(handleJobConfirm:) forControlEvents:UIControlEventTouchUpInside];
+        }
+
         return cell;
     } else if (collectionView.tag == 2){
         // past
@@ -291,8 +261,8 @@
     if (collectionView.tag == 1) {
             UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
             recorderView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"recorderView"];
-            controller.jobRecord = nextJobRecords[indexPath.row];
-        NSLog(@"%@",[controller.jobRecord valueForKey:@"client"]);
+            controller.job = nextJobs[indexPath.row];
+        
             //menu is only an example
             [self presentViewController:controller animated:YES completion:nil];
     } else if (collectionView.tag == 2) {
@@ -319,41 +289,79 @@
     }
 }
 
-
--(void)manualCode :(NSString*)code{
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"code = '%@'",code]];
-    CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
+-(void)handleJobConfirm:(id)sender {
+    UIButton *button = (UIButton*)sender;
+    unconfirmedJobObject *job = nextJobs[button.tag];
+    MFMailComposeViewController* composeVC = [[MFMailComposeViewController alloc] init];
+    composeVC.mailComposeDelegate = self;
     
-    [[CKContainer defaultContainer].publicCloudDatabase performQuery:query
-                                                        inZoneWithID:nil
-                                                   completionHandler:^(NSArray *results, NSError *error) {
-                                                       if (results.count > 0) {
-                                                           CKRecord *record = results[0];
-                                                           dispatch_sync(dispatch_get_main_queue(), ^{
-                                                               [UIView animateWithDuration:0.3 animations:^(void){
-                                                                   //
-                                                               }];
-                                                               double delayInSeconds = 2.0;
-                                                               dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                                                               dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                                                                   UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-                                                                   recorderView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"recorderView"];
-                                                                   controller.jobRecord = record;
-                                                                   //menu is only an example
-                                                                   [self presentViewController:controller animated:YES completion:nil];
-                                                               });
-                                                               // Update the UI on the main thread.
-                                                           });
-                                                           
-                                                       } else {
-                                                           dispatch_sync(dispatch_get_main_queue(), ^{
-                                                               [References toastMessage:@"Job Not Found" andView:self andClose:NO];
-                                                               // Update the UI on the main thread.
-                                                           });
-                                                           
-                                                       }
-                                                   }];
+    // Configure the fields of the interface.
+    [composeVC setToRecipients:@[job.email]];
+    [composeVC setSubject:[NSString stringWithFormat:@"Confirmation: ZER0trace destruction of %@ drives on %@",job.drives,job.dateText]];
+    composeVC.view.tag = button.tag;
+    // Present the view controller modally.
+    [self presentViewController:composeVC animated:YES completion:nil];
+    FIRDatabaseReference *reference = [[[[FIRDatabase database] reference] child:@"upcomingJobs"] child:job.code];
+    [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        NSDictionary *dictionary = snapshot.value;
+        [dictionary setValue:@1 forKey:@"confirmed"];
+        [reference updateChildValues:dictionary];
+    }];
 }
+
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    if (result == MFMailComposeResultCancelled) {
+        unconfirmedJobObject *job = nextJobs[controller.view.tag];
+        FIRDatabaseReference *reference = [[[[FIRDatabase database] reference] child:@"upcomingJobs"] child:job.code];
+        [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            NSDictionary *dictionary = snapshot.value;
+            [dictionary setValue:@0 forKey:@"confirmed"];
+            [reference updateChildValues:dictionary];
+        }];
+        [References toastMessage:@"You must email the client to confirm the job." andView:self andClose:NO];
+    } else {
+        NSLog(@"email sent");
+        [self getUpcomingJobs];
+    }
+    
+}
+
+
+//-(void)manualCode :(NSString*)code{
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"code = '%@'",code]];
+//    CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
+//
+//    [[CKContainer defaultContainer].publicCloudDatabase performQuery:query
+//                                                        inZoneWithID:nil
+//                                                   completionHandler:^(NSArray *results, NSError *error) {
+//                                                       if (results.count > 0) {
+//                                                           CKRecord *record = results[0];
+//                                                           dispatch_sync(dispatch_get_main_queue(), ^{
+//                                                               [UIView animateWithDuration:0.3 animations:^(void){
+//                                                                   //
+//                                                               }];
+//                                                               double delayInSeconds = 2.0;
+//                                                               dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+//                                                               dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//                                                                   UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+//                                                                   recorderView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"recorderView"];
+//                                                                   controller.job = record;
+//                                                                   //menu is only an example
+//                                                                   [self presentViewController:controller animated:YES completion:nil];
+//                                                               });
+//                                                               // Update the UI on the main thread.
+//                                                           });
+//
+//                                                       } else {
+//                                                           dispatch_sync(dispatch_get_main_queue(), ^{
+//                                                               [References toastMessage:@"Job Not Found" andView:self andClose:NO];
+//                                                               // Update the UI on the main thread.
+//                                                           });
+//
+//                                                       }
+//                                                   }];
+//}
 
 -(void)newJob:(NSString *)title{
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:@"Enter the clients code" preferredStyle:UIAlertControllerStyleAlert];
@@ -450,10 +458,7 @@
     for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:&error]) {
         [locallySaved addObject:file];
     }
-    savedNextJobs = [[NSMutableArray alloc] init];
-    nextJobs = [[NSMutableArray alloc] init];
     completedJobs = [[NSMutableArray alloc] init];
-    nextJobRecords = [[NSMutableArray alloc] init];
     completedJobsRecord = [[NSMutableArray alloc] init];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"TRUEPREDICATE"]];
     CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
@@ -484,19 +489,9 @@
                                                                    NSData *signature = [record objectForKey:@"signatureData"];
                                                                    [completedJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"]  andClientCode:[record valueForKey:@"clientCode"] andCode:[record valueForKey:@"code"] andURL:[record valueForKey:@"videoURL"] andDate:[record objectForKey:@"dateCompleted"] andSerials:driveSerials andTimes:driveTimes andSignature:signature]];
                                                                    [completedJobsRecord addObject:record];
-                                                               } else {
-                                                                   [nextJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andClientCode:[record valueForKey:@"clientCode"] andCode:[record valueForKey:@"code"] andURL:nil andDate:nil andSerials:nil andTimes:nil andSignature:nil]];
-                                                                   [nextJobRecords addObject:record];
                                                                }
                                                            }
                                                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                                               NSSortDescriptor *sortDescriptor;
-                                                               sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"client" ascending:YES];
-                                                               nextJobs = [[NSMutableArray alloc] initWithArray:[nextJobs sortedArrayUsingDescriptors:@[sortDescriptor]]];
-                                                               nextJobRecords = [[NSMutableArray alloc] initWithArray:[nextJobRecords sortedArrayUsingDescriptors:@[sortDescriptor]]];
-                                                               savedNextJobs = nextJobs;
-                                                               savedCompletedJobs = completedJobs;
-                                                               [upcomingJobs reloadData];
                                                                [recentJobs reloadData];
                                                                [self setVisibility];
                                                                // Update the UI on the main thread.
@@ -551,11 +546,8 @@
 
 - (IBAction)refreshButton:(id)sender {
     [self getUpcoming:NO];
-    [self getPendingAccounts];
     [UIView animateWithDuration:0.25 animations:^(void){
         [search setText:@"Search by Client or Code"];
-        searchButton.alpha = 0.5;
-        search.alpha = 0.5;
         [searchButton setImage:[UIImage imageNamed:@"search.png"] forState:UIControlStateNormal];
     }];
 }
@@ -614,6 +606,11 @@
 }
 
 - (IBAction)jobManager:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    unconfirmedJobsView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"unconfirmedJobsView"];
+    controller.modalPresentationStyle = UIModalPresentationFormSheet;
+    //menu is only an example
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 -(void)handleDeleteButton:(id)sender {
@@ -679,8 +676,33 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+-(void)getUpcomingJobs {
+   
+    FIRDatabaseReference *reference = [[[FIRDatabase database] reference] child:@"upcomingJobs"];
+    [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        [savedNextJobs removeAllObjects];
+        savedNextJobs = [[NSMutableArray alloc] init];
+        [nextJobs removeAllObjects];
+        nextJobs = [[NSMutableArray alloc] init];
+        NSDictionary *dictionary = snapshot.value;
+        if (![[NSString stringWithFormat:@"%@",dictionary] isEqualToString:@"<null>"]) {
+            for(id key in dictionary) {
+                id value = [dictionary objectForKey:key];
+                unconfirmedJobObject *job = [[unconfirmedJobObject alloc] initWithType:[value objectForKey:@"client"] andCode:[value objectForKey:@"code"] andDate:[value valueForKey:@"date"] andLocation:[[CLLocation alloc] initWithLatitude:[[value valueForKey:@"location-lat"] doubleValue] longitude:[[value valueForKey:@"location-lon"] doubleValue]] andDrives:[value objectForKey:@"drives"] andDateText:[value valueForKey:@"dateText"] andConfirmation:[value valueForKey:@"confirmed"] andEmail:[value objectForKey:@"email"] andClientName:[value valueForKey:@"clientName"]];
+                [job printObject];
+                [nextJobs addObject:job];
+                [savedNextJobs addObject:job];
+                [upcomingJobs reloadData];
+                [self setVisibility];
+            }
+        }
+        [reference removeAllObservers];
+    }];
+}
+
 -(void)getPendingAccounts {
-    [ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+    [_ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        [_ref removeAllObservers];
         [pendingAccounts removeAllObjects];
         pendingAccounts = [[NSMutableArray alloc] init];
         unconfirmedJobInt = 0;
@@ -696,28 +718,10 @@
                 // Set stop to YES when you wanted to break the iteration.
             }];
             if (pendingAccounts.count < 1) {
-                if (unconfirmedJobInt < 1) {
-                    unconfirmedJobButton.alpha = 0;
-                    unconfirmedJobCount.alpha = 0;
-                    unconfirmedJobButton.enabled = false;
-                    unconfirmedJobButton.hidden = true;
-                    unconfirmedJobCount.hidden = true;
+                if (clientManagerButton.hidden != YES) {
                     [UIView animateWithDuration:0.25 animations:^(void){
                         refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
                         searchButton.frame = CGRectMake(clientManagerButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
-                    }];
-                } else {
-                    unconfirmedJobCount.text =[NSString stringWithFormat:@"%lu",(unsigned long)unconfirmedJobInt];
-                    unconfirmedJobButton.alpha = 1;
-                    unconfirmedJobCount.alpha = 1;
-                    unconfirmedJobButton.enabled = true;
-                    unconfirmedJobButton.hidden = false;
-                    unconfirmedJobCount.hidden = false;
-                    [UIView animateWithDuration:0.25 animations:^(void){
-                        refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
-                        searchButton.frame = CGRectMake(unconfirmedJobButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
-                        unconfirmedJobCount.frame = CGRectMake(clientCount.frame.origin.x, unconfirmedJobCount.frame.origin.y, unconfirmedJobCount.frame.size.width, unconfirmedJobCount.frame.size.height);
-                        unconfirmedJobButton.frame = CGRectMake(clientManagerButton.frame.origin.x, unconfirmedJobButton.frame.origin.y, unconfirmedJobButton.frame.size.width, unconfirmedJobButton.frame.size.height);
                     }];
                 }
                 
@@ -725,36 +729,25 @@
                 clientManagerButton.alpha = 0.0f;
                 clientCount.hidden = true;
             } else {
-                if (unconfirmedJobInt < 1) {
-                    unconfirmedJobButton.alpha = 0;
-                    unconfirmedJobCount.alpha = 0;
-                    unconfirmedJobButton.enabled = false;
-                    unconfirmedJobButton.hidden = true;
-                    unconfirmedJobCount.hidden = true;
-                    [UIView animateWithDuration:0.25 animations:^(void){
-                        refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
-                        searchButton.frame = CGRectMake(unconfirmedJobButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
-                    }];
-                } else {
-                    unconfirmedJobCount.text =[NSString stringWithFormat:@"%lu",(unsigned long)unconfirmedJobInt];
-                    unconfirmedJobButton.alpha = 1;
-                    unconfirmedJobCount.alpha = 1;
-                    unconfirmedJobButton.enabled = true;
-                    unconfirmedJobButton.hidden = false;
-                    unconfirmedJobCount.hidden = false;
-                }
-                
+                [UIView animateWithDuration:0.25 animations:^(void){
+                    refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
+                    searchButton.frame = CGRectMake(refreshButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
+                }];
                 clientManagerButton.enabled = true;
                 clientCount.hidden = false;
                 clientManagerButton.alpha = 1.0f;
                 clientCount.text = [NSString stringWithFormat:@"%lu",(unsigned long)pendingAccounts.count];
             }
         } else {
-            clientManagerButton.alpha = 0.5f;
+            [UIView animateWithDuration:0.25 animations:^(void){
+                refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
+                searchButton.frame = CGRectMake(clientManagerButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
+            }];
+            
             clientManagerButton.enabled = false;
+            clientManagerButton.alpha = 0.0f;
             clientCount.hidden = true;
         }
-
     }];
 
 }

@@ -11,10 +11,12 @@
 #import <AVKit/AVKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <FirebaseStorage/FirebaseStorage.h>
+#import <FirebaseDatabase/FIRDatabaseReference.h>
 #import <LLSimpleCamera/LLSimpleCamera.h>
 #import "driveObject.h"
 #import <CloudKit/CloudKit.h>
 #import "SignatureDrawView.h"
+#import "unconfirmedJobObject.h"
 
 
 @interface recorderView : UIViewController <UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate> {
@@ -62,7 +64,7 @@
 
 
 - (IBAction)simulateScan:(id)sender;
-@property (nonatomic, assign) CKRecord *jobRecord;
+@property (nonatomic, strong) unconfirmedJobObject *job;
 @property (nonatomic, assign) NSString *recordID;
 - (IBAction)confirmDestruction:(id)sender;
 - (IBAction)cancel:(id)sender;

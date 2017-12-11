@@ -210,8 +210,11 @@
                     // Ok action example
                     NSString *code = [References randomIntWithLength:5];
                     [[[ref child:@"upcomingJobs"] child:code] setValue:@{
+                                                                         @"confirmed" : [NSNumber numberWithInt:0],
+                                                                         @"email" : [[NSUserDefaults standardUserDefaults] objectForKey:@"email"],
                                                                          @"code" : code,
-                                                                                                       @"client": [[NSUserDefaults standardUserDefaults] objectForKey:@"client"],
+                                                                         @"clientName" : [[NSUserDefaults standardUserDefaults] objectForKey:@"client"],
+                                                                                                       @"client": [[NSUserDefaults standardUserDefaults] objectForKey:@"code"],
                                                                                                        @"date": [NSNumber numberWithDouble:[selectedDate timeIntervalSince1970]],
                                                                                                        @"dateText" : finalDateText,
                                                                                                        @"location-lat": [NSNumber numberWithFloat:jobLocation.coordinate.latitude],

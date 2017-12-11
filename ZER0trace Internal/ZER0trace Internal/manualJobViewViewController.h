@@ -13,6 +13,7 @@
 #import "References.h"
 #import "jobObject.h"
 #import "homeView.h"
+#import <FirebaseDatabase/FIRDatabaseReference.h>
 
 @interface manualJobViewViewController : UIViewController <UITableViewDelegate,UITableViewDataSource> {
     NSMutableArray *clients;

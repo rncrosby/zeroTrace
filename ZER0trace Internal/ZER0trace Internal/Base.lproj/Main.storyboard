@@ -245,22 +245,6 @@
                                     <outlet property="delegate" destination="H82-MJ-fmV" id="Ix9-8r-ZOr"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fUi-r8-33C">
-                                <rect key="frame" x="860" y="50" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" backgroundImage="refresh-light.png"/>
-                                <connections>
-                                    <action selector="refreshButton:" destination="H82-MJ-fmV" eventType="touchUpInside" id="cqr-p2-xYB"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HlR-Qm-caA">
-                                <rect key="frame" x="898" y="50" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="search.png"/>
-                                <connections>
-                                    <action selector="searchButton:" destination="H82-MJ-fmV" eventType="touchUpInside" id="rZk-Oq-a5F"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KEB-Kh-O0c">
                                 <rect key="frame" x="974" y="50" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -279,25 +263,22 @@
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GZE-ee-1hb">
-                                <rect key="frame" x="936" y="50" width="30" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fUi-r8-33C">
+                                <rect key="frame" x="898" y="50" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="calendar.png">
-                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
+                                <state key="normal" backgroundImage="refresh-light.png"/>
                                 <connections>
-                                    <action selector="clientManager:" destination="H82-MJ-fmV" eventType="touchUpInside" id="zCo-Oz-672"/>
-                                    <action selector="jobManager:" destination="H82-MJ-fmV" eventType="touchUpInside" id="UgO-AE-6P6"/>
+                                    <action selector="refreshButton:" destination="H82-MJ-fmV" eventType="touchUpInside" id="cqr-p2-xYB"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="987-TK-qYD">
-                                <rect key="frame" x="952" y="41" width="23" height="23"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HlR-Qm-caA">
+                                <rect key="frame" x="936" y="50" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.70440274479999998" green="0.18128180499999999" blue="0.1017555222" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <state key="normal" image="search.png"/>
+                                <connections>
+                                    <action selector="searchButton:" destination="H82-MJ-fmV" eventType="touchUpInside" id="rZk-Oq-a5F"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -318,8 +299,6 @@
                         <outlet property="scrollView" destination="0cU-YB-cdk" id="jLF-is-Ypx"/>
                         <outlet property="search" destination="1dd-83-at6" id="RMR-Sb-y3S"/>
                         <outlet property="searchButton" destination="HlR-Qm-caA" id="r3G-jd-Se7"/>
-                        <outlet property="unconfirmedJobButton" destination="GZE-ee-1hb" id="bcU-S0-lWM"/>
-                        <outlet property="unconfirmedJobCount" destination="987-TK-qYD" id="EFt-G7-RND"/>
                         <outlet property="upcomingJobs" destination="APS-2I-4mq" id="05f-gW-yft"/>
                     </connections>
                 </viewController>
@@ -960,10 +939,56 @@ October 8</string>
             </objects>
             <point key="canvasLocation" x="654.5" y="-427.5"/>
         </scene>
+        <!--Unconfirmed Jobs View-->
+        <scene sceneID="GsM-ZL-DI3">
+            <objects>
+                <viewController storyboardIdentifier="unconfirmedJobsView" useStoryboardIdentifierAsRestorationIdentifier="YES" id="40l-xf-j9Z" customClass="unconfirmedJobsView" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="S8c-qn-PXW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="D0s-BK-bom">
+                                <rect key="frame" x="10" y="611" width="93" height="46"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Close">
+                                    <color key="titleColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="close:" destination="np7-5X-gDr" eventType="touchUpInside" id="w5x-7O-QOb"/>
+                                    <action selector="closeButton:" destination="40l-xf-j9Z" eventType="touchUpInside" id="0a8-uC-nML"/>
+                                </connections>
+                            </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="UwW-iM-4pV">
+                                <rect key="frame" x="0.0" y="54" width="375" height="549"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="separatorInset" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Require Confirmation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Sth-fe-CZJ">
+                                <rect key="frame" x="8" y="8" width="298" height="38"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <value key="contentSizeForViewInPopover" type="size" width="375" height="667"/>
+                    <size key="freeformSize" width="375" height="667"/>
+                    <connections>
+                        <outlet property="close" destination="D0s-BK-bom" id="DDG-Lo-iJy"/>
+                        <outlet property="table" destination="UwW-iM-4pV" id="euJ-EE-6jq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0Rh-hs-9VJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1039" y="-1411"/>
+        </scene>
     </scenes>
     <resources>
         <image name="backspace.png" width="75" height="75"/>
-        <image name="calendar.png" width="100" height="100"/>
         <image name="client.png" width="100" height="100"/>
         <image name="light.png" width="1600" height="529"/>
         <image name="refresh-light.png" width="75" height="75"/>
