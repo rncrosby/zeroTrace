@@ -12,6 +12,7 @@
 #import "clientView.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <FirebaseAuth/FirebaseAuth.h>
+#import <FirebaseDatabase/FIRDatabaseReference.h>
 @import Firebase;
 
 
@@ -28,6 +29,12 @@
     __weak IBOutlet UITextField *contactName;
     __weak IBOutlet UILabel *contactPhoneHeader;
     __weak IBOutlet UITextField *contactPhone;
+    __weak IBOutlet UILabel *companyNameHeader;
+    __weak IBOutlet UITextField *companyName;
+    __weak IBOutlet UIButton *forceSignInButton;
+    
+    
+    
     FIRAuth *auth;
     
     
@@ -43,5 +50,6 @@
 - (IBAction)goToJobCode:(id)sender;
 - (IBAction)goToSignUp:(id)sender;
 - (IBAction)continueButton:(id)sender;
+- (IBAction)forceSignIn:(id)sender;
 
 @end

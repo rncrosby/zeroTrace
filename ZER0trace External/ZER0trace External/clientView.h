@@ -25,6 +25,7 @@
 #import "upcomingJobCell.h"
 #import <MapKit/MapKit.h>
 #import "driveObject.h"
+#import "loginView.h"
 
 @interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate> {
     NSMutableArray *hashedSerials;
@@ -40,14 +41,8 @@
     NSMutableArray *upcomingJobs,*jobs,*savedJobs;
     __weak IBOutlet UILabel *clientName;
     __weak IBOutlet UILabel *clientInfo;
-    __weak IBOutlet UILabel *driveCount;
     __weak IBOutlet UITableView *table;
-    __weak IBOutlet UILabel *filmRuntime;
-    __weak IBOutlet UILabel *destructionCount;
-    __weak IBOutlet UIButton *menu;
     int driveTotal, hourFootage, destructions;
-    //    __weak IBOutlet UITextField *searchBar;
-//    __weak IBOutlet UIButton *searchButton;
     NSString *machineLearningLabel;
     __weak IBOutlet UIScrollView *scroll;
     int oldY,intUpcoming,intComplete;
@@ -59,10 +54,10 @@
     
     // menu views
     
-    __weak IBOutlet UIImageView *menuLogo;
+    __weak IBOutlet UIButton *more;
 }
+- (IBAction)more:(id)sender;
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 - (IBAction)searchButton:(id)sender;
-- (IBAction)toggleMenu:(id)sender;
 -(void)addDrive:(driveObject*)headDrive appendDrive:(driveObject*)appendDrive;
 @end

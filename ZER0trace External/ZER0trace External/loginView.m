@@ -23,8 +23,6 @@
 
 
 - (void)viewDidLoad {
-    [username setText:@"rncrosby@ucsc.edu"];
-    [password setText:@"steelers"];
     currentCard = 0;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -38,21 +36,35 @@
     [References cardshadow:card];
     cardOrigin = scroll.bounds;
     scroll.frame = CGRectMake(0, scroll.frame.origin.y+[References screenHeight], [References screenWidth], [References screenHeight]);
-//    [[NSUserDefaults standardUserDefaults] setObject:@"99999" forKey:@"clientCode"];
-//    [[NSUserDefaults standardUserDefaults] setObject:@"UCSC" forKey:@"client"];
-////    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"client"]) {
-//        [UIView animateWithDuration:1.0f animations:^(void){
-//            header.text = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]];
-//            subHeader.hidden = YES;
-//        } completion:^(bool complete){
-//        }];
-////    }
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"client"]) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"isPending"] == YES) {
+            [UIView animateWithDuration:1.0f animations:^(void){
+                header.text = [NSString stringWithFormat:@"Almost Ready, %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]];
+                subHeader.text = @"You'll recieve an email when your account is ready";
+                header.frame = CGRectMake(header.frame.origin.x, header.frame.origin.y+100, header.frame.size.width, header.frame.size.height);
+                subHeader.frame = CGRectMake(subHeader.frame.origin.x, subHeader.frame.origin.y+100, subHeader.frame.size.width, subHeader.frame.size.height);
+                forceSignInButton.hidden = NO;
+            } completion:^(bool complete){
+                if (complete) {
+                    nil;
+                }
+            }];
+        } else {
+            [UIView animateWithDuration:1.0f animations:^(void){
+                header.text = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"client"]];
+                subHeader.hidden = YES;
+            } completion:^(bool complete){
+            }];
+        }
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"client"]) {
-        [self prepareScene];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"isPending"] == YES) {
     } else {
+        if (![[NSUserDefaults standardUserDefaults] objectForKey:@"client"]) {
+            [self prepareScene];
+        } else {
             [UIView animateWithDuration:1.0f animations:^(void){
                 header.frame = CGRectMake(header.frame.origin.x, 20, header.frame.size.width, header.frame.size.height);
             } completion:^(bool complete){
@@ -68,6 +80,7 @@
                     });
                 }
             }];
+        }
     }
 }
 
@@ -117,11 +130,18 @@
             }];
         }
         if (textField == contactPhone) {
-            [textField resignFirstResponder];
+            [companyName becomeFirstResponder];
             [UIView animateWithDuration:0.5f animations:^(void){
-                scroll.frame = CGRectMake(0, scroll.frame.origin.y+110, scroll.frame.size.width, scroll.frame.size.height);
+                scroll.frame = CGRectMake(0, scroll.frame.origin.y-60, scroll.frame.size.width, scroll.frame.size.height);
             }];
         }
+        if (textField == companyName) {
+            [textField resignFirstResponder];
+            [UIView animateWithDuration:0.5f animations:^(void){
+                scroll.frame = CGRectMake(0, scroll.frame.origin.y+165, scroll.frame.size.width, scroll.frame.size.height);
+            }];
+        }
+        
     }
     
     return YES;
@@ -145,6 +165,10 @@
         [UIView animateWithDuration:animationSpeed animations:^(void){
             scroll.frame = CGRectMake(0, scroll.frame.origin.y+[References screenHeight], [References screenWidth], [References screenHeight]);
         } completion:^(bool complete){
+            username.placeholder = @"example@email.com";
+            usernameHeader.text = @"ACCOUNT EMAIL ADDRESS";
+            companyName.hidden = YES;
+            companyNameHeader.hidden = YES;
             usernameHeader.hidden = NO;
             username.hidden = NO;
             password.hidden = NO;
@@ -176,6 +200,10 @@
         } completion:^(bool complete){
             usernameHeader.text = @"JOB CODE";
             username.placeholder = @"00000";
+            username.text = @"";
+            password.text = @"";
+            companyName.hidden = YES;
+            companyNameHeader.hidden = YES;
             usernameHeader.hidden = NO;
             username.hidden = NO;
             password.hidden = YES;
@@ -210,6 +238,8 @@
             usernameHeader.text = @"ACCOUNT EMAIL ADDRESS";
             username.placeholder = @"email@company.com";
             usernameHeader.hidden = NO;
+            companyName.hidden = NO;
+            companyNameHeader.hidden = NO;
             username.hidden = NO;
             password.hidden = NO;
             passwordHeader.hidden = NO;
@@ -251,6 +281,7 @@
                                                                    NSString *client = [record valueForKey:@"clientName"];
                                                                    [[NSUserDefaults standardUserDefaults] setObject:[record valueForKey:@"email"] forKey:@"email"];
                                                                    [[NSUserDefaults standardUserDefaults] setObject:code forKey:@"code"];
+                                                                   [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isPending"];
                                                                    [[NSUserDefaults standardUserDefaults] setObject:client forKey:@"client"];
                                                                    [[NSUserDefaults standardUserDefaults] synchronize];
                                                                    dispatch_async(dispatch_get_main_queue(), ^{
@@ -284,6 +315,50 @@
                              });
                              }];
               });
+    } else if (currentCard == 2) {
+        FIRDatabaseReference *ref = [[FIRDatabase database] reference];
+        NSString *code = [References randomIntWithLength:5];
+        NSArray *usernameText = [username.text componentsSeparatedByString:@"@"];
+        [[ref child:usernameText[0]] setValue:@{
+                                                             @"client" : companyName.text,
+                                                             @"email" : username.text,
+                                                             @"contact" : contactName.text,
+                                                             @"phone"   : contactPhone.text,
+                                                             @"code"    : code
+                                                             } withCompletionBlock:^(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+                                                                 if (!error) {
+                                                                     [[FIRAuth auth] createUserWithEmail:username.text
+                                                                                                password:password.text
+                                                                                              completion:^(FIRUser *_Nullable user, NSError *_Nullable error) {
+                                                                                                  [UIView animateWithDuration:1.0f animations:^(void){
+                                                                                                      [[NSUserDefaults standardUserDefaults] setObject:username.text forKey:@"email"];
+                                                                                                      [[NSUserDefaults standardUserDefaults] setObject:code forKey:@"code"];
+                                                                                                      [[NSUserDefaults standardUserDefaults] setObject:companyName.text forKey:@"client"];
+                                                                                                      [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isPending"];
+                                                                                                      header.text = [NSString stringWithFormat:@"Almost Ready, %@",companyName.text];
+                                                                                                      subHeader.text = @"You'll recieve an email when your account is ready";
+                                                                                                      header.frame = CGRectMake(header.frame.origin.x, header.frame.origin.y+100, header.frame.size.width, header.frame.size.height);
+                                                                                                      subHeader.frame = CGRectMake(subHeader.frame.origin.x, subHeader.frame.origin.y+100, subHeader.frame.size.width, subHeader.frame.size.height);
+                                                                                                      signIn.frame = CGRectMake(signIn.frame.origin.x, signIn.frame.origin.y+[References screenHeight], signIn.frame.size.width, signIn.frame.size.height);
+                                                                                                      signUp.frame = CGRectMake(signUp.frame.origin.x, signUp.frame.origin.y+[References screenHeight], signUp.frame.size.width, signUp.frame.size.height);
+                                                                                                      jobCode.frame = CGRectMake(jobCode.frame.origin.x, jobCode.frame.origin.y+[References screenHeight], jobCode.frame.size.width, jobCode.frame.size.height);
+                                                                                                      scroll.frame = CGRectMake(scroll.frame.origin.x, scroll.frame.origin.y+[References screenHeight], scroll.frame.size.width, scroll.frame.size.height);
+                                                                                                      forceSignInButton.hidden = NO;
+                                                                                                  } completion:^(bool complete){
+                                                                                                      if (complete) {
+                                                                                                          nil;
+                                                                                                      }
+                                                                                                  }];
+                                                                                              }];
+                                                                 } else {
+                                                                     NSLog(@"%@",error.localizedDescription);
+                                                                 }
+                                                             }];
     }
+}
+
+- (IBAction)forceSignIn:(id)sender {
+    [self prepareScene];
+    forceSignInButton.hidden = YES;
 }
 @end

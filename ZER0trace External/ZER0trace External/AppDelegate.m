@@ -18,9 +18,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"code"];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"client"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
     [FIRApp configure];
     return YES;
 }

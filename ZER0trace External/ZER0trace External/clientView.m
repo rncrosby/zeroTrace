@@ -16,7 +16,7 @@
 
 - (void)viewDidLoad {
     menuShowing = false;
-    [References tintUIButton:menu color:[UIColor blackColor]];
+    [References tintUIButton:more color:[UIColor blackColor]];
     hasReloaded = false;
     upcomingJobs = [[NSMutableArray alloc] init];
     videoPlaying = false;
@@ -78,53 +78,6 @@
         isSearching = true;
     }
 
-}
-
-- (IBAction)toggleMenu:(id)sender {
-    int fromXChanger = [References screenWidth]-32-menu.frame.size.width;
-    
-    if (menuShowing == false) {
-        menuLogo.frame = CGRectMake(8-[References screenWidth], clientName.frame.origin.y, menuLogo.frame.size.width, menuLogo.frame.size.height);
-        menuShowing = true;
-        [UIView animateWithDuration:0.5f animations:^(void){
-            menu.transform = CGAffineTransformMakeRotation(M_PI);
-            [self shiftView:clientName by:fromXChanger];
-            [self shiftView:clientInfo by:fromXChanger];
-            [self shiftView:searchField by:fromXChanger];
-            [self shiftView:searchButton by:fromXChanger];
-            [self shiftView:table by:fromXChanger];
-            [self shiftView:menu by:fromXChanger];
-            menuLogo.frame = CGRectMake(menuLogo.frame.origin.x+[References screenWidth], clientName.frame.origin.y, menuLogo.frame.size.width, menuLogo.frame.size.height);
-            clientName.alpha = 0.5;
-            clientInfo.alpha = 0.5;
-            searchField.alpha = 0.5;
-            searchButton.alpha = 0.5;
-            table.alpha = 0.5;
-        } completion:^(bool completion){
-            table.userInteractionEnabled = false;
-            searchField.userInteractionEnabled = false;
-        }];
-} else {
-    menuShowing = false;
-    [UIView animateWithDuration:0.5f animations:^(void){
-        menu.transform = CGAffineTransformMakeRotation(-2*M_PI);
-        menuLogo.frame = CGRectMake(menuLogo.frame.origin.x-[References screenWidth], clientName.frame.origin.y, menuLogo.frame.size.width, menuLogo.frame.size.height);
-        [self shiftView:clientName by:-1*fromXChanger];
-        [self shiftView:clientInfo by:-1*fromXChanger];
-        [self shiftView:searchField by:-1*fromXChanger];
-        [self shiftView:searchButton by:-1*fromXChanger];
-        [self shiftView:table by:-1*fromXChanger];
-         [self shiftView:menu by:-1*fromXChanger];
-        clientName.alpha = 1;
-        clientInfo.alpha = 1;
-        searchField.alpha = 1;
-        searchButton.alpha = 1;
-        table.alpha = 1;
-    } completion:^(bool completion){
-        table.userInteractionEnabled = true;
-        searchField.userInteractionEnabled = true;
-    }];
-}
 }
 
 -(void)shiftView:(UIView*)view by:(CGFloat)pixels {
@@ -959,8 +912,6 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
             driveTotal++;
         }
     }
-    destructionCount.text = [NSString stringWithFormat:@"%lu\ndestructions",jobs.count];
-    driveCount.text = [NSString stringWithFormat:@"%i\ndrives",driveTotal];
 }
 
 -(void)addDrive:(driveObject*)headDrive appendDrive:(driveObject*)appendDrive{
@@ -985,5 +936,31 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
             return [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
     }
 
+}
+- (IBAction)more:(id)sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"ZER0trace" message:@"Version 1.0" preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *shareJob = [UIAlertAction actionWithTitle:@"Contact Support" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+        [References toastMessage:@"soon" andView:self andClose:NO];
+    }];
+    UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:@"Sign Out" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action){
+        // Ok action example
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"client"];
+         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"email"];
+         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"code"];
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+        loginView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"loginView"];
+        [self presentViewController:controller animated:YES completion:nil];
+    }];
+    UIAlertAction *infoAction = [UIAlertAction actionWithTitle:@"More Info" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+        // Ok action example
+    }];
+    UIAlertAction *doneAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action){
+        // Other action
+    }];
+    [alert addAction:infoAction];
+    [alert addAction:shareJob];
+    [alert addAction:signOutAction];
+    [alert addAction:doneAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 @end

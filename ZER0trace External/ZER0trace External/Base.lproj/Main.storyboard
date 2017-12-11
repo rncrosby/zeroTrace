@@ -16,6 +16,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Get Started" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ctg-el-Ap1">
+                                <rect key="frame" x="16" y="82" width="382" height="46"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="35"/>
+                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="use your company information or a job code" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RJE-ok-Pkm">
                                 <rect key="frame" x="20" y="112" width="374" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -167,25 +174,54 @@
                                         <color key="textColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <textField hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Apple Inc." textAlignment="natural" minimumFontSize="17" id="JS5-sL-Oce">
+                                        <rect key="frame" x="16" y="286" width="364" height="42"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="textColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="35"/>
+                                        <textInputTraits key="textInputTraits" keyboardAppearance="alert"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                                <color key="value" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <outlet property="delegate" destination="8rP-dW-H8K" id="bwx-7M-kDp"/>
+                                        </connections>
+                                    </textField>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="COMPANY NAME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="onH-L5-tD1">
+                                        <rect key="frame" x="16" y="271" width="113" height="16"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="8"/>
+                                        <color key="textColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                             </scrollView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Get Started" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ctg-el-Ap1">
-                                <rect key="frame" x="16" y="82" width="382" height="46"/>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="40F-bv-atM">
+                                <rect key="frame" x="-1" y="682" width="415" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="35"/>
-                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                <state key="normal" title="Sign In">
+                                    <color key="titleColor" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="forceSignIn:" destination="8rP-dW-H8K" eventType="touchUpInside" id="NDv-Xp-VVp"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.050000000000000003" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <size key="freeformSize" width="414" height="736"/>
                     <connections>
                         <outlet property="card" destination="oV5-b6-lZ1" id="cP9-Pv-1Xc"/>
+                        <outlet property="companyName" destination="JS5-sL-Oce" id="HPN-T0-YyH"/>
+                        <outlet property="companyNameHeader" destination="onH-L5-tD1" id="yWC-hq-mqx"/>
                         <outlet property="contactName" destination="OUB-H6-Cw6" id="jBg-Hl-doi"/>
                         <outlet property="contactNameHeader" destination="3bz-Og-LmS" id="xUQ-9w-HyE"/>
                         <outlet property="contactPhone" destination="YkZ-HD-Nr1" id="NN6-cH-e9D"/>
                         <outlet property="contactPhoneHeader" destination="dzz-ho-hon" id="VV4-u0-zB5"/>
+                        <outlet property="forceSignInButton" destination="40F-bv-atM" id="UFb-2e-1Iq"/>
                         <outlet property="header" destination="ctg-el-Ap1" id="b3M-Tm-WRj"/>
                         <outlet property="jobCode" destination="zez-oH-oQr" id="nr5-qb-xCc"/>
                         <outlet property="password" destination="lqY-0E-YLd" id="mAg-Tg-56j"/>
@@ -215,7 +251,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" text="Oracle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GIq-BA-mRm">
-                                        <rect key="frame" x="16" y="8" width="382" height="36"/>
+                                        <rect key="frame" x="16" y="8" width="286" height="36"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="35"/>
                                         <color key="textColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -258,6 +294,14 @@
                                             <action selector="searchButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rQ9-x7-o50"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GrI-tr-yZv">
+                                        <rect key="frame" x="368" y="11" width="30" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="more.png"/>
+                                        <connections>
+                                            <action selector="more:" destination="BYZ-38-t0r" eventType="touchUpInside" id="shU-t4-WDm"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="NMY-Os-ZjD"/>
@@ -271,6 +315,7 @@
                     <connections>
                         <outlet property="clientInfo" destination="kE2-sm-9PN" id="z8H-vQ-W2f"/>
                         <outlet property="clientName" destination="GIq-BA-mRm" id="FOm-qS-vMe"/>
+                        <outlet property="more" destination="GrI-tr-yZv" id="3LX-tt-z57"/>
                         <outlet property="scroll" destination="dMj-n0-QfD" id="l09-Dg-Z02"/>
                         <outlet property="searchButton" destination="WhJ-rN-pvo" id="9qS-Pj-cpa"/>
                         <outlet property="searchField" destination="wig-lN-NhO" id="Wh5-sI-743"/>
@@ -459,6 +504,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="more.png" width="100" height="100"/>
         <image name="search.png" width="100" height="100"/>
     </resources>
     <color key="tintColor" red="1" green="0.090196080505847931" blue="0.26666668057441711" alpha="1" colorSpace="calibratedRGB"/>
