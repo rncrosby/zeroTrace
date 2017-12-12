@@ -56,10 +56,10 @@
     view.layer.shadowOpacity = .2;
 }
 +(void)topshadow:(UIView*)view {
-    view.layer.shadowOffset = CGSizeMake(0, 5);
-    view.layer.shadowRadius = 5;
+    view.layer.shadowOffset = CGSizeMake(0, -20);
+    view.layer.shadowRadius = 20;
     view.layer.shadowColor = [UIColor blackColor].CGColor;
-    view.layer.shadowOpacity = .5;
+    view.layer.shadowOpacity = .8;
 }
 +(void)cardshadow:(UIView*)view {
     view.layer.shadowOffset = CGSizeMake(0, 4);
@@ -223,6 +223,16 @@
 +(void)blurView:(UIView *)view {
     [view setBackgroundColor:[UIColor clearColor]];
     UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
+    UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    blurEffectView.frame =CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
+    
+    [view addSubview:blurEffectView];
+    [view sendSubviewToBack:blurEffectView];
+}
+
++(void)newBlurView:(UIView *)view withEffect:(UIBlurEffectStyle)blur{
+    [view setBackgroundColor:[UIColor clearColor]];
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:blur];
     UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
     blurEffectView.frame =CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
     

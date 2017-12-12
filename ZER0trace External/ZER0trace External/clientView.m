@@ -241,94 +241,11 @@
     if (indexPath.section == 0) {
         nil;
     } else {
-        if (indexSelected == indexPath.row) {
-            [scrollTimer invalidate];
-            clientCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            scroll.contentSize = CGSizeMake([References screenWidth],  ogTableHeight+table.frame.origin.y);
-            [scroll setContentOffset:CGPointMake(0, (indexPath.row * 308)+121 +(2*45)+table.frame.origin.y-20) animated:YES];
-            [UIView animateWithDuration: 0.25 animations: ^{
-                for (UIView *subview in cell.driveScroll.subviews)
-                {
-                    subview.alpha = 0;
-                }
-                cell.drives.alpha = 1;
-                cell.code.alpha = 1;
-                cell.videoView.alpha = 0;
-                cell.playButton.alpha = 0;
-                cell.progressBar.alpha = 0;
-                cell.videoControls.alpha = 0;
-                cell.driveScroll.alpha = 0;
-                cell.playTime.alpha = 0;
-                cell.totalTime.alpha = 0;
-                cell.videoView.frame = CGRectMake(cell.videoView.frame.origin.x, cell.videoView.frame.origin.y, cell.videoView.frame.size.width, cell.videoView.frame.size.height/2);
-                cell.videoPlayer.frame = CGRectMake(-20, -30, cell.videoView.frame.size.width+40, cell.videoView.frame.size.height+40);
-                cell.timeCompleted.text = [self timeSinceCompletion:cell.jobDate];
-            }];
-            [expandedCell.videoPlayer pause];
-            indexSelected = -1;
-            scroll.scrollEnabled = YES;
-            scroll.bounces = YES;
-        } else {
-            
-            [scrollTimer invalidate];
-            [expandedCell.videoPlayer pause];
-            clientCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            expandedCell = cell;
-            [expandedCell.playButton addTarget:self action:@selector(playVideo) forControlEvents:UIControlEventTouchUpInside];
-            clientCell *cellDos = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexSelected inSection:1]];
-            if (indexSelected == -1) {
-                scroll.contentSize = CGSizeMake([References screenWidth],  ogTableHeight+table.frame.origin.y-308+[References screenHeight]);
-            }
-            if (intUpcoming == 0) {
-                [scroll setContentOffset:CGPointMake(0, (indexPath.row * 308)+(2*45)+table.frame.origin.y+92) animated:YES];
-            } else {
-                [scroll setContentOffset:CGPointMake(0, (indexPath.row * 308) + (2*45)+table.frame.origin.y+121-16) animated:YES];
-            }
-            
-            [UIView animateWithDuration: 0.25 animations: ^{
-                for (UIView *subview in cell.driveScroll.subviews)
-                {
-                    subview.alpha = 1;
-                }
-                cell.drives.alpha = 0;
-                cell.code.alpha = 0;
-                cell.playButton.alpha = 1;
-                cell.videoView.alpha = 1;
-                cell.progressBar.alpha = 1;
-                cell.videoControls.alpha = 1;
-                cell.driveScroll.alpha = 1;
-                cell.playTime.alpha = 1;
-                cell.totalTime.alpha = 1;
-                cell.timeCompleted.text = @"TAP TO RETURN";
-                cell.videoView.frame = CGRectMake(cell.videoView.frame.origin.x, cell.videoView.frame.origin.y, cell.videoView.frame.size.width, cell.videoView.frame.size.height*2);
-                cell.videoPlayer.frame = CGRectMake(-40, -70, cell.videoView.frame.size.width+80, cell.videoView.frame.size.height+140);
-                cell.drives.alpha = 0;
-                cell.code.alpha = 0;
-                cellDos.videoView.alpha = 0;
-                cellDos.playButton.alpha = 0;
-                cellDos.progressBar.alpha = 0;
-                cellDos.videoControls.alpha = 0;
-                cellDos.driveScroll.alpha = 0;
-                cellDos.playTime.alpha = 0;
-                cellDos.totalTime.alpha = 0;
-                cellDos.drives.alpha = 1;
-                cellDos.code.alpha = 1;
-                cellDos.timeCompleted.text = [self timeSinceCompletion:cellDos.jobDate];
-                cellDos.videoView.frame = CGRectMake(cellDos.videoView.frame.origin.x, cellDos.videoView.frame.origin.y, cellDos.videoView.frame.size.width, cellDos.videoView.frame.size.height/2);
-                cellDos.videoPlayer.frame = CGRectMake(-20, -20, cellDos.videoView.frame.size.width+40, cellDos.videoView.frame.size.height+40);
-                for (UIView *subview in cellDos.driveScroll.subviews)
-                
-                {
-                    subview.alpha = 0;
-                }
-            }];
-            indexSelected = (int)indexPath.row;
-            scroll.scrollEnabled = NO;
-            scroll.bounces = NO;
-        }
-        [tableView beginUpdates];
-        [tableView endUpdates];
-    
+        jobObject *job = jobs[indexPath.row];
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+        jobView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"jobView"];
+        controller.job = job;
+        [self presentViewController:controller animated:YES completion:nil];
     }
 }
 
@@ -523,17 +440,6 @@
         cell.mapView.zoomEnabled = false;
         cell.mapView.scrollEnabled = false;
         cell.mapView.userInteractionEnabled = false;
-        cell.videoPlayer = [[CTVideoView alloc] init];
-        cell.videoPlayer.frame = CGRectMake(-10,-10,cell.videoView.frame.size.width+20,(cell.videoView.frame.size.height*2)+20);
-        [cell.videoView addSubview:cell.videoPlayer];
-        [cell.videoPlayer setShouldPlayAfterPrepareFinished:NO];
-        [cell.videoPlayer setIsMuted:YES];
-        NSLog(@"%@",job.videoURL.absoluteString);
-        cell.videoPlayer.videoUrl = job.videoURL; // mp4 playable
-        [cell.videoPlayer prepare];
-        [cell.progressBar setProgress:0];
-        [cell.videoPlayer setUserInteractionEnabled:FALSE];
-        [References cornerRadius:cell.videoView radius:12.0f];
         [References tintUIButton:cell.playButton color:cell.drives.textColor];
         NSData *archivedButton = [NSKeyedArchiver archivedDataWithRootObject:cell.driveButton];
         NSData *archivedTime = [NSKeyedArchiver archivedDataWithRootObject:cell.driveTime];
@@ -851,7 +757,7 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
                        break;
                    }
                }
-                jobObject *job = [[jobObject alloc] initWithType:[NSURL URLWithString:[jobDictionary objectForKey:@"videoURL"]] andTimes:driveTimes andSerials:driveSerials andDate:dateText andCode:(NSString*)key andLocation:location andDateObject:date];
+                jobObject *job = [[jobObject alloc] initWithType:[NSURL URLWithString:[jobDictionary objectForKey:@"videoURL"]] andTimes:driveTimes andSerials:driveSerials andDate:dateText andCode:(NSString*)key andLocation:location andDateObject:date andSignature:[jobDictionary objectForKey:@"signatureURL"]];
                 [jobs addObject:job];
                 intComplete = intComplete + 1;
             }

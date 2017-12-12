@@ -13,6 +13,7 @@
     NSMutableData *_responseData;
     NSString *result;
 }
++(void)newBlurView:(UIView *)view withEffect:(UIBlurEffectStyle)blur;
 +(id)returnObjectForKey:(NSString*)key;
 +(void)printUser;
 +(NSString *)backendAddress;

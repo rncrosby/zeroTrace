@@ -41,6 +41,9 @@
 		AD92C45C1F8EA33100454285 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AD92C45B1F8EA33100454285 /* main.m */; };
 		ADA32E991FCE103F000B9BBA /* newJobCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA32E971FCE103F000B9BBA /* newJobCell.m */; };
 		ADA32E9A1FCE103F000B9BBA /* newJobCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADA32E981FCE103F000B9BBA /* newJobCell.xib */; };
+		ADBE83861FDF6CC0003BAEB1 /* jobView.m in Sources */ = {isa = PBXBuildFile; fileRef = ADBE83851FDF6CC0003BAEB1 /* jobView.m */; };
+		ADBE838A1FDF85AC003BAEB1 /* driveCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ADBE83881FDF85AC003BAEB1 /* driveCell.m */; };
+		ADBE838B1FDF85AC003BAEB1 /* driveCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADBE83891FDF85AC003BAEB1 /* driveCell.xib */; };
 		ADC4CEFC1FD4AD8500D727F6 /* newJobView.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC4CEFB1FD4AD8500D727F6 /* newJobView.m */; };
 		ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = ADDFAA161FC383AB00C1F1D3 /* shred.mp4 */; };
 		ADDFAA1A1FC3899B00C1F1D3 /* blr.jpg in Resources */ = {isa = PBXBuildFile; fileRef = ADDFAA191FC3899B00C1F1D3 /* blr.jpg */; };
@@ -107,6 +110,12 @@
 		ADA32E961FCE103F000B9BBA /* newJobCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = newJobCell.h; sourceTree = "<group>"; };
 		ADA32E971FCE103F000B9BBA /* newJobCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = newJobCell.m; sourceTree = "<group>"; };
 		ADA32E981FCE103F000B9BBA /* newJobCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = newJobCell.xib; sourceTree = "<group>"; };
+		ADBE83841FDF6CC0003BAEB1 /* jobView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jobView.h; sourceTree = "<group>"; };
+		ADBE83851FDF6CC0003BAEB1 /* jobView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jobView.m; sourceTree = "<group>"; };
+		ADBE83871FDF85AC003BAEB1 /* driveCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = driveCell.h; sourceTree = "<group>"; };
+		ADBE83881FDF85AC003BAEB1 /* driveCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = driveCell.m; sourceTree = "<group>"; };
+		ADBE83891FDF85AC003BAEB1 /* driveCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = driveCell.xib; sourceTree = "<group>"; };
+		ADBE83961FDFB01F003BAEB1 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		ADC4CEFA1FD4AD8500D727F6 /* newJobView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = newJobView.h; sourceTree = "<group>"; };
 		ADC4CEFB1FD4AD8500D727F6 /* newJobView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = newJobView.m; sourceTree = "<group>"; };
 		ADDFAA161FC383AB00C1F1D3 /* shred.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = shred.mp4; path = ../../Website/shred.mp4; sourceTree = "<group>"; };
@@ -148,6 +157,7 @@
 		6FF90382E1972151008D6ED1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				ADBE83961FDFB01F003BAEB1 /* CoreImage.framework */,
 				AD597EC71FD79E6700383354 /* libobjc.tbd */,
 				AD58F6251FD4C1A800494B14 /* CoreLocation.framework */,
 				AD84A84B1FCD1BEF003A79FC /* QuartzCore.framework */,
@@ -252,6 +262,11 @@
 				ADF15C611FD510C80005226F /* upcomingJobCell.xib */,
 				AD597EC41FD79B9500383354 /* driveObject.h */,
 				AD597EC51FD79B9500383354 /* driveObject.m */,
+				ADBE83841FDF6CC0003BAEB1 /* jobView.h */,
+				ADBE83851FDF6CC0003BAEB1 /* jobView.m */,
+				ADBE83871FDF85AC003BAEB1 /* driveCell.h */,
+				ADBE83881FDF85AC003BAEB1 /* driveCell.m */,
+				ADBE83891FDF85AC003BAEB1 /* driveCell.xib */,
 			);
 			path = "ZER0trace External";
 			sourceTree = "<group>";
@@ -331,6 +346,7 @@
 				ADF15C631FD510C90005226F /* upcomingJobCell.xib in Resources */,
 				ADDFAA181FC3840200C1F1D3 /* shred.mp4 in Resources */,
 				AD1F56631F8EC27500C9F33F /* pause.png in Resources */,
+				ADBE838B1FDF85AC003BAEB1 /* driveCell.xib in Resources */,
 				AD41F5A91FC4CCB40027B007 /* cancel.png in Resources */,
 				AD1F56641F8EC27500C9F33F /* play.png in Resources */,
 				ADE9B7B91FC39F760078DE1D /* plus.png in Resources */,
@@ -411,10 +427,12 @@
 				AD845EE31FBA61DC00F5B965 /* NSData+CommonCrypto.m in Sources */,
 				AD845EE51FBA61DC00F5B965 /* NSData+Base64.m in Sources */,
 				ADA32E991FCE103F000B9BBA /* newJobCell.m in Sources */,
+				ADBE83861FDF6CC0003BAEB1 /* jobView.m in Sources */,
 				ADC4CEFC1FD4AD8500D727F6 /* newJobView.m in Sources */,
 				AD845EE61FBA61DC00F5B965 /* AESCrypt.m in Sources */,
 				AD1F56541F8EAACA00C9F33F /* References.m in Sources */,
 				AD845EE41FBA61DC00F5B965 /* NSString+Base64.m in Sources */,
+				ADBE838A1FDF85AC003BAEB1 /* driveCell.m in Sources */,
 				ADF15C621FD510C90005226F /* upcomingJobCell.m in Sources */,
 				AD415A631FD4FD8C00F350B6 /* upcomingJobObject.m in Sources */,
 				AD1F56581F8EB5E100C9F33F /* jobObject.m in Sources */,

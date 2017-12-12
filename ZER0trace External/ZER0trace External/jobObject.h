@@ -18,8 +18,9 @@
 @property (nonatomic, strong) NSArray* driveTimes;
 @property (nonatomic, strong) NSArray* driveSerials;
 @property (nonatomic, strong) NSString *jobCode;
+@property (nonatomic, strong) NSString *signature;
 
--(instancetype)initWithType:(NSURL*)videoURL andTimes:(NSArray*)driveTimes andSerials:(NSArray*)driveSerials andDate:(NSString*)date andCode:(NSString*)jobCode andLocation:(CLLocation*)location andDateObject:(NSDate*)dateObject;
+-(instancetype)initWithType:(NSURL*)videoURL andTimes:(NSArray*)driveTimes andSerials:(NSArray*)driveSerials andDate:(NSString*)date andCode:(NSString*)jobCode andLocation:(CLLocation*)location andDateObject:(NSDate*)dateObject andSignature:(NSString*)signature;
 
 
 @end

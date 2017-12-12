@@ -10,7 +10,7 @@
 
 @implementation jobObject
 
--(instancetype)initWithType:(NSURL*)videoURL andTimes:(NSArray*)driveTimes andSerials:(NSArray*)driveSerials andDate:(NSString*)date andCode:(NSString*)jobCode andLocation:(CLLocation*)location andDateObject:(NSDate*)dateObject {
+-(instancetype)initWithType:(NSURL*)videoURL andTimes:(NSArray*)driveTimes andSerials:(NSArray*)driveSerials andDate:(NSString*)date andCode:(NSString*)jobCode andLocation:(CLLocation*)location andDateObject:(NSDate*)dateObject andSignature:(NSString *)signature{
     self = [super init];
     if(self)
     {
@@ -21,6 +21,7 @@
         self.dateOfDestruction = date;
         self.jobCode = jobCode;
         self.dateObject = dateObject;
+        self.signature = signature;
     }
     return self;
 }

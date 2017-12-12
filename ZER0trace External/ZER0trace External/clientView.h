@@ -25,6 +25,7 @@
 #import "upcomingJobCell.h"
 #import <MapKit/MapKit.h>
 #import "driveObject.h"
+#import "jobView.h"
 #import "loginView.h"
 
 @interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate> {
