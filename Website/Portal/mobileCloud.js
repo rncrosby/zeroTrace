@@ -77,88 +77,78 @@ function getAllJobs() {
 
 
 	function getJob() {
-		console.log("Preparing iCloud");
-		CloudKit.configure({
-				containers: [{
-					containerIdentifier: 'iCloud.com.fullytoasted.ZER0trace-Internal',
-					apiToken: 'af60d3e793d45807555d470d8a6972dc50b182a36aa0772d612c1c37ad8d16be',
-					environment: 'production'
-				}]
+		var full = window.location.href.split("?");
+		var clientCode = full[1].split("=");
+		clientCode = clientCode[1];
+		var jobCode = full[2].split("=");
+		jobCode = jobCode[1];
+		// var jobCode = window.sessionStorage.getItem("jobCode");
+		// var clientCode = window.sessionStorage.getItem("clientCode");
+		console.log(jobCode + clientCode);
+		var database = firebase.database();
+		database.ref('/' + clientCode + '/' + jobCode).once('value').then(function(snapshot) {
+			var job = snapshot.val();
+			var serials = job['driveSerials'];
+			var times = job['driveTimes'];
+			var date = job['dateText'];
+			var signatureURL = job['signatureURL'];
+			var videoURL = job['videoURL'];
+			var secMHeight = "0px";
+			document.getElementById("menuBarText").innerHTML = date;
+			document.getElementById("DRIVECOUNT").innerHTML = serials.length;
+			document.getElementById("JOBID").innerHTML = jobCode;
+			var signature = document.getElementById('signature');
+			signature.setAttribute('src', signatureURL)
+			var playerInstance = jwplayer("videoPlayer");
+			var widthNum = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+			var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+			if (width > 700) {
+				width = 700;
+				widthNum = 700;
+			}
+			var heightNum = widthNum/1.8;
+			width = width.toString() + "px";
+			height = heightNum.toString() + "px";
+			newHeight = heightNum + 450;
+			secMHeight = newHeight +450+ "px";
+			document.getElementById("driveContainer").style.marginTop = secMHeight;
+			var stringHeight = -1 * newHeight;
+			stringHeight = stringHeight + "px";
+			document.getElementById("drives").style.marginTop = stringHeight;
+			playerInstance.setup({
+			    file: videoURL,
+			    width: width,
+					height: height,
+					"skin": {
+						"name" : "myskin"
+					}
 			});
 
-  		var container = CloudKit.getDefaultContainer();
-  		var publicDatabase = container.publicCloudDatabase;
-      var full = window.location.href.split("?");
-  		var code = full[1].split("=");
-  		publicDatabase.fetchRecords(code[1]).then(function(response) {
-  		if (response.hasErrors) {
-  				alert("No Video Found");
-  		} else {
-  					var fetchedRecord = response.records[0];
-						console.log(fetchedRecord);
-						var secMHeight = "0px";
-  					if (fetchedRecord['fields']['driveSerials']) {
-  						var serials = fetchedRecord['fields']['driveSerials']['value'];
-  						var times = fetchedRecord['fields']['driveTimes']['value'];
-							var date = fetchedRecord['fields']['jobDate']['value'];
-							document.getElementById("menuBarText").innerHTML = date;
-							document.getElementById("DRIVECOUNT").innerHTML = serials.length;
-							document.getElementById("JOBID").innerHTML = fetchedRecord['fields']['code']['value'];
-							var signature = document.getElementById('signature');
-							signature.setAttribute('src', fetchedRecord['fields']['signatueURL']['value'])
-							var playerInstance = jwplayer("videoPlayer");
-							var widthNum = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-							var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-							if (width > 700) {
-								width = 700;
-								widthNum = 700;
-							}
-							var heightNum = widthNum/1.8;
-							width = width.toString() + "px";
-							height = heightNum.toString() + "px";
-							newHeight = heightNum + 450;
-							secMHeight = newHeight +450+ "px";
-							document.getElementById("driveContainer").style.marginTop = secMHeight;
-							var stringHeight = -1 * newHeight;
-							stringHeight = stringHeight + "px";
-							document.getElementById("drives").style.marginTop = stringHeight;
-  						playerInstance.setup({
-  						    file: fetchedRecord['fields']['videoURL']['value'],
-  						    width: width,
-									height: height,
-  								"skin": {
-  									"name" : "myskin"
-  								}
-  						});
+			for (var i = 0; i < serials.length; i++) {
+        var drive = document.createElement("div");
+        drive.id = "driveObject";
+				drive.className = "driveClass";
+        drive.setAttribute("time",times[i]);
+				drive.onclick = function() {
+					skimToTime(this);
+				}
+        var container = document.getElementById('drives');
+        var serial = document.createElement("p");
+        serial.id = "driveSerial";
+        serial.innerHTML = serials[i];
+        var time = document.createElement("p");
+        time.id = "driveTime";
+        var date = new Date(null);
+        date.setSeconds(times[i]); // specify value for SECONDS here
+        var result = date.toISOString().substr(11, 8);
+        time.innerHTML = result;
+        drive.appendChild(serial);
+        drive.appendChild(time);
+        container.appendChild(drive);
+			}
 
-							for (var i = 0; i < serials.length; i++) {
-                var drive = document.createElement("div");
-                drive.id = "driveObject";
-								drive.className = "driveClass";
-                drive.setAttribute("time",times[i]);
-								drive.onclick = function() {
-									skimToTime(this);
-								}
-                var container = document.getElementById('drives');
-                var serial = document.createElement("p");
-                serial.id = "driveSerial";
-                serial.innerHTML = serials[i];
-                var time = document.createElement("p");
-                time.id = "driveTime";
-                var date = new Date(null);
-                date.setSeconds(times[i]); // specify value for SECONDS here
-                var result = date.toISOString().substr(11, 8);
-                time.innerHTML = result;
-                drive.appendChild(serial);
-                drive.appendChild(time);
-                container.appendChild(drive);
-  						}
-  					}
 
-					}
-
-  		}
-  	);
+			});
 
 	}
   function checkCode(form) {
@@ -166,30 +156,30 @@ function getAllJobs() {
 			document.getElementById("cardHead").innerHTML = "Try Again";
       document.getElementById("cardSubHead").innerHTML = "The code should be<br>5 digits long";
 		} else {
-      CloudKit.configure({
-  				containers: [{
-  					containerIdentifier: 'iCloud.com.fullytoasted.ZER0trace-Internal',
-  					apiToken: '2d86e7c79d5ca11b06592a0c703cdfcb3869512c75629ae151d96f924a0fb696',
-  					environment: 'production'
-  				}]
-  			});
-
-    		var container = CloudKit.getDefaultContainer();
-    		var publicDatabase = container.publicCloudDatabase;
-    		publicDatabase.fetchRecords(form.code.value).then(function(response) {
-    		if (response.hasErrors) {
-    				// Insert error handling
-            document.getElementById("cardHead").innerHTML = "Try Again";
-            document.getElementById("cardSubHead").innerHTML = "This code is invalid.";
-    		} else {
-						window.sessionStorage.setItem("signedIn", "");
-            window.location.href = "jobM.html?code="+form.code.value;
-          }
-
-    		}
-    	);
-  	// FINISH GET JOBS
-  	// START GET CURRENTJOB
+			var foundResult = 0;
+			var database = firebase.database();
+			firebase.database().ref('/').once('value').then(function(snapshot) {
+				snapshot.forEach(function(child){
+					var obj = child.val();
+					if (!("code" in obj)) {
+						for (var key in obj) {
+							if (key == form.code.value) {
+								var foundJob = obj[key];
+								window.sessionStorage.setItem("signedIn", "");
+								window.sessionStorage.setItem("clientCode", foundJob["clientCode"]);
+								window.sessionStorage.setItem("jobCode", foundJob["code"]);
+								window.location.href = "jobM.html?client=" + foundJob["clientCode"] + '?code=' + foundJob["code"];
+								foundResult = 1;
+								return false;
+							}
+							}
+					}
+    		});
+				if (foundResult == 0) {
+					document.getElementById("cardHead").innerHTML = "Try Again";
+		      document.getElementById("cardSubHead").innerHTML = "Code not found";
+				}
+			});
 		}
     return false;
   }

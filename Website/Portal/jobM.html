@@ -12,16 +12,21 @@
     <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-database.js"></script>
-<script>
-  // Initialize Firebase
-  // TODO: Replace with your project's customized code snippet
-  var config = {
-    apiKey: "AIzaSyADP8PfP74I6PDAerLkZSOwukNZg1BO--M",
-    authDomain: "zer0trace-f8259.firebaseapp.com",
-    databaseURL: "https://zer0trace-f8259.firebaseio.com/",
-  };
-  firebase.initializeApp(config);
-</script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyADP8PfP74I6PDAerLkZSOwukNZg1BO--M",
+        authDomain: "zer0trace-f8259.firebaseapp.com",
+        databaseURL: "https://zer0trace-f8259.firebaseio.com",
+        projectId: "zer0trace-f8259",
+        storageBucket: "zer0trace-f8259.appspot.com",
+        messagingSenderId: "80812276638"
+      };
+      var defaultApp = firebase.initializeApp(config);
+      // Initialize the default app
+    var defaultDatabase = defaultApp.database();
+    defaultDatabase = firebase.database();
+    </script>
   </head>
   <body>
     <script>getJob();</script>
