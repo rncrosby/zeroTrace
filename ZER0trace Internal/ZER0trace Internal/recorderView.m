@@ -329,37 +329,31 @@
         [driveSerials addObject:drive.serial];
         [driveTimes addObject:drive.time];
     }
+    NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"EEEE, MMMM d"];
+    FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:_job.client];
+    [[ref child:_job.code] setValue:@{
+                                    @"email" : _job.email,
+                                    @"code" : _job.code,
+                                    @"clientName" : _job.clientName,
+                                    @"clientCode": _job.client,
+                                    @"date": [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]],
+                                    @"dateText" : [formatter stringFromDate:[NSDate date]],
+                                    @"location-lat": [NSNumber numberWithDouble:_job.location.coordinate.latitude],
+                                    @"location-lon": [NSNumber numberWithDouble:_job.location.coordinate.longitude],
+                                    @"driveTimes": driveTimes,
+                                    @"driveSerials" : driveSerials,
+                                    @"videoURL" : downloadURL.absoluteString,
+                                    @"signatureURL" : signatureURL.absoluteString
+                                    } withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+                                    }];
     FIRDatabaseReference *reference = [[[[FIRDatabase database] reference] child:@"upcomingJobs"]  child:[NSString stringWithFormat:@"%@",_job.code]];
     [reference removeValueWithCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
         if (!error) {
-                CKRecord *record = [[CKRecord alloc] initWithRecordType:@"Job" recordID:[[CKRecordID alloc]initWithRecordName:_job.code]];
-                record[@"location"] = _job.location;
-                record[@"client"] = _job.clientName;
-                record[@"clientCode"] = _job.client;
-                record[@"code"] = _job.code;
-                record[@"email"] = _job.email;
-                record[@"jobDate"] = @"Date";
-                record[@"signatueURL"] = signatureURL.absoluteString;
-                record[@"signatureData"] = signatureData;
-                record[@"videoURL"] = downloadURL.absoluteString;
-                record[@"driveSerials"] = driveSerials;
-                record[@"driveTimes"] = driveTimes;
-                record[@"dateCompleted"] = [NSDate date];
-                NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"EEEE, MMMM d"];
-                record[@"jobDate"] = [formatter stringFromDate:[NSDate date]];
-                [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
-                    if (error) {
-                        NSLog(@"%@",error.localizedDescription);
-                    } else {
-                        saveProgress = saveProgress+1;
-                        if (saveProgress == 2) {
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                [References fadeIn:confirmDestructionButton];
-                            });
-                        }
-                    }
-                }];
+            saveProgress = saveProgress+1;
+            if (saveProgress == 2) {
+                    [References fadeIn:confirmDestructionButton];
+            }
         } else {
             NSLog(@"%@",error.localizedDescription);
         }

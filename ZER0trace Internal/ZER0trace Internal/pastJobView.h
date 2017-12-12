@@ -24,7 +24,7 @@
     __weak IBOutlet UIButton *closeButton;
 }
 @property (nonatomic) AVPlayer *avPlayer;
-@property (nonatomic, assign) jobObject *job;
+@property (nonatomic, strong) jobObject *job;
 - (IBAction)close:(id)sender;
 - (IBAction)share:(id)sender;
 

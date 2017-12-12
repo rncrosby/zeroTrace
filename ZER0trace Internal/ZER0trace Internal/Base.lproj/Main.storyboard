@@ -245,26 +245,8 @@
                                     <outlet property="delegate" destination="H82-MJ-fmV" id="Ix9-8r-ZOr"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KEB-Kh-O0c">
-                                <rect key="frame" x="974" y="50" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="client.png">
-                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="clientManager:" destination="H82-MJ-fmV" eventType="touchUpInside" id="WEX-dX-TPP"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="15x-MW-Zqw">
-                                <rect key="frame" x="990" y="41" width="23" height="23"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.70440274477005005" green="0.18128180503845215" blue="0.10175552219152451" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fUi-r8-33C">
-                                <rect key="frame" x="898" y="50" width="30" height="30"/>
+                                <rect key="frame" x="936" y="48" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" backgroundImage="refresh-light.png"/>
                                 <connections>
@@ -272,7 +254,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HlR-Qm-caA">
-                                <rect key="frame" x="936" y="50" width="30" height="30"/>
+                                <rect key="frame" x="974" y="48" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="search.png"/>
                                 <connections>
@@ -286,8 +268,6 @@
                     <connections>
                         <outlet property="beginningProgress" destination="PUI-aG-8Sm" id="BeK-5l-igV"/>
                         <outlet property="checkScannerButton" destination="feW-FC-YUZ" id="9l9-0C-Js6"/>
-                        <outlet property="clientCount" destination="15x-MW-Zqw" id="P5w-zx-RiX"/>
-                        <outlet property="clientManagerButton" destination="KEB-Kh-O0c" id="HJe-ox-unm"/>
                         <outlet property="logo" destination="bEM-yI-QMD" id="gQW-kM-k3J"/>
                         <outlet property="menuBar" destination="fHo-aF-udj" id="1z7-iU-34l"/>
                         <outlet property="noPastJobs" destination="DDY-z9-CSV" id="IYC-xQ-eca"/>
@@ -616,7 +596,7 @@ October 8</string>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Client Code" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eQN-cc-BiR">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Job Code" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eQN-cc-BiR">
                                         <rect key="frame" x="404" y="270" width="216" height="18"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -989,7 +969,6 @@ October 8</string>
     </scenes>
     <resources>
         <image name="backspace.png" width="75" height="75"/>
-        <image name="client.png" width="100" height="100"/>
         <image name="light.png" width="1600" height="529"/>
         <image name="refresh-light.png" width="75" height="75"/>
         <image name="search.png" width="100" height="100"/>

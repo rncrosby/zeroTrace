@@ -34,7 +34,8 @@
     [References cornerRadius:signatureImage radius:7.0f];
     [References cornerRadius:shareButton radius:7.0f];
     [References cornerRadius:closeButton radius:7.0f];
-    [signatureImage setImage:[UIImage imageWithData:_job.signature]];
+    NSLog(@"%@",_job.signature);
+    [signatureImage setImage:[UIImage imageWithData:[[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:_job.signature]]]];
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }

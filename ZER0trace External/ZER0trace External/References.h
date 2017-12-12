@@ -13,6 +13,8 @@
     NSMutableData *_responseData;
     NSString *result;
 }
++(id)returnObjectForKey:(NSString*)key;
++(void)printUser;
 +(NSString *)backendAddress;
 +(UIColor *)colorFromHexString:(NSString *)hexString;
 +(CGFloat)screenWidth;

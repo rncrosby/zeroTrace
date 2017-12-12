@@ -15,19 +15,14 @@
 @implementation clientView
 
 - (void)viewDidLoad {
-    menuShowing = false;
     [References tintUIButton:more color:[UIColor blackColor]];
-    hasReloaded = false;
-    upcomingJobs = [[NSMutableArray alloc] init];
     videoPlaying = false;
     indexSelected = -1;
     isSearching = false;
     hideStatusBar = false;
-    self.ref = [[FIRDatabase database] reference];
-    [self getUpcomingJobs:false];
     [super viewDidLoad];
     clientName.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"client"];
-    clientInfo.text = @"Your last job was completed about 4 hours ago";
+    clientInfo.text = @"--";
     searchField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 9, 0);
     [References cornerRadius:searchField radius:8.0f];
     [References cornerRadius:searchButton radius:searchButton.frame.size.width/2];
@@ -37,6 +32,7 @@
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(testRefresh:) forControlEvents:UIControlEventValueChanged];
     [scroll addSubview:refreshControl];
+        [self getClient];
     //    [searchBar addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
     // Do any additional setup after loading the view.
 }
@@ -44,8 +40,6 @@
 - (void)testRefresh:(UIRefreshControl *)refreshControl
 {
     refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing data..."];
-    hasReloaded = false;
-    [self getUpcomingJobs:true];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         [NSThread sleepForTimeInterval:3];
@@ -58,8 +52,6 @@
             refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:lastUpdate];
             
             [refreshControl endRefreshing];
-            
-            NSLog(@"refresh end");
         });
     });
 }
@@ -290,7 +282,7 @@
             if (intUpcoming == 0) {
                 [scroll setContentOffset:CGPointMake(0, (indexPath.row * 308)+(2*45)+table.frame.origin.y+92) animated:YES];
             } else {
-                [scroll setContentOffset:CGPointMake(0, ((indexPath.row * 308) + 121)+(2*45)+table.frame.origin.y) animated:YES];
+                [scroll setContentOffset:CGPointMake(0, (indexPath.row * 308) + (2*45)+table.frame.origin.y+121-16) animated:YES];
             }
             
             [UIView animateWithDuration: 0.25 animations: ^{
@@ -516,21 +508,17 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"clientCell" owner:self options:nil];
             cell = [nib objectAtIndex:0];
         }
-        
+
         [References cornerRadius:cell.playButton radius:cell.playButton.frame.size.width/2];
         cell.playButton.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
         [References cornerRadius:cell.mapView radius:12.0f];
-        
         cell.backgroundColor = [UIColor clearColor];
         [cell setBackgroundColor:[UIColor clearColor]];
         jobObject *job = jobs[indexPath.row];
-        
+        NSLog(@"%@",job.jobCode);
         cell.date.text = job.dateOfDestruction;
         cell.drives.text = [NSString stringWithFormat:@"%lu\nDrives",(unsigned long)job.driveSerials.count];
-        //    [References blurView:cell.playButton];
-        [cell.playButton setBackgroundColor:[UIColor lightTextColor]];
         [References blurView:cell.bottomBlur];
-        [References cardshadow:cell.playButton];
         cell.playButton.tag = indexPath.row;
         cell.mapView.zoomEnabled = false;
         cell.mapView.scrollEnabled = false;
@@ -540,6 +528,7 @@
         [cell.videoView addSubview:cell.videoPlayer];
         [cell.videoPlayer setShouldPlayAfterPrepareFinished:NO];
         [cell.videoPlayer setIsMuted:YES];
+        NSLog(@"%@",job.videoURL.absoluteString);
         cell.videoPlayer.videoUrl = job.videoURL; // mp4 playable
         [cell.videoPlayer prepare];
         [cell.progressBar setProgress:0];
@@ -602,121 +591,6 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
     return barCodeImage;
 }
 
--(void)getClientJobs {
-//    table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y+[References screenHeight], [References screenWidth], table.frame.size.height);
-    jobs = [[NSMutableArray alloc] init];
-    savedJobs = [[NSMutableArray alloc] init];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"clientCode = '%@'",[[NSUserDefaults standardUserDefaults] objectForKey:@"code"]]];
-    CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
-    query.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc]initWithKey:@"modificationDate" ascending:false]];
-    CKContainer *container = [CKContainer containerWithIdentifier:@"iCloud.com.fullytoasted.ZER0trace-Internal"];
-    [container.publicCloudDatabase performQuery:query
-                                                        inZoneWithID:nil
-                                                   completionHandler:^(NSArray *results, NSError *error) {
-                                                       if (error) {
-                                                           NSLog(@"%@",error.localizedDescription);
-                                                       }
-                                                       for (int a = 0; a < results.count; a++) {
-                                                           CKRecord *record = results[a];
-                                                           NSString *date = [record valueForKey:@"jobDate"];
-                                                           NSString *code = [record valueForKey:@"code"];
-                                                           intComplete = intComplete + 1;
-                                                           
-                                                           for (int a = 0; a < date.length; a++) {
-                                                               if ([date characterAtIndex:a] == ' ') {
-                                                                   
-                                                                   NSMutableString *mu = [NSMutableString stringWithString:date];
-                                                                   [mu deleteCharactersInRange:NSMakeRange(a, 1)];
-                                                                   [mu insertString:@"\n" atIndex:a];
-                                                                   date = mu;
-                                                                   break;
-                                                               }
-                                                           }
-                                                           NSArray *driveTimes = [record objectForKey:@"driveTimes"];
-                                                           NSArray *driveSerials = [record objectForKey:@"driveSerials"];
-                                                           NSURL *videoURL = [NSURL URLWithString:[record valueForKey:@"videoURL"]];
-                                                           CLLocation *location = [record objectForKey:@"location"];
-                                                           jobObject *job;
-                                                           if (location != NULL) {
-                                                               job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:date andCode:code andLocation:[[CLLocation alloc] initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude] andDateObject:[record valueForKey:@"modificationDate"]];
-                                                           } else {
-                                                               job = [[jobObject alloc] initWithType:videoURL andTimes:driveTimes andSerials:driveSerials andDate:date andCode:code andLocation:[[CLLocation alloc] initWithLatitude:0.0 longitude:0.0] andDateObject:[record valueForKey:@"modificationDate"]];
-                                                           }
-                                                           
-                                                           [jobs addObject:job];
-                                                           [savedJobs addObject:job];
-                                                       } dispatch_sync(dispatch_get_main_queue(), ^{
-                                                           intUpcoming = upcomingJobs.count;
-                                                           [table reloadData];
-                                                           ogTableHeight = table.frame.origin.y + ((intComplete * 308)+121) + (2 * 45)+32;
-                                                           if (intUpcoming == 0) {
-                                                               ogTableHeight = ogTableHeight + 92;
-                                                           }
-                                                           scroll.contentSize = CGSizeMake([References screenWidth], ogTableHeight);
-                                                           table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y, [References screenWidth], ((intComplete * 308) + 121)+(2*45)+1000);
-                                                           [self machineLearning];
-                                                           [self HashTheDrives];
-                                                       });
-                                                       
-                                                   }];
-}
-//- (IBAction)searchButton:(id)sender {
-//    if (isSearching == false) {
-//        searchBar.hidden = false;
-//        [UIView animateWithDuration:0.25f animations:^(void){
-//            line.frame = CGRectMake(0, line.frame.origin.y+searchBar.frame.size.height+20, line.frame.size.width, line.frame.size.height);
-//            table.frame = CGRectMake(0, table.frame.origin.y+searchBar.frame.size.height+20, table.frame.size.width, table.frame.size.height-searchBar.frame.size.height-20);
-//            [searchButton setImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
-//        } completion:^(bool complete){
-//            if (complete) {
-//                [searchBar becomeFirstResponder];
-//                isSearching = true;
-//            }
-//        }];
-//    } else {
-//        jobs = [[NSMutableArray alloc] init];
-//        for (int a = 0; a < savedJobs.count; a++) {
-//            [jobs addObject:savedJobs[a]];
-//        }
-//        [table reloadData];
-//        [searchBar resignFirstResponder];
-//        [UIView animateWithDuration:0.25f animations:^(void){
-//            line.frame = CGRectMake(0, line.frame.origin.y-searchBar.frame.size.height-20, line.frame.size.width, line.frame.size.height);
-//            table.frame = CGRectMake(0, table.frame.origin.y-searchBar.frame.size.height-20, table.frame.size.width, table.frame.size.height+searchBar.frame.size.height+20);
-//            [searchButton setImage:[UIImage imageNamed:@"search.png"] forState:UIControlStateNormal];
-//        } completion:^(bool complete){
-//            if (complete) {
-//                searchBar.hidden = true;
-//                isSearching = false;
-//            }
-//        }];
-//    }
-//    
-//}
-//
-//-(void)textChanged:(UITextField *)textField {
-//    if (textField.text.length == 0) {
-//        jobs = [[NSMutableArray alloc] init];
-//        for (int a = 0; a < savedJobs.count; a++) {
-//            [jobs addObject:savedJobs[a]];
-//        }
-//        [table reloadData];
-//        return ;
-//    }
-//    [jobs removeAllObjects];
-//    jobs = [[NSMutableArray alloc] init];
-//    for (int a = 0; a < savedJobs.count; a++) {
-//        jobObject *job = savedJobs[a];
-//        for (int b = 0; b < job.driveSerials.count; b++) {
-//            if ([job.driveSerials[b] localizedCaseInsensitiveContainsString:textField.text]) {
-//                [jobs addObject:job];
-//                break;
-//            }
-//        }
-//    }
-//    [table reloadData];
-//}
-
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.tag == 1) {
         
@@ -762,55 +636,13 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
     return UIStatusBarAnimationSlide;
 }
 
--(void)getUpcomingJobs:(BOOL)isRelaod{
-    [_ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        if (hasReloaded == false) {
-            hasReloaded = true;
-            if (![[NSString stringWithFormat:@"%@",snapshot.value]  isEqualToString:@"<null>"]) {
-                NSDictionary *Djobs = snapshot.value;
-                if ([Djobs objectForKey:@"upcomingJobs"] != nil) {
-                    Djobs = [Djobs objectForKey:@"upcomingJobs"];
-                    upcomingJobs = [[NSMutableArray alloc] init];
-                    [upcomingJobs removeAllObjects];
-                    NSArray *matches = [Djobs allValues];
-                    for (int a = 0; a < matches.count; a++) {
-                        if ([[matches[a] objectForKey:@"client"] isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"code"]]) {
-                            NSLog(@"%@",matches[a]);
-                            upcomingJobObject *job = [[upcomingJobObject alloc] initWithType:[matches[a] valueForKey:@"code"] forClient:[matches[a] objectForKey:@"client"] withLat:[matches[a] objectForKey:@"location-lat"] andLon:[matches[a] objectForKey:@"location-lon"] andDrives:[matches[a] objectForKey:@"drives"] on:[matches[a] objectForKey:@"date"] withText:[matches[a] objectForKey:@"dateText"]];
-                            [upcomingJobs addObject:job];
-                        }
-                    }
-                    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateObject" ascending:TRUE];
-                    [upcomingJobs sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-                    if (isRelaod == false) {
-                        [self getClientJobs];
-                    } else {
-                        intUpcoming = upcomingJobs.count;
-                        [table reloadData];
-                    }
-                } else {
-                    [table reloadData];
-                }
-            } else {
-                intUpcoming = 0;
-                [self getClientJobs];
-            }
-        } else {
-            
-        }
-            
-        
-    }];
-    
-}
-
 -(void)upcomingMore:(id)sender {
     UIButton *button = (UIButton*)sender;
     upcomingJobObject *job = upcomingJobs[button.tag];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:job.dateText message:@"This job has not been confirmed yet." preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel Job" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action){
         intUpcoming--;
-        FIRDatabaseReference *objectRef = [[_ref child:@"upcomingJobs"] child:[NSString stringWithFormat:@"%@",job.code]];
+        FIRDatabaseReference *objectRef = [[[[FIRDatabase database] reference] child:@"upcomingJobs"] child:[NSString stringWithFormat:@"%@",job.code]];
         [objectRef removeValue];
         [upcomingJobs removeObjectAtIndex:button.tag];
         [table reloadData];
@@ -889,7 +721,12 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
                        completionHandler:^(NSArray *placemarks, NSError *error){
                            if(!error){
                                CLPlacemark *placeMark = placemarks[0];
-                               clientInfo.text =[NSString stringWithFormat:@"Your next job is scheduled for %@ at %@",timeInterval,[NSString stringWithFormat:@"%@ %@",placeMark.subThoroughfare,placeMark.thoroughfare]];
+                               if ((placeMark.subThoroughfare == NULL) || (placeMark.thoroughfare == NULL)) {
+                                   clientInfo.text =[NSString stringWithFormat:@"Your next job is scheduled for %@",[timeInterval lowercaseString]];
+                               } else {
+                                   clientInfo.text =[NSString stringWithFormat:@"Your next job is scheduled for %@ at %@",[timeInterval lowercaseString],[NSString stringWithFormat:@"%@ %@",placeMark.subThoroughfare,placeMark.thoroughfare]];
+                               }
+                               
                            }
                            else{
                                NSLog(@"There was a reverse geocoding error\n%@", [error localizedDescription]);
@@ -963,4 +800,94 @@ CIImage *barCodeImage = barCodeFilter.outputImage;
     [alert addAction:doneAction];
     [self presentViewController:alert animated:YES completion:nil];
 }
+
+-(void)getClient{
+    upcomingJobs = [[NSMutableArray alloc] init];
+    [upcomingJobs removeAllObjects];
+    jobs = [[NSMutableArray alloc] init];
+    [jobs removeAllObjects];
+    FIRDatabaseReference *reference = [[FIRDatabase database] reference];
+    refreshComplete = 0;
+    [NSTimer scheduledTimerWithTimeInterval:0.1
+                                     target:self
+                                   selector:@selector(refreshComplete:)
+                                   userInfo:nil
+                                    repeats:YES];
+    [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        NSDictionary *database = snapshot.value;
+        if ([database objectForKey:@"upcomingJobs"]) {
+            NSDictionary *upcomingJobsDictionary = [database objectForKey:@"upcomingJobs"];
+            for (id key in upcomingJobsDictionary) {
+                if ([[[upcomingJobsDictionary objectForKey:key] objectForKey:@"client"] isEqualToString:[References returnObjectForKey:@"code"]]) {
+                    NSDictionary *upcomingJob = [upcomingJobsDictionary objectForKey:key];
+                    upcomingJobObject *job = [[upcomingJobObject alloc] initWithType:[upcomingJob valueForKey:@"code"] forClient:[upcomingJob objectForKey:@"client"] withLat:[upcomingJob objectForKey:@"location-lat"] andLon:[upcomingJob objectForKey:@"location-lon"] andDrives:[upcomingJob objectForKey:@"drives"] on:[upcomingJob objectForKey:@"date"] withText:[upcomingJob objectForKey:@"dateText"]];
+                        [upcomingJobs addObject:job];
+                        }
+                    }
+                    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateObject" ascending:TRUE];
+                    [upcomingJobs sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+                    intUpcoming = upcomingJobs.count;
+            refreshComplete = refreshComplete + 1;
+        } else {
+            intUpcoming = 0;
+            NSLog(@"no upcoming jobs");
+            refreshComplete = refreshComplete + 1;
+        }
+        if ([database objectForKey:[References returnObjectForKey:@"code"]]) {
+            NSDictionary *myJobsDictionary = [database objectForKey:[References returnObjectForKey:@"code"]];
+            for (id key in myJobsDictionary) {
+                NSDictionary *jobDictionary = [myJobsDictionary objectForKey:key];
+                CLLocation *location = [[CLLocation alloc] initWithLatitude:[[jobDictionary valueForKey:@"location-lat"] doubleValue] longitude:[[jobDictionary valueForKey:@"location-lon"] doubleValue]];
+                NSArray *driveSerials = [jobDictionary objectForKey:@"driveSerials"];
+                NSArray *driveTimes = [jobDictionary objectForKey:@"driveTimes"];
+                NSString *dateText = [jobDictionary objectForKey:@"dateText"];
+                NSDate *date = [NSDate dateWithTimeIntervalSince1970:[[jobDictionary valueForKey:@"date"] doubleValue]];
+                for (int a = 0; a < dateText.length; a++) {
+                   if ([dateText characterAtIndex:a] == ' ') {
+                       NSMutableString *mu = [NSMutableString stringWithString:dateText];
+                       [mu deleteCharactersInRange:NSMakeRange(a, 1)];
+                       [mu insertString:@"\n" atIndex:a];
+                       dateText = mu;
+                       break;
+                   }
+               }
+                jobObject *job = [[jobObject alloc] initWithType:[NSURL URLWithString:[jobDictionary objectForKey:@"videoURL"]] andTimes:driveTimes andSerials:driveSerials andDate:dateText andCode:(NSString*)key andLocation:location andDateObject:date];
+                [jobs addObject:job];
+                intComplete = intComplete + 1;
+            }
+            refreshComplete = refreshComplete + 1;
+        } else {
+            intComplete = 0;
+            NSLog(@"no my jobs");
+            refreshComplete = refreshComplete + 1;
+        }
+    }];
+    
+}
+
+-(void)refreshComplete:(id)sender{
+    if (refreshComplete == 2) {
+        NSLog(@"complete: %i\nupcoming: %i",intComplete,intUpcoming);
+        NSTimer *timer = (NSTimer*)sender;
+        [self machineLearning];
+        [self HashTheDrives];
+        [table reloadData];
+       ogTableHeight = table.frame.origin.y + ((intComplete * 308)+121) + (2 * 45)+32;
+       if (intUpcoming == 0) {
+           ogTableHeight = ogTableHeight + 92;
+       }
+        if (ogTableHeight < [References screenHeight]) {
+            scroll.contentSize = CGSizeMake([References screenWidth], [References screenHeight]);
+        } else {
+            scroll.contentSize = CGSizeMake([References screenWidth], ogTableHeight);
+        }
+       
+    
+       table.frame = CGRectMake(table.frame.origin.x, table.frame.origin.y, [References screenWidth], ((intComplete * 308) + 121)+(2*45)+1000);
+                [timer invalidate];
+    }
+
+    
+}
+
 @end

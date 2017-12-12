@@ -65,16 +65,9 @@
 - (IBAction)next:(id)sender {
         NSString *newCode = [References randomIntWithLength:5];
         NSString *clientCode = code;
-        CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:clientCode];
-        [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:recordID completionHandler:^(CKRecord *record, NSError *error) {
-            if (error) {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    [References toastMessage:@"No Client Found" andView:self andClose:YES];
-                });
-                return;
-            }
-            NSString *clientName = [record valueForKey:@"clientName"];
-            NSString *email = [record valueForKey:@"email"];
+    for (int a = 0; a < clients.count; a++) {
+        accountObject *act = clients[a];
+        if ([clientCode isEqualToString:act.code]) {
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
             [dateFormat setDateFormat:@"EEEE, MMMM"];
             NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
@@ -85,20 +78,21 @@
             NSString *finalDateText = [NSString stringWithFormat:@"%@ %@",dateTextTemp,numberFormatted];
             FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:@"upcomingJobs"];
             [[ref child:newCode] setValue:@{
-                                                                 @"confirmed" : [NSNumber numberWithInt:0],
-                                                                 @"email" : email,
-                                                                 @"code" : newCode,
-                                                                 @"clientName" : clientName,
-                                                                 @"client": clientCode,
-                                                                 @"date": [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]],
-                                                                 @"dateText" : finalDateText,
-                                                                 @"location-lat": [NSNumber numberWithFloat:0.0],
-                                                                 @"location-lon": [NSNumber numberWithFloat:0.0],
-                                                                 @"drives": [NSNumber numberWithInteger:100],
-                                                                 } withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
-                                                                     [self dismissViewControllerAnimated:YES completion:nil];
-                                                                 }];
-        }];
+                                            @"confirmed" : [NSNumber numberWithInt:0],
+                                            @"email" : act.email,
+                                            @"code" : newCode,
+                                            @"clientName" : act.client,
+                                            @"client": clientCode,
+                                            @"date": [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]],
+                                            @"dateText" : finalDateText,
+                                            @"location-lat": [NSNumber numberWithFloat:0.0],
+                                            @"location-lon": [NSNumber numberWithFloat:0.0],
+                                            @"drives": [NSNumber numberWithInteger:100],
+                                            } withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+                                                [self dismissViewControllerAnimated:YES completion:nil];
+                                            }];
+        }
+    }
         //compare the current password and do action here
 }
 
@@ -109,26 +103,26 @@
 }
 
 -(void)getClients {
+    clients = [[NSMutableArray alloc] init];
     [clients removeAllObjects];
-    NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
-    CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Clients" predicate:predicate];
-    [[CKContainer defaultContainer].publicCloudDatabase performQuery:query
-                                                        inZoneWithID:nil
-                                                   completionHandler:^(NSArray *results, NSError *error) {
-                           clients = [[NSMutableArray alloc] init];
-                            for (int a = 0; a < results.count; a++) {
-                                CKRecord *record = results[a];
-                                accountObject *account = [[accountObject alloc] initWithType:[record valueForKey:@"clientName"] andClient:[record valueForKey:@"clientName"] andCode:[record valueForKey:@"userCode"] andContactName:[record valueForKey:@"contactName"] andEmail:[record valueForKey:@"email"] andPhone:[record valueForKey:@"phone"]];
-                                [clients addObject:account];
-                            
-                            }
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            NSSortDescriptor *sortDescriptor;
-                            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"client" ascending:YES];
-                            NSArray *sortedArray = [clients sortedArrayUsingDescriptors:@[sortDescriptor]];
-                            clients = [[NSMutableArray alloc] initWithArray:sortedArray];
-                            [table reloadData];
-            });
+    FIRDatabaseReference *reference = [[FIRDatabase database] reference];
+    [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        NSDictionary *dictionary = snapshot.value;
+        if (![[NSString stringWithFormat:@"%@",dictionary] isEqualToString:@"<null>"]) {
+            for(id key in dictionary) {
+                NSDictionary *client = [dictionary objectForKey:key];
+                if ([client objectForKey:@"client"]) {
+                        accountObject *account = [[accountObject alloc] initWithType:[client valueForKey:@"client"] andClient:[client valueForKey:@"client"] andCode:[client valueForKey:@"code"] andContactName:[client valueForKey:@"contact"] andEmail:[client valueForKey:@"email"] andPhone:[client valueForKey:@"phone"]];
+                        [clients addObject:account];
+                    }
+                }
+            NSSortDescriptor *sortDescriptor;
+            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"client" ascending:YES];
+            NSArray *sortedArray = [clients sortedArrayUsingDescriptors:@[sortDescriptor]];
+            clients = [[NSMutableArray alloc] initWithArray:sortedArray];
+            [table reloadData];
+        }
+        [reference removeAllObservers];
     }];
 }
 

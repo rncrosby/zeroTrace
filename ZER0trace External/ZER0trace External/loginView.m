@@ -261,99 +261,98 @@
                                password:password.text
                              completion:^(FIRUser *user, NSError *error) {
                                  if (error) {
-                                     
                                            [References toastMessage:error.localizedDescription andView:self andClose:YES];
-                                   
-                                   
                                      return;
                                  }
-                                 NSLog(@"signed in");
-                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                 NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"email = '%@'",username.text]];
-                                 CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Clients" predicate:predicate];
-                                 CKContainer *container = [CKContainer containerWithIdentifier:@"iCloud.com.fullytoasted.ZER0trace-Internal"];
-                                 [container.publicCloudDatabase performQuery:query
-                                                                inZoneWithID:nil
-                                                           completionHandler:^(NSArray *results, NSError *error) {
-                                                               if (!error) {
-                                                                   CKRecord *record = results[0];
-                                                                   NSString *code = [record valueForKey:@"userCode"];
-                                                                   NSString *client = [record valueForKey:@"clientName"];
-                                                                   [[NSUserDefaults standardUserDefaults] setObject:[record valueForKey:@"email"] forKey:@"email"];
-                                                                   [[NSUserDefaults standardUserDefaults] setObject:code forKey:@"code"];
-                                                                   [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isPending"];
-                                                                   [[NSUserDefaults standardUserDefaults] setObject:client forKey:@"client"];
-                                                                   [[NSUserDefaults standardUserDefaults] synchronize];
-                                                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                                                       [UIView animateWithDuration:1.0f animations:^(void){
-                                                                           header.text = [NSString stringWithFormat:@"Hi, %@",client];
-                                                                           subHeader.text = @"One second...";
-                                                                           header.frame = CGRectMake(header.frame.origin.x, header.frame.origin.y+100, header.frame.size.width, header.frame.size.height);
-                                                                           subHeader.frame = CGRectMake(subHeader.frame.origin.x, subHeader.frame.origin.y+100, subHeader.frame.size.width, subHeader.frame.size.height);
-                                                                           signIn.frame = CGRectMake(signIn.frame.origin.x, signIn.frame.origin.y+[References screenHeight], signIn.frame.size.width, signIn.frame.size.height);
-                                                                           signUp.frame = CGRectMake(signUp.frame.origin.x, signUp.frame.origin.y+[References screenHeight], signUp.frame.size.width, signUp.frame.size.height);
-                                                                           jobCode.frame = CGRectMake(jobCode.frame.origin.x, jobCode.frame.origin.y+[References screenHeight], jobCode.frame.size.width, jobCode.frame.size.height);
-                                                                           scroll.frame = CGRectMake(scroll.frame.origin.x, scroll.frame.origin.y+[References screenHeight], scroll.frame.size.width, scroll.frame.size.height);
-                                                                       } completion:^(bool complete){
-                                                                           if (complete) {
-                                                                               double delayInSeconds = 1.0;
-                                                                               dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                                                                               dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                                                                                   UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-                                                                                   clientView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"clientView"];
-                                                                                   [self presentViewController:controller animated:YES completion:nil];
-                                                                               });
-                                                                           }
-                                                                       }];
-                                                                   });
-                                                               } else {
-                                                                   [References toastMessage:error.localizedDescription andView:self andClose:NO];
-                                                                   return;
-                                                               }
-                                                               
-                                                           }];
-                             });
+                                 NSArray *usernameText = [username.text componentsSeparatedByString:@"@"];
+                                 FIRDatabaseReference *reference = [[[FIRDatabase database] reference] child:usernameText[0]];
+                                 [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                                     NSDictionary *user = snapshot.value;
+                                     [[NSUserDefaults standardUserDefaults] setObject:[user valueForKey:@"email"] forKey:@"email"];
+                                     [[NSUserDefaults standardUserDefaults] setObject:[user valueForKey:@"phone"] forKey:@"phone"];
+                                     [[NSUserDefaults standardUserDefaults] setObject:[user valueForKey:@"code"] forKey:@"code"];
+                                     [[NSUserDefaults standardUserDefaults] setObject:[user valueForKey:@"client"] forKey:@"client"];
+                                     [reference removeAllObservers];
+                                     [[NSUserDefaults standardUserDefaults] synchronize];
+                                     [UIView animateWithDuration:1.0f animations:^(void){
+                                         header.text = [NSString stringWithFormat:@"Hi, %@",[user valueForKey:@"client"]];
+                                         subHeader.text = @"One second...";
+                                         header.frame = CGRectMake(header.frame.origin.x, header.frame.origin.y+100, header.frame.size.width, header.frame.size.height);
+                                         subHeader.frame = CGRectMake(subHeader.frame.origin.x, subHeader.frame.origin.y+100, subHeader.frame.size.width, subHeader.frame.size.height);
+                                         signIn.frame = CGRectMake(signIn.frame.origin.x, signIn.frame.origin.y+[References screenHeight], signIn.frame.size.width, signIn.frame.size.height);
+                                         signUp.frame = CGRectMake(signUp.frame.origin.x, signUp.frame.origin.y+[References screenHeight], signUp.frame.size.width, signUp.frame.size.height);
+                                         jobCode.frame = CGRectMake(jobCode.frame.origin.x, jobCode.frame.origin.y+[References screenHeight], jobCode.frame.size.width, jobCode.frame.size.height);
+                                         scroll.frame = CGRectMake(scroll.frame.origin.x, scroll.frame.origin.y+[References screenHeight], scroll.frame.size.width, scroll.frame.size.height);
+                                     } completion:^(bool complete){
+                                         if (complete) {
+                                             double delayInSeconds = 1.0;
+                                             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                                             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                                 UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+                                                 clientView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"clientView"];
+                                                 [self presentViewController:controller animated:YES completion:nil];
+                                             });
+                                         }
+                                     }];
+                                 }];
                              }];
               });
     } else if (currentCard == 2) {
-        FIRDatabaseReference *ref = [[FIRDatabase database] reference];
+        FIRDatabaseReference *refJobs = [[FIRDatabase database] reference];
         NSString *code = [References randomIntWithLength:5];
         NSArray *usernameText = [username.text componentsSeparatedByString:@"@"];
-        [[ref child:usernameText[0]] setValue:@{
-                                                             @"client" : companyName.text,
-                                                             @"email" : username.text,
-                                                             @"contact" : contactName.text,
-                                                             @"phone"   : contactPhone.text,
-                                                             @"code"    : code
-                                                             } withCompletionBlock:^(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
-                                                                 if (!error) {
-                                                                     [[FIRAuth auth] createUserWithEmail:username.text
-                                                                                                password:password.text
-                                                                                              completion:^(FIRUser *_Nullable user, NSError *_Nullable error) {
-                                                                                                  [UIView animateWithDuration:1.0f animations:^(void){
-                                                                                                      [[NSUserDefaults standardUserDefaults] setObject:username.text forKey:@"email"];
-                                                                                                      [[NSUserDefaults standardUserDefaults] setObject:code forKey:@"code"];
-                                                                                                      [[NSUserDefaults standardUserDefaults] setObject:companyName.text forKey:@"client"];
-                                                                                                      [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isPending"];
-                                                                                                      header.text = [NSString stringWithFormat:@"Almost Ready, %@",companyName.text];
-                                                                                                      subHeader.text = @"You'll recieve an email when your account is ready";
-                                                                                                      header.frame = CGRectMake(header.frame.origin.x, header.frame.origin.y+100, header.frame.size.width, header.frame.size.height);
-                                                                                                      subHeader.frame = CGRectMake(subHeader.frame.origin.x, subHeader.frame.origin.y+100, subHeader.frame.size.width, subHeader.frame.size.height);
-                                                                                                      signIn.frame = CGRectMake(signIn.frame.origin.x, signIn.frame.origin.y+[References screenHeight], signIn.frame.size.width, signIn.frame.size.height);
-                                                                                                      signUp.frame = CGRectMake(signUp.frame.origin.x, signUp.frame.origin.y+[References screenHeight], signUp.frame.size.width, signUp.frame.size.height);
-                                                                                                      jobCode.frame = CGRectMake(jobCode.frame.origin.x, jobCode.frame.origin.y+[References screenHeight], jobCode.frame.size.width, jobCode.frame.size.height);
-                                                                                                      scroll.frame = CGRectMake(scroll.frame.origin.x, scroll.frame.origin.y+[References screenHeight], scroll.frame.size.width, scroll.frame.size.height);
-                                                                                                      forceSignInButton.hidden = NO;
-                                                                                                  } completion:^(bool complete){
-                                                                                                      if (complete) {
-                                                                                                          nil;
-                                                                                                      }
-                                                                                                  }];
+        [[FIRAuth auth] createUserWithEmail:username.text
+                                   password:password.text
+                                 completion:^(FIRUser *_Nullable user, NSError *_Nullable error){
+                                     if (!error) {
+                                         [[refJobs child:code] setValue:@{} withCompletionBlock:^(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+               if (!error) {
+                           FIRDatabaseReference *reference = [[FIRDatabase database] reference];
+                    [[reference child:usernameText[0]] setValue:@{
+                                  @"client" : companyName.text,
+                                  @"email" : username.text,
+                                  @"contact" : contactName.text,
+                                  @"phone"   : contactPhone.text,
+                                  @"code"    : code
+                                  } withCompletionBlock:^(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+                                      if (!error) {
+                                          [[NSUserDefaults standardUserDefaults] setObject:contactPhone.text forKey:@"phone"];
+                                          [[NSUserDefaults standardUserDefaults] setObject:username.text forKey:@"email"];
+                                          [[NSUserDefaults standardUserDefaults] setObject:code forKey:@"code"];
+                                          [[NSUserDefaults standardUserDefaults] setObject:companyName.text forKey:@"client"];
+                                          [[NSUserDefaults standardUserDefaults] synchronize];
+                                          [UIView animateWithDuration:1.0f animations:^(void){
+                                              header.text = [NSString stringWithFormat:@"Hi, %@",companyName.text];
+                                              subHeader.text = @"One second...";
+                                              header.frame = CGRectMake(header.frame.origin.x, header.frame.origin.y+100, header.frame.size.width, header.frame.size.height);
+                                              subHeader.frame = CGRectMake(subHeader.frame.origin.x, subHeader.frame.origin.y+100, subHeader.frame.size.width, subHeader.frame.size.height);
+                                              signIn.frame = CGRectMake(signIn.frame.origin.x, signIn.frame.origin.y+[References screenHeight], signIn.frame.size.width, signIn.frame.size.height);
+                                              signUp.frame = CGRectMake(signUp.frame.origin.x, signUp.frame.origin.y+[References screenHeight], signUp.frame.size.width, signUp.frame.size.height);
+                                              jobCode.frame = CGRectMake(jobCode.frame.origin.x, jobCode.frame.origin.y+[References screenHeight], jobCode.frame.size.width, jobCode.frame.size.height);
+                                              scroll.frame = CGRectMake(scroll.frame.origin.x, scroll.frame.origin.y+[References screenHeight], scroll.frame.size.width, scroll.frame.size.height);
+                                          } completion:^(bool complete){
+                                              if (complete) {
+                                                  double delayInSeconds = 1.0;
+                                                  dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                                                  dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                                      UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+                                                      clientView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"clientView"];
+                                                      [self presentViewController:controller animated:YES completion:nil];
+                                                  });
+                                              }
+                                          }];
+                                      } else {
+                                          [References toastMessage:error.localizedDescription andView:self andClose:NO];
+                                      }
+                                  }];
+                                                                                                  }
                                                                                               }];
-                                                                 } else {
-                                                                     NSLog(@"%@",error.localizedDescription);
-                                                                 }
-                                                             }];
+                                        
+                                     } else {
+                                         [References toastMessage:error.localizedDescription andView:self andClose:NO];
+                                     }
+                                     
+                                 }];
     }
 }
 

@@ -28,6 +28,7 @@
 #import "loginView.h"
 
 @interface clientView : UIViewController <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate> {
+    int refreshComplete;
     NSMutableArray *hashedSerials;
     NSTimer *scrollTimer;
     bool videoPlaying,disableScrolling;

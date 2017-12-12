@@ -533,6 +533,13 @@
     return string;
 }
 
++(void)printUser {
+    NSLog(@"\nClient: %@\nCode: %@\nEmail: %@\nPhone: %@\n",[self returnObjectForKey:@"client"],[self returnObjectForKey:@"code"],[self returnObjectForKey:@"email"],[self returnObjectForKey:@"phone"]);
+}
+
++(id)returnObjectForKey:(NSString*)key{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:key];
+}
 
 @end
 

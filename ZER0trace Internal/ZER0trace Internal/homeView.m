@@ -26,7 +26,7 @@
     scrollView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]);
     [super viewDidLoad];
     // Create the reader object
-    [self getUpcoming:NO];
+    [self getUpcomingJobs];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createdNewJob) name:@"refreshJobs" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
@@ -55,7 +55,7 @@
     [self presentViewController:refreshingJobs animated:YES completion:nil];
     [self setVisibility];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [self getUpcoming:YES];
+        [self getUpcomingJobs];
     });
 }
 
@@ -72,7 +72,6 @@
     if ([References screenWidth] > 1024) {
         [References toastMessage:@"ZER0trace is not optimized for this iPad. Please use a 9.7\" device." andView:self andClose:NO];
     }
-    [self getPendingAccounts];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -363,72 +362,6 @@
 //                                                   }];
 //}
 
--(void)newJob:(NSString *)title{
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:@"Enter the clients code" preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = @"Client Code";
-        textField.keyboardType = UIKeyboardTypeNumberPad;
-        textField.secureTextEntry = NO;
-    }];
-    UIAlertAction *create = [UIAlertAction actionWithTitle:@"Create" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        NSString *code = [References randomIntWithLength:5];
-        
-        NSString *clientCode = [[alertController textFields][0] text];
-        NSString __block *clientName = @"";
-        CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:clientCode];
-        [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:recordID completionHandler:^(CKRecord *record, NSError *error) {
-            if (error) {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                [self newJob:@"No Client Found"];
-                });
-                return;
-            }
-            clientName = [record valueForKey:@"clientName"];
-            NSMutableArray *allJobCodes = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobCodes"]];
-        
-            [allJobCodes addObject:code];
-            NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"EEEE, MMMM d"];
-            NSMutableArray *allJobDates = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobDates"]];
-            [allJobDates addObject:[formatter stringFromDate:[NSDate date]]];
-            record[@"allJobCodes"] = allJobCodes;
-            record[@"allJobDates"] = allJobDates;
-            [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
-                NSLog(@"%@",error.localizedDescription);
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    CKRecord *record = [[CKRecord alloc] initWithRecordType:@"Job" recordID:[[CKRecordID alloc] initWithRecordName:code]];
-                    record[@"client"] = clientName;
-                    record[@"code"] = code;
-                    [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
-                        if (!error) {
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                [nextJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"] andClientCode:[record valueForKey:@"clientCode"] andCode:[record valueForKey:@"code"] andURL:nil andDate:nil andSerials:nil andTimes:nil andSignature:nil]];
-                                [nextJobRecords addObject:record];
-                                [upcomingJobs reloadData];
-                                [self setVisibility];
-                            });
-                        } else {
-                            NSLog(@"%@",error.localizedDescription);
-                        }
-
-                    }];
-                    });
-            }];
-        }];
-        //compare the current password and do action here
-        
-    }];
-    [alertController addAction:create];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-    }];
-    UIAlertAction *searchAction = [UIAlertAction actionWithTitle:@"See List of Codes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [References toastMessage:@"Coming Soon" andView:self andClose:NO];
-    }];
-    [alertController addAction:searchAction];
-    [alertController addAction:cancelAction];
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
 - (void)reader:(QRCodeReaderViewController *)reader didScanResult:(NSString *)result
 {
     [self dismissViewControllerAnimated:YES completion:^{
@@ -441,74 +374,6 @@
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
--(void)getUpcoming:(BOOL)isNewJob{
-    [savedNextJobs removeAllObjects];
-    [completedJobs removeAllObjects];
-    [nextJobs removeAllObjects];
-    [completedJobs removeAllObjects];
-    [nextJobRecords removeAllObjects];
-    [completedJobs removeAllObjects];
-    upcomingJobs.hidden = YES;
-    recentJobs.hidden = YES;
-    locallySaved = [[NSMutableArray alloc] init];
-    NSError *error = nil;
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSURL *documentsURL = [NSURL fileURLWithPath:documentsDirectory];
-    for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:&error]) {
-        [locallySaved addObject:file];
-    }
-    completedJobs = [[NSMutableArray alloc] init];
-    completedJobsRecord = [[NSMutableArray alloc] init];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"TRUEPREDICATE"]];
-    CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Job" predicate:predicate];
-    query.sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc]initWithKey:@"modificationDate" ascending:false]];
-    [[CKContainer defaultContainer].publicCloudDatabase performQuery:query
-                                                        inZoneWithID:nil
-                                                   completionHandler:^(NSArray *results, NSError *error) {
-                                                       if (error) {
-                                                           UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable To Connect" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-                                                           UIAlertAction *settings = [UIAlertAction actionWithTitle:@"Open Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
-                                                               
-                                                               [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"App-prefs:"]];
-                                                           }];
-                                                           UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action){
-                                                               
-                                                           }];
-                                                           [alert addAction:settings];
-                                                           [alert addAction:cancel];
-                                                           [self presentViewController:alert animated:YES completion:nil];
-                                                       }
-                                                       if (results.count > 0) {
-                                                           
-                                                           for (int a = 0; a < results.count; a++) {
-                                                               CKRecord *record = results[a];
-                                                               if ([record valueForKey:@"videoURL"]) {
-                                                                   NSArray *driveTimes = [record objectForKey:@"driveTimes"];
-                                                                   NSArray *driveSerials = [record objectForKey:@"driveSerials"];
-                                                                   NSData *signature = [record objectForKey:@"signatureData"];
-                                                                   [completedJobs addObject:[[jobObject alloc] initWithType:[record valueForKey:@"client"]  andClientCode:[record valueForKey:@"clientCode"] andCode:[record valueForKey:@"code"] andURL:[record valueForKey:@"videoURL"] andDate:[record objectForKey:@"dateCompleted"] andSerials:driveSerials andTimes:driveTimes andSignature:signature]];
-                                                                   [completedJobsRecord addObject:record];
-                                                               }
-                                                           }
-                                                           dispatch_sync(dispatch_get_main_queue(), ^{
-                                                               [recentJobs reloadData];
-                                                               [self setVisibility];
-                                                               // Update the UI on the main thread.
-                                                           });
-                                                           
-                                                       } else {
-                                                           dispatch_sync(dispatch_get_main_queue(), ^{
-                                                               [self setVisibility];
-                                                               // Update the UI on the main thread.
-                                                           });
-                                                       }
-                                                   }];
-    if (isNewJob == YES) {
-         [refreshingJobs dismissViewControllerAnimated:YES completion:nil];
-    }
-   
-}
 
 -(void)setVisibility {
     if (nextJobs.count < 1) {
@@ -545,7 +410,7 @@
 }
 
 - (IBAction)refreshButton:(id)sender {
-    [self getUpcoming:NO];
+    [self getUpcomingJobs];
     [UIView animateWithDuration:0.25 animations:^(void){
         [search setText:@"Search by Client or Code"];
         [searchButton setImage:[UIImage imageNamed:@"search.png"] forState:UIControlStateNormal];
@@ -622,52 +487,8 @@
     jobObject *job = nextJobs[indexInArray];
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Confirm Cancellation of Job" message:@"This action is irreversible" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Cancel Job" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            deletingJob = [UIAlertController alertControllerWithTitle:@"Cancelling Job"
-                                                              message:@"One Second..."
-                                                       preferredStyle:UIAlertControllerStyleAlert];
-            [self presentViewController:deletingJob animated:YES completion:nil];
-            CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:job.clientCode];
-            [[CKContainer defaultContainer].publicCloudDatabase fetchRecordWithID:recordID completionHandler:^(CKRecord *record, NSError *error) {
-                if (error) {
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:job.code];
-                        [[CKContainer defaultContainer].publicCloudDatabase deleteRecordWithID:recordID completionHandler:^(CKRecordID *recordID, NSError *error) {
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                [deletingJob dismissViewControllerAnimated:YES completion:nil];
-                                [self getUpcoming:NO];
-                            });
-                        }];
-                        // Update the UI on the main thread.
-                    });
-                    return;
-                }
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    NSMutableArray *jobCodes = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobCodes"]];
-                    NSMutableArray *jobDates = [[NSMutableArray alloc] initWithArray:[record objectForKey:@"allJobDates"]];
-                    for (int a = 0; a < jobCodes.count; a++) {
-                        if ([jobCodes[a] isEqualToString:job.code]) {
-                            [jobCodes removeObjectAtIndex:a];
-                            [jobDates removeObjectAtIndex:a];
-                            break;
-                        }
-                    }
-                    record[@"allJobCodes"] = jobCodes;
-                    record[@"allJobDates"] = jobDates;
-                    [[CKContainer defaultContainer].publicCloudDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:job.code];
-                            [[CKContainer defaultContainer].publicCloudDatabase deleteRecordWithID:recordID completionHandler:^(CKRecordID *recordID, NSError *error) {
-                                dispatch_sync(dispatch_get_main_queue(), ^{
-                                    [deletingJob dismissViewControllerAnimated:YES completion:nil];
-                                    [self getUpcoming:NO];
-                                });
-                            }];
-                            // Update the UI on the main thread.
-                        });
-                    }];
-                });
-            }];
-        }];
+        NSLog(@"would cancel");
+    }];
     [alertController addAction:confirmAction];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Back" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
@@ -677,7 +498,6 @@
 }
 
 -(void)getUpcomingJobs {
-   
     FIRDatabaseReference *reference = [[[FIRDatabase database] reference] child:@"upcomingJobs"];
     [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         [savedNextJobs removeAllObjects];
@@ -689,66 +509,53 @@
             for(id key in dictionary) {
                 id value = [dictionary objectForKey:key];
                 unconfirmedJobObject *job = [[unconfirmedJobObject alloc] initWithType:[value objectForKey:@"client"] andCode:[value objectForKey:@"code"] andDate:[value valueForKey:@"date"] andLocation:[[CLLocation alloc] initWithLatitude:[[value valueForKey:@"location-lat"] doubleValue] longitude:[[value valueForKey:@"location-lon"] doubleValue]] andDrives:[value objectForKey:@"drives"] andDateText:[value valueForKey:@"dateText"] andConfirmation:[value valueForKey:@"confirmed"] andEmail:[value objectForKey:@"email"] andClientName:[value valueForKey:@"clientName"]];
-                [job printObject];
                 [nextJobs addObject:job];
                 [savedNextJobs addObject:job];
                 [upcomingJobs reloadData];
                 [self setVisibility];
             }
         }
+        [self getPastJobs];
         [reference removeAllObservers];
     }];
 }
 
--(void)getPendingAccounts {
-    [_ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        [_ref removeAllObservers];
-        [pendingAccounts removeAllObjects];
-        pendingAccounts = [[NSMutableArray alloc] init];
-        unconfirmedJobInt = 0;
-        NSDictionary *accounts = snapshot.value;
-        if (![[NSString stringWithFormat:@"%@",accounts] isEqualToString:@"<null>"]) {
-            [accounts enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-                if (![key isEqualToString:@"upcomingJobs"]) {
-                    accountObject *account = [[accountObject alloc] initWithType:key andClient:[obj valueForKey:@"client"] andCode:[obj valueForKey:@"code"] andContactName:[obj valueForKey:@"client"] andEmail:[obj valueForKey:@"email"] andPhone:[obj valueForKey:@"phone"]];
-                    [pendingAccounts addObject:account];
-                } else {
-                    unconfirmedJobInt++;
+-(void)getPastJobs{
+    upcomingJobs.hidden = YES;
+    recentJobs.hidden = YES;
+    locallySaved = [[NSMutableArray alloc] init];
+    NSError *error = nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSURL *documentsURL = [NSURL fileURLWithPath:documentsDirectory];
+    for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:&error]) {
+        [locallySaved addObject:file];
+    }
+    completedJobs = [[NSMutableArray alloc] init];
+    FIRDatabaseReference *reference = [[FIRDatabase database] reference];
+    [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        NSDictionary *dictionary = snapshot.value;
+            [completedJobs removeAllObjects];
+        if (![[NSString stringWithFormat:@"%@",dictionary] isEqualToString:@"<null>"]) {
+            for(id key in dictionary) {
+                NSDictionary *client = [dictionary objectForKey:key];
+                if (![client objectForKey:@"client"] && ![(NSString*)key isEqualToString:@"upcomingJobs"]) {
+                    for(id subKey in client) {
+                        NSDictionary *jobD = [client objectForKey:subKey];
+                        NSArray *driveSerials = [jobD objectForKey:@"driveSerials"];
+                        NSArray *driveTimes = [jobD objectForKey:@"driveTimes"];
+                        NSDate *date = [NSDate dateWithTimeIntervalSince1970:[[jobD objectForKey:@"date"] doubleValue]];
+                        jobObject *job = [[jobObject alloc] initWithType:[jobD valueForKey:@"clientName"] andClientCode:[jobD valueForKey:@"clientCode"] andCode:[jobD valueForKey:@"code"] andURL:[jobD valueForKey:@"videoURL"] andDate:date andSerials:driveSerials andTimes:driveTimes andSignature:[jobD valueForKey:@"signatureURL"]];
+                        [completedJobs addObject:job];
+                    }
+                    
                 }
-                // Set stop to YES when you wanted to break the iteration.
-            }];
-            if (pendingAccounts.count < 1) {
-                if (clientManagerButton.hidden != YES) {
-                    [UIView animateWithDuration:0.25 animations:^(void){
-                        refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
-                        searchButton.frame = CGRectMake(clientManagerButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
-                    }];
-                }
-                
-                clientManagerButton.enabled = false;
-                clientManagerButton.alpha = 0.0f;
-                clientCount.hidden = true;
-            } else {
-                [UIView animateWithDuration:0.25 animations:^(void){
-                    refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
-                    searchButton.frame = CGRectMake(refreshButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
-                }];
-                clientManagerButton.enabled = true;
-                clientCount.hidden = false;
-                clientManagerButton.alpha = 1.0f;
-                clientCount.text = [NSString stringWithFormat:@"%lu",(unsigned long)pendingAccounts.count];
             }
-        } else {
-            [UIView animateWithDuration:0.25 animations:^(void){
-                refreshButton.frame = CGRectMake(searchButton.frame.origin.x, refreshButton.frame.origin.y, refreshButton.frame.size.width, refreshButton.frame.size.height);
-                searchButton.frame = CGRectMake(clientManagerButton.frame.origin.x, searchButton.frame.origin.y, searchButton.frame.size.width, searchButton.frame.size.height);
-            }];
-            
-            clientManagerButton.enabled = false;
-            clientManagerButton.alpha = 0.0f;
-            clientCount.hidden = true;
+            [recentJobs reloadData];
+            [self setVisibility];
         }
+        [reference removeAllObservers];
     }];
-
+    
 }
 @end
