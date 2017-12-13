@@ -1,80 +1,126 @@
-function getAllJobs() {
-		var sesh = window.sessionStorage.getItem("signedIn");
-		console.log(sesh);
-	  // 2
-		CloudKit.configure({
-				containers: [{
-					containerIdentifier: 'iCloud.com.fullytoasted.ZER0trace-Internal',
-					apiToken: '2d86e7c79d5ca11b06592a0c703cdfcb3869512c75629ae151d96f924a0fb696',
-					environment: 'production'
-				}]
+function getUpcoming() {
+	var sesh = window.sessionStorage.getItem("signedIn");
+	var code = window.sessionStorage.getItem("clientCode");
+	var email = window.sessionStorage.getItem("email");
+	var client = window.sessionStorage.getItem("clientName");
+	var jobTitles = [];
+	var jobCodes = [];
+	var jobCompletion = [];
+	var code = window.sessionStorage.getItem("clientCode");
+	firebase.database().ref('/upcomingJobs/').once('value').then(function(snapshot) {
+		snapshot.forEach(function(child){
+			var obj = child.val();
+			if (obj["client"] == code) {
+				jobTitles.push(obj['dateText']);
+				jobCodes.push(obj['code']);
+				jobCompletion.push(0);
+			}
+		});
+		var fire = firebase.database();
+		fire.ref('/'+code).once('value').then(function(snap) {
+			snap.forEach(function(child){
+				var obj = child.val();
+				jobTitles.push(obj['dateText']);
+				jobCodes.push(obj['code']);
+				jobCompletion.push(1);
 			});
-
-		var container = CloudKit.getDefaultContainer();
-		var publicDatabase = container.publicCloudDatabase;
-		var full = window.location.href.split("?");
-		var code = full[1].split("=");
-		// GET JOBS
-		publicDatabase.fetchRecords(code[1]).then(function(response) {
-		if (response.hasErrors) {
-				// Insert error handling
-				window.location.href = "processing.html";
-		} else {
-					var fetchedRecord = response.records[0];
-					var jobTitles = fetchedRecord['fields']['allJobDates']['value'];
-					var jobCodes = fetchedRecord['fields']['allJobCodes']['value'];
-					var jobCompletion = fetchedRecord['fields']['allJobCompletion']['value'];
-					var container = document.getElementById('jobsContainer');
-					for (var i = 0; i < jobTitles.length; i++) {
-						var job = document.createElement("div");
-						var positionInfo = job.getBoundingClientRect();
-						var rightMargin = positionInfo.width.toString() + "px";
-						if (jobCompletion[i] == 1) {
-							var chevron = document.createElement("img");
-							chevron.id = "chevron";
-							chevron.style.marginRight = rightMargin;
-							job.appendChild(chevron);
-							var jobStatus = document.createElement("div");
-							jobStatus.id = "jobComplete";
-							job.appendChild(jobStatus);
-							job.id = "jobObject";
-							job.setAttribute("code",jobCodes[i]);
-							job.onclick = function() {
-									openJob(this);
-							}
-						} else {
-							var jobStatus = document.createElement("div");
-							jobStatus.id = "jobPending";
-							container.appendChild(jobStatus);
-							var job = document.createElement("div");
-							job.id = "jobObject";
-							job.setAttribute("code",jobCodes[i]);
-							job.onclick = function() {
-								var x = document.getElementById("snackbar")
-								document.getElementById("snackbar").innerHTML = "This Job is Pending Completion";
-								x.className = "show";
-								setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-							}
-						}
-
-						var jobDate = document.createElement("p");
-						jobDate.id = "JobDate";
-						jobDate.innerHTML = jobTitles[i];
-						var jobCode = document.createElement("p");
-						jobCode.id = "jobCode";
-						jobCode.innerHTML = jobCodes[i];
-						job.appendChild(jobDate);
-						job.appendChild(jobCode);
-						container.appendChild(job);
+			var container = document.getElementById('jobsContainer');
+			for (var i = 0; i < jobTitles.length; i++) {
+				var job = document.createElement("div");
+				var positionInfo = job.getBoundingClientRect();
+				var rightMargin = positionInfo.width.toString() + "px";
+				if (jobCompletion[i] == 1) {
+					var chevron = document.createElement("img");
+					chevron.id = "chevron";
+					chevron.style.marginRight = rightMargin;
+					job.appendChild(chevron);
+					var jobStatus = document.createElement("div");
+					jobStatus.id = "jobComplete";
+					job.appendChild(jobStatus);
+					job.id = "jobObject";
+					job.setAttribute("code",jobCodes[i]);
+					job.onclick = function() {
+							openJob(this);
 					}
+				} else {
+					var jobStatus = document.createElement("div");
+					jobStatus.id = "jobPending";
+					container.appendChild(jobStatus);
+					var job = document.createElement("div");
+					job.id = "jobObject";
+					job.setAttribute("code",jobCodes[i]);
+					job.onclick = function() {
+						upcomingJob(this);
 					}
-		}
-	)}
-	function openJob(object) {
-		var code = object.getAttribute("code");
-		window.location.href = "jobM.html?code=" + code;
-	}
+				}
+				var jobDate = document.createElement("p");
+				jobDate.id = "JobDate";
+				jobDate.innerHTML = jobTitles[i];
+				var jobCode = document.createElement("p");
+				jobCode.id = "jobCode";
+				jobCode.innerHTML = jobCodes[i];
+				job.appendChild(jobDate);
+				job.appendChild(jobCode);
+				container.appendChild(job);
+			}
+			});
+		});
+}
 
+function openJob(object) {
+	var jobCode = object.getAttribute("code");
+	var clientCode = window.sessionStorage.getItem("clientCode");
+	window.location.href = "jobM.html?client=" + clientCode + '?code=' + jobCode;
+}
+
+function upcomingJob() {
+
+}
+
+function scheduleJob(form) {
+	var code = window.sessionStorage.getItem("clientCode");
+	var email = window.sessionStorage.getItem("email");
+	var client = window.sessionStorage.getItem("clientName");
+	var date = form.date.value;
+	var drives = form.drives.value;
+	var addressLine1 = form.line1.value;
+	var addressLine2 = form.line2.value;
+	var city = form.city.value;
+	var state = form.state.value;
+	var zip = form.zip.value;
+	var address = addressLine1 + '\n' + addressLine2 + '\n' + city + '\n' + state + '\n' + zip;
+	var geocoder = new google.maps.Geocoder();
+  geocoder.geocode({'address': address}, function(results, status) {
+    if (status === 'OK') {
+			var longitude = results[0].geometry.location.lng();
+			var latitude = results[0].geometry.location.lat();
+      console.log(latitude + ',' + longitude);
+			var epoch = moment(date).unix();
+			var jobID = makeid();
+			var rootRef = firebase.database().ref('upcomingJobs/' + jobID).set({
+				"client": code,
+				"clientName" : client,
+				"code" : jobID,
+				"confirmed" : 0,
+				"date" : epoch,
+				"dateText" : moment(date).format('dddd, MMMM D'),
+				"drives" : parseInt(drives),
+				"email" : email,
+				"location-lat": latitude,
+				"location-lon" : longitude
+			}, function(error) {
+			  if (error) {
+			    alert(error);
+			  } else {
+			    window.location.href = "clientPortalM.html";
+			  }
+			});
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+	});
+	return false;
+}
 
 	function getJob() {
 		var full = window.location.href.split("?");
@@ -165,7 +211,7 @@ function getAllJobs() {
 						for (var key in obj) {
 							if (key == form.code.value) {
 								var foundJob = obj[key];
-								window.sessionStorage.setItem("signedIn", "");
+								window.sessionStorage.setItem("signedIn", "false");
 								window.sessionStorage.setItem("clientCode", foundJob["clientCode"]);
 								window.sessionStorage.setItem("jobCode", foundJob["code"]);
 								window.location.href = "jobM.html?client=" + foundJob["clientCode"] + '?code=' + foundJob["code"];
@@ -188,22 +234,20 @@ function getAllJobs() {
     playerInstance.seek(object.getAttribute("time"));
   }
 	function handleSignout() {
-		var sesh = window.sessionStorage.getItem("signedIn");
-		if (sesh == "true") {
-			window.sessionStorage.setItem("signedIn","");
-			window.sessionStorage.setItem("code","");
-			window.location.href = "clientM.html";
-		} else {
-			window.location.href = "codeM.html";
-		}
+		window.sessionStorage.setItem("signedIn", "false");
+		window.sessionStorage.setItem("clientCode", "");
+		window.sessionStorage.setItem("email", "");
+		window.sessionStorage.setItem("clientName", "");
+		window.location.href = "codeM.html";
 	}
 	function handleJobClose() {
-		var sesh = window.sessionStorage.getItem("signedIn");
-		if (sesh == "true") {
-			var code = window.sessionStorage.getItem("code");
-			window.location.href = "clientPortalM.html?code="+code.toString();
+		var text = window.sessionStorage.getItem("signedIn");
+		if (text == "true") {
+			window.location.href = "clientPortalM.html";
 		} else {
 			window.location.href = "codeM.html";
+			window.sessionStorage.setItem("signedIn","false");
+			window.sessionStorage.setItem("code","");
 		}
 	}
 	function checkClient(form){
@@ -213,9 +257,13 @@ function getAllJobs() {
 			var userID = username.split("@");
 			firebase.database().ref(userID[0]).once('value').then(function(snapshot) {
 				var code = snapshot.val().code;
+				var email = snapshot.val().email;
+				var clientName = snapshot.val().client;
 				window.sessionStorage.setItem("signedIn", "true");
-				window.sessionStorage.setItem("code", code);
-				window.location.href = "clientPortalM.html?code=" + code;
+				window.sessionStorage.setItem("clientCode", code);
+				window.sessionStorage.setItem("email", email);
+				window.sessionStorage.setItem("clientName", clientName);
+				window.location.href = "clientPortalM.html"
 			});
 			}).catch(function(error) {
 		  // Handle Errors here.
@@ -313,17 +361,22 @@ function handleRegistration(form) {
 				var email = window.sessionStorage.getItem("email");
 				var phone = window.sessionStorage.getItem("phone");
 				var username = email.split("@");
+				var code = makeid();
 				var rootRef = firebase.database().ref(username[0]).set({
 					"client": clientName,
 					"contact" : contactName,
 					"email" : email,
 					"phone" : phone,
-					"code"	: makeid()
+					"code"	: code
 				});
 				firebase.auth().createUserWithEmailAndPassword(email, entry).then(function(user) {
-					window.location.href = "processing.html";
 					}).catch(function(error) {
-				  // Handle Errors here.
+						window.sessionStorage.setItem("signedIn", "true");
+						window.sessionStorage.setItem("clientCode", code);
+						window.sessionStorage.setItem("email", email);
+						window.sessionStorage.setItem("clientName", clientName);
+						window.location.href = "clientPortalM.html"
+				  	// Handle Errors here.
 				  var errorCode = error.code;
 				  var errorMessage = error.message;
 					if (errorCode) {

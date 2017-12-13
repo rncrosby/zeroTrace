@@ -8,9 +8,32 @@
        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <title>ZER0trace Client Portal</title>
+        <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyADP8PfP74I6PDAerLkZSOwukNZg1BO--M",
+        authDomain: "zer0trace-f8259.firebaseapp.com",
+        databaseURL: "https://zer0trace-f8259.firebaseio.com",
+        projectId: "zer0trace-f8259",
+        storageBucket: "zer0trace-f8259.appspot.com",
+        messagingSenderId: "80812276638"
+      };
+      var defaultApp = firebase.initializeApp(config);
+      // Initialize the default app
+
+    console.log(defaultApp.name);  // "[DEFAULT]"
+    // You can retrieve services via the defaultApp variable...
+    var defaultStorage = defaultApp.storage();
+    var defaultDatabase = defaultApp.database();
+
+    // ... or you can use the equivalent shorthand notation
+    defaultStorage = firebase.storage();
+    defaultDatabase = firebase.database();
+    </script>
   </head>
   <body>
-    <script>getAllJobs();</script>
+    <script>getUpcoming();</script>
     <div class="menuBar">
       <p id="menuBarText">Jobs</p>
       <a href="clientNewM.html" id="share"><img id="shareIcon" src="plus.png"/></a>

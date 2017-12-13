@@ -35,8 +35,7 @@ defaultDatabase = firebase.database();
   <body>
     <script>
     if (window.sessionStorage.getItem("signedIn") == "true") {
-      var code = window.sessionStorage.getItem("code");
-      window.location.href = "clientPortalM.html?code=" + code.toString();
+      window.location.href = "clientPortalM.html";
     }
     </script>
     <center><div class="card">
