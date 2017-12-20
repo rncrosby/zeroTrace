@@ -449,6 +449,11 @@
 }
 
 -(void)mergeAll {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Compressing Video"
+                                                                   message:@"Please be patient..."
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    [self presentViewController:alert animated:YES completion:nil];
     NSLog(@"starting merge");
     //Create the AVMutable composition to add tracks
     AVMutableComposition* composition = [[AVMutableComposition alloc]init];
@@ -494,11 +499,10 @@
                 break;
             case AVAssetExportSessionStatusCompleted:
                 //Here you go you have got the merged video :)
-                
-                [self completeRecordingUpload:url];
-                break;
-            default:
-                NSLog(@"somethings not right");
+                [alert dismissViewControllerAnimated:YES completion:^(void){
+                    [self completeRecordingUpload:url];
+                }];
+                NSLog(@"complete");
                 break;
         }
         
@@ -506,7 +510,6 @@
 }
 
 -(void)completeRecordingUpload:(NSURL*)fileURL{
-    dispatch_sync(dispatch_get_main_queue(), ^{
         [completeProgress setProgress:0];
         cancel.hidden = YES;
         destructionButton.hidden = YES;
@@ -532,6 +535,5 @@
             [self.view bringSubviewToFront:completeView];
             [References cornerRadius:recordButton radius:recordButton.frame.size.width/2];
         }];
-    });
 }
 @end

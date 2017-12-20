@@ -555,6 +555,7 @@
             [self setVisibility];
         }
         [reference removeAllObservers];
+        [refreshingJobs dismissViewControllerAnimated:YES completion:nil];
     }];
     
 }

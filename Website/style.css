@@ -12,6 +12,17 @@ body {
   overflow-y: scroll;
 }
 
+img#bannerlogo {
+  padding-left: 1%;
+  width: auto;
+  height: 100px;
+}
+
+a#bannerLinks {
+  display: inline;
+  line-height: 150px;
+}
+
 img#social {
   position: fixed;
   z-index: 100;

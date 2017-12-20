@@ -17,11 +17,13 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is only used while scheduling a new job.</string>
+	<string>3</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>To Take Photos</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location is only used while scheduling a new job.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

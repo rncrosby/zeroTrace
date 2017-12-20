@@ -573,7 +573,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DE9230446DDE54DF4A6EE290 /* Pods-ZER0trace External.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = "ZER0trace External/ZER0trace External.entitlements";
 				DEVELOPMENT_TEAM = UD5W2M958Y;
 				INFOPLIST_FILE = "ZER0trace External/Info.plist";
@@ -588,7 +588,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8ECCD9232A32CFA83BF54A7E /* Pods-ZER0trace External.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = "ZER0trace External/ZER0trace External.entitlements";
 				DEVELOPMENT_TEAM = UD5W2M958Y;
 				INFOPLIST_FILE = "ZER0trace External/Info.plist";
