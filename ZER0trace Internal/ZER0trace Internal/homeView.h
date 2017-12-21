@@ -21,6 +21,7 @@
 #import "manualJobViewViewController.h"
 #import "accountObject.h"
 #import <MessageUI/MessageUI.h>
+#import "peripheralCamera.h"
 #import "unconfirmedJobObject.h"
 
 @interface homeView : UIViewController <QRCodeReaderDelegate,UITextFieldDelegate,UICollectionViewDelegate,UICollectionViewDataSource,MFMailComposeViewControllerDelegate> {
@@ -28,6 +29,7 @@
     NSMutableArray *pendingAccounts;
     QRCodeReaderViewController *vc;
     bool performSearch;
+    bool scannerFound;
     __weak IBOutlet UITextField *search;
     int searchLength;
     NSMutableArray *nextJobs,*savedNextJobs,*completedJobs,*savedCompletedJobs,*nextJobRecords,*completedJobsRecord,*locallySaved;
@@ -58,6 +60,7 @@
 - (IBAction)clientManager:(id)sender;
 - (IBAction)searchButton:(id)sender;
 - (IBAction)jobManager:(id)sender;
+- (IBAction)cameraMode:(id)sender;
 
 
 

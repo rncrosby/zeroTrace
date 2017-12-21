@@ -86,8 +86,10 @@
     NSLog(@"%f",keyboard.size.height);
     if (keyboard.size.height > 100) {
         [checkScannerButton setTitle:@"No Scanner Found" forState:UIControlStateNormal];
+        scannerFound = false;
     } else {
          [checkScannerButton setTitle:@"Scanner Connected" forState:UIControlStateNormal];
+        scannerFound = true;
     }
     
     [scannerCheck resignFirstResponder];
@@ -258,12 +260,16 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (collectionView.tag == 1) {
+        if (scannerFound == true) {
             UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
             recorderView *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"recorderView"];
             controller.job = nextJobs[indexPath.row];
-        
+            
             //menu is only an example
             [self presentViewController:controller animated:YES completion:nil];
+        } else {
+            [References toastMessage:@"Please connect a scanner" andView:self andClose:NO];
+        }
     } else if (collectionView.tag == 2) {
         // past
         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
@@ -476,6 +482,35 @@
     controller.modalPresentationStyle = UIModalPresentationFormSheet;
     //menu is only an example
     [self presentViewController:controller animated:YES completion:nil];
+}
+
+- (IBAction)cameraMode:(id)sender {
+    FIRDatabaseReference *reference = [[[FIRDatabase database] reference] child:@"activeJobs"];
+    [reference observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        [reference removeAllObservers];
+        NSDictionary *dictionary = snapshot.value;
+        if (![[NSString stringWithFormat:@"%@",dictionary] isEqualToString:@"<null>"]) {
+            for(id key in dictionary) {
+                NSDictionary *client = [dictionary objectForKey:key];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Active Jobs" message:@"Choose the job for this camera to connect to." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:[client valueForKey:@"clientName"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                    // Ok action example
+                    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Camera" bundle: nil];
+                    peripheralCamera *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"peripheralCamera"];
+                    //menu is only an example
+                    [self presentViewController:controller animated:YES completion:nil];
+                }];
+                UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action){
+                    // Other action
+                }];
+                [alert addAction:okAction];
+                [alert addAction:otherAction];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+        } else {
+            [References toastMessage:@"No Active Jobs" andView:self andClose:NO];
+        }
+    }];
 }
 
 -(void)handleDeleteButton:(id)sender {

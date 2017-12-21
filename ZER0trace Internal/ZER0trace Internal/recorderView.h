@@ -20,7 +20,11 @@
 
 
 @interface recorderView : UIViewController <UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate> {
+    NSDictionary *jobDict;
+    FIRDatabaseReference *jobListenerObject;
+    NSURL *camera1,*camera2;
     bool useSimulator;
+    bool firstRecord;
     int clipCount;
     bool beforeRecording;
     __weak IBOutlet UILabel *statusBarReal;
@@ -58,7 +62,8 @@
     __weak IBOutlet UIButton *destructionButton;
     __weak IBOutlet UILabel *statusBar;
     __weak IBOutlet UIButton *comppleteRecordingStep;
-    
+    __weak IBOutlet UILabel *cam1Status;
+    __weak IBOutlet UILabel *cam2Status;
 }
 - (IBAction)toggleRecording:(id)sender;
 

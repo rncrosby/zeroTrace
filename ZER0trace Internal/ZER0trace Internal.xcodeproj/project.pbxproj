@@ -10,6 +10,9 @@
 		AB9547A1AF4A6E553AB4829D /* libPods-ZER0trace Internal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32AEB1BC68F645F14213C830 /* libPods-ZER0trace Internal.a */; };
 		AD176F261F9D6C71003119CD /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = AD176F251F9D6B36003119CD /* refresh.png */; };
 		AD176F291F9D900C003119CD /* refresh-light.png in Resources */ = {isa = PBXBuildFile; fileRef = AD176F281F9D8FF7003119CD /* refresh-light.png */; };
+		AD21EA7A1FEB25C40004B4A9 /* connect.png in Resources */ = {isa = PBXBuildFile; fileRef = AD21EA791FEB25C30004B4A9 /* connect.png */; };
+		AD21EA7C1FEB26770004B4A9 /* Camera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD21EA7B1FEB26770004B4A9 /* Camera.storyboard */; };
+		AD21EA7F1FEB26A80004B4A9 /* peripheralCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = AD21EA7E1FEB26A80004B4A9 /* peripheralCamera.m */; };
 		AD3807331F8C034B007BB8DF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3807321F8C034B007BB8DF /* AppDelegate.m */; };
 		AD3807361F8C034B007BB8DF /* recorderView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3807351F8C034B007BB8DF /* recorderView.m */; };
 		AD3807391F8C034B007BB8DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD3807371F8C034B007BB8DF /* Main.storyboard */; };
@@ -60,6 +63,10 @@
 		AD176F251F9D6B36003119CD /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
 		AD176F271F9D7694003119CD /* AppIcon.appiconset */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppIcon.appiconset; sourceTree = "<group>"; };
 		AD176F281F9D8FF7003119CD /* refresh-light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh-light.png"; sourceTree = "<group>"; };
+		AD21EA791FEB25C30004B4A9 /* connect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = connect.png; sourceTree = "<group>"; };
+		AD21EA7B1FEB26770004B4A9 /* Camera.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Camera.storyboard; sourceTree = "<group>"; };
+		AD21EA7D1FEB26A80004B4A9 /* peripheralCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = peripheralCamera.h; sourceTree = "<group>"; };
+		AD21EA7E1FEB26A80004B4A9 /* peripheralCamera.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = peripheralCamera.m; sourceTree = "<group>"; };
 		AD38072E1F8C034B007BB8DF /* ZER0trace Internal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ZER0trace Internal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD3807311F8C034B007BB8DF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		AD3807321F8C034B007BB8DF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -231,6 +238,9 @@
 				AD9187FD1FDCD17D00020EAF /* unconfirmedJobsCell.xib */,
 				AD9188001FDCD4AC00020EAF /* unconfirmedJobObject.h */,
 				AD9188011FDCD4AC00020EAF /* unconfirmedJobObject.m */,
+				AD21EA7B1FEB26770004B4A9 /* Camera.storyboard */,
+				AD21EA7D1FEB26A80004B4A9 /* peripheralCamera.h */,
+				AD21EA7E1FEB26A80004B4A9 /* peripheralCamera.m */,
 			);
 			path = "ZER0trace Internal";
 			sourceTree = "<group>";
@@ -238,6 +248,7 @@
 		ADB4DC971F95572300245CCA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				AD21EA791FEB25C30004B4A9 /* connect.png */,
 				ADD92E7D1FDCB90E00D4A9DE /* calendar.png */,
 				AD5809781FC24CA600B6DE38 /* client.png */,
 				AD9BB8341FBFBDFF00E5CD5A /* search.png */,
@@ -334,6 +345,7 @@
 				ADB4DC961F9551A200245CCA /* light.png in Resources */,
 				AD9BB82F1FBF90AD00E5CD5A /* clientListCell.xib in Resources */,
 				ADB4DC921F954D7500245CCA /* code.png in Resources */,
+				AD21EA7A1FEB25C40004B4A9 /* connect.png in Resources */,
 				AD5809791FC24CA600B6DE38 /* client.png in Resources */,
 				AD9BB8311FBFA8CF00E5CD5A /* check.png in Resources */,
 				ADB4DC931F954D7500245CCA /* plus.png in Resources */,
@@ -342,6 +354,7 @@
 				AD79BDA41F8C3BB30025CD6B /* dark.png in Resources */,
 				AD4099ED1F8C0BBB00AB03EC /* GoogleService-Info.plist in Resources */,
 				AD38073E1F8C034B007BB8DF /* LaunchScreen.storyboard in Resources */,
+				AD21EA7C1FEB26770004B4A9 /* Camera.storyboard in Resources */,
 				AD38073B1F8C034B007BB8DF /* Assets.xcassets in Resources */,
 				AD3807391F8C034B007BB8DF /* Main.storyboard in Resources */,
 			);
@@ -413,6 +426,7 @@
 				AD8E37641FBD732A00552292 /* clientManagerCell.m in Sources */,
 				AD9BB82E1FBF90AD00E5CD5A /* clientListCell.m in Sources */,
 				ADCFD2601F9EBD6900215AC9 /* manualJobViewViewController.m in Sources */,
+				AD21EA7F1FEB26A80004B4A9 /* peripheralCamera.m in Sources */,
 				AD9187FE1FDCD17D00020EAF /* unconfirmedJobsCell.m in Sources */,
 				AD3807411F8C034B007BB8DF /* main.m in Sources */,
 				AD3807331F8C034B007BB8DF /* AppDelegate.m in Sources */,
@@ -559,6 +573,7 @@
 				CODE_SIGN_ENTITLEMENTS = "ZER0trace Internal/ZER0trace Internal.entitlements";
 				DEVELOPMENT_TEAM = UD5W2M958Y;
 				INFOPLIST_FILE = "ZER0trace Internal/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fullytoasted.ZER0trace-Internal";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -574,6 +589,7 @@
 				CODE_SIGN_ENTITLEMENTS = "ZER0trace Internal/ZER0trace Internal.entitlements";
 				DEVELOPMENT_TEAM = UD5W2M958Y;
 				INFOPLIST_FILE = "ZER0trace Internal/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fullytoasted.ZER0trace-Internal";
 				PRODUCT_NAME = "$(TARGET_NAME)";

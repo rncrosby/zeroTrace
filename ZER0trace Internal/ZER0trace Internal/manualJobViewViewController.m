@@ -78,7 +78,7 @@
             NSString *finalDateText = [NSString stringWithFormat:@"%@ %@",dateTextTemp,numberFormatted];
             FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:@"upcomingJobs"];
             [[ref child:newCode] setValue:@{
-                                            @"confirmed" : [NSNumber numberWithInt:0],
+                                            @"confirmed" : [NSNumber numberWithInt:1],
                                             @"email" : act.email,
                                             @"code" : newCode,
                                             @"clientName" : act.client,

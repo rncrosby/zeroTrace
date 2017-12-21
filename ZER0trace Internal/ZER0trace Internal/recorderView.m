@@ -15,15 +15,82 @@
 @implementation recorderView
 
 
+-(void)jobOpened {
+    jobDict = @{
+                @"email" : _job.email,
+                @"code" : _job.code,
+                @"clientName" : _job.clientName,
+                @"clientCode": _job.client,
+                @"camera1": @"NOT CONNECTED",
+                @"camera2": @"NOT CONNECTED",
+                @"cameraStatus" : @"prepare"
+                };
+    FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:@"activeJobs"];
+    [[ref child:_job.code] setValue:jobDict withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+                                          [self jobListener];
+    }];
+}
+
+-(void)jobListener {
+    jobListenerObject = [[FIRDatabase database] reference];
+    [[jobListenerObject child:@"activeJobs"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        NSLog(@"change");
+        if (![[NSString stringWithFormat:@"%@",(NSDictionary*)snapshot.value] isEqualToString:@"<null>"]) {
+            for (id key in (NSDictionary*)snapshot.value) {
+                NSDictionary *dictionary = [(NSDictionary*)snapshot.value valueForKey:key];
+                if ([[dictionary valueForKey:@"cameraStatus"] isEqualToString:@"recording"]) {
+                    if (clipCount == 0) {
+                        recorderTimeInt = 0;
+                        recorderTime = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                                        target:self
+                                                                      selector:@selector(incrementTime)
+                                                                      userInfo:nil
+                                                                       repeats:YES];
+                    }
+                    [UIView animateWithDuration:0.3 animations:^(){
+                        [References cornerRadius:recordButton radius:16.0];
+                        [References borderColor:recordButton color:[UIColor whiteColor]];
+                    }];
+                    isRecording = TRUE;
+                    [References fadeButtonColor:recordButton color:[[UIColor whiteColor] colorWithAlphaComponent:0.6f]];
+                } else if ([[dictionary valueForKey:@"cameraStatus"] isEqualToString:@"paused"]) {
+                    isRecording = FALSE;
+                }
+                if ([[dictionary valueForKey:@"camera1Completion"] isEqualToString:@"complete"]) {
+                    if ([[dictionary valueForKey:@"camera2"] isEqualToString:@"NOT CONNECTED"]) {
+                        FIRDatabaseReference *reftwo = [[[FIRDatabase database] reference] child:@"activeJobs"];
+                        [jobDict setValue:@"completeAndComplete" forKey:@"camera1Completion"];
+                        [[reftwo child:_job.code] setValue:jobDict withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+                        }];
+                        NSString *cam1URL = [dictionary valueForKey:@"camera1"];
+                        NSString *cam2URL = @"";
+                        [self saveScanData:cam1URL andcam2:cam2URL];
+                    }
+                    
+                }
+                if ([(NSString*)[dictionary valueForKey:@"camera1"] length] > 20) {
+                    cam1Status.text = @"COMPLETE";
+                } else {
+                    cam1Status.text = [NSString stringWithFormat:@"%@",[dictionary valueForKey:@"camera1"]];
+                    cam2Status.text = [NSString stringWithFormat:@"%@",[dictionary valueForKey:@"camera2"]];
+                }
+                jobDict = dictionary;
+            }
+        }
+
+        
+    }];
+}
 - (void)viewDidLoad {
+    firstRecord = true;
     [_job printObject];
     clipCount = 0;
     statusBar.backgroundColor = [UIColor clearColor];
-    [References blurView:statusBar];
-    [References cornerRadius:statusBar radius:24.0f];
-    [References blurView:statusBarReal];
-    [References blurView:drivesCollectionBlur];
-    [References cornerRadius:drivesCollectionBlur radius:16.0f];
+//    [References blurView:statusBar];
+//    [References cornerRadius:statusBar radius:24.0f];
+//    [References blurView:statusBarReal];
+//    [References blurView:drivesCollectionBlur];
+//    [References cornerRadius:drivesCollectionBlur radius:16.0f];
     clientCode.text = _job.code;
     code = _job.code;
     beforeRecording = true;
@@ -38,7 +105,6 @@
     [References borderColor:simulateScan color:[UIColor grayColor]];
     [References cornerRadius:simulateScan radius:simulateScan.frame.size.width/2];
     [References lightCardShadow:cancel];
-    [self prepareCamera];
     [super viewDidLoad];
     NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MM_dd_yyy"];
@@ -49,7 +115,7 @@
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardDidShowNotification
                                                object:nil];
-    
+    [self jobOpened];
 }
 
 - (void) keyboardWillShow:(NSNotification *)notification
@@ -86,32 +152,32 @@
         
     } else {
         // scanner connected
+        useSimulator = false;
+        [References moveUp:comppleteRecordingStep yChange:keyboard.size.height-8];
         [References moveUp:simulateScan yChange:keyboard.size.height-8];
         [References moveUp:recordButton yChange:keyboard.size.height-8];
         [References moveUp:drivesCollectionBlur yChange:keyboard.size.height-8];
         [References moveUp:drivesCollectionView yChange:keyboard.size.height-8];
-        [barcode becomeFirstResponder];
-        [self startRecording];
     }
 }
 
 -(void)prepareCamera {
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    
-    // create camera with standard settings
-    recorder = [[LLSimpleCamera alloc] init];
-    
-    // camera with video recording capability
-    recorder =  [[LLSimpleCamera alloc] initWithVideoEnabled:YES];
-    
-    // camera with precise quality, position and video parameters.
-    recorder = [[LLSimpleCamera alloc] initWithQuality:AVCaptureSessionPreset1280x720
-                                              position:LLCameraPositionRear
-                                          videoEnabled:YES];
-    [recorder start];
-    // attach to the view
-    [recorder attachToViewController:self withFrame:CGRectMake(0, 0, screenRect.size.width, screenRect.size.height)];
-    [self.view sendSubviewToBack:recorder.view];
+//    CGRect screenRect = [[UIScreen mainScreen] bounds];
+//
+//    // create camera with standard settings
+//    recorder = [[LLSimpleCamera alloc] init];
+//
+//    // camera with video recording capability
+//    recorder =  [[LLSimpleCamera alloc] initWithVideoEnabled:YES];
+//
+//    // camera with precise quality, position and video parameters.
+//    recorder = [[LLSimpleCamera alloc] initWithQuality:AVCaptureSessionPreset1280x720
+//                                              position:LLCameraPositionRear
+//                                          videoEnabled:YES];
+//    [recorder start];
+//    // attach to the view
+//    [recorder attachToViewController:self withFrame:CGRectMake(0, 0, screenRect.size.width, screenRect.size.height)];
+//    [self.view sendSubviewToBack:recorder.view];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -120,43 +186,30 @@
 }
 
 -(void)startRecording {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSURL *documentsURL = [NSURL fileURLWithPath:documentsDirectory];
-    outputURL = [[documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"asdfg_%i",clipCount]] URLByAppendingPathExtension:@"mov"];
-    compressedOutURL = documentsURL;
-    [recorder startRecordingWithOutputUrl:outputURL];
-    if (clipCount == 0) {
-        recorderTimeInt = 0;
-        recorderTime = [NSTimer scheduledTimerWithTimeInterval:1.0
-                                                        target:self
-                                                      selector:@selector(incrementTime)
-                                                      userInfo:nil
-                                                       repeats:YES];
-    }
-    [UIView animateWithDuration:0.3 animations:^(){
-        [References cornerRadius:recordButton radius:16.0];
-        [References borderColor:recordButton color:[UIColor whiteColor]];
-    }];
-    isRecording = TRUE;
-    [References fadeButtonColor:recordButton color:[[UIColor whiteColor] colorWithAlphaComponent:0.6f]];
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString *documentsDirectory = [paths objectAtIndex:0];
+//    NSURL *documentsURL = [NSURL fileURLWithPath:documentsDirectory];
+//    outputURL = [[documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"asdfg_%i",clipCount]] URLByAppendingPathExtension:@"mov"];
+//    compressedOutURL = documentsURL;
+//    [recorder startRecordingWithOutputUrl:outputURL];
+        [jobDict setValue:@"record" forKey:@"cameraStatus"];
+        FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:@"activeJobs"];
+        [[ref child:_job.code] setValue:jobDict withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+        }];
 }
 
 
 - (IBAction)toggleRecording:(id)sender {
     if (isRecording == FALSE) {
-        [References fadeOut:comppleteRecordingStep];
-        if (useSimulator == true) {
-            [References fadeIn:simulateScan];
-            [self startRecording];
-        } else {
+        if (firstRecord == true) {
             [barcode becomeFirstResponder];
+            firstRecord = false;
         }
+        [References fadeOut:comppleteRecordingStep];
+        [self startRecording];
     } else {
-        clipCount = clipCount + 1;
-        isRecording = FALSE;
         [References fadeIn:comppleteRecordingStep];
-        [recorder stopRecording:^(LLSimpleCamera *camera, NSURL *outputURLVideo, NSError *error){
+//        [recorder stopRecording:^(LLSimpleCamera *camera, NSURL *outputURLVideo, NSError *error){
             [References fadeButtonColor:recordButton color:[[References colorFromHexString:@"#EE2B2A"] colorWithAlphaComponent:0.6f]];
             [UIView animateWithDuration:0.3 animations:^(){
                 comppleteRecordingStep.alpha = 1;
@@ -164,8 +217,13 @@
                 [References cornerRadius:recordButton radius:recordButton.frame.size.width/2];
                 
             }];
-            [self checkFiles];
+        clipCount = clipCount + 1;
+        [jobDict setValue:@"pause" forKey:@"cameraStatus"];
+        FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:@"activeJobs"];
+        [[ref child:_job.code] setValue:jobDict withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
         }];
+//            [self checkFiles];
+//        }];
 //        [completeProgress setProgress:0];
 //        cancel.hidden = YES;
 //        destructionButton.hidden = YES;
@@ -210,7 +268,7 @@
 - (IBAction)simulateScan:(id)sender {
     driveObject *drive = [[driveObject alloc] initWithType:[References randomStringWithLength:8] andTime:recorderTimeInt];
     [scannedDrives addObject:drive];
-    drivesScanned.text = [NSString stringWithFormat:@"%lu Drives Scanned",(unsigned long)scannedDrives.count];
+    drivesScanned.text = [NSString stringWithFormat:@"%lu\nDrives Scanned",(unsigned long)scannedDrives.count];
     [drivesCollectionView reloadData];
      }
 
@@ -257,7 +315,6 @@
             [cell bringSubviewToFront:view];
         }
     }
-    
     return cell;
 }
 
@@ -281,47 +338,7 @@
     [drivesCollectionView reloadData];
 }
 
--(void)uploadFile:(NSURL*)url withName:(NSString*)name{
-        FIRStorage *storage = [FIRStorage storage];
-        FIRStorageReference *storageRef = [storage reference];
-        // Create a reference to the file you want to upload
-        FIRStorageReference *riversRef = [storageRef child:[NSString stringWithFormat:@"recordings/%@.mov",name]];
-        
-        // Upload the file to the path "images/rivers.jpg"
-        FIRStorageUploadTask *uploadTask = [riversRef putFile:url metadata:nil completion:^(FIRStorageMetadata *metadata, NSError *error) {
-            if (error != nil) {
-                // Uh-oh, an error occurred!
-            } else {
-                [self saveScanData:metadata.downloadURL];
-            }
-        }];
-        [uploadTask observeStatus:FIRStorageTaskStatusProgress
-                          handler:^(FIRStorageTaskSnapshot *snapshot) {
-                              [completeProgress setProgress:snapshot.progress.fractionCompleted animated:YES];
-                              if (snapshot.progress.fractionCompleted == 1) {
-                                  saveProgress = saveProgress + 1;
-                                  completeTitle.text = @"Destruction Saved";
-                                  if (saveProgress == 2) {
-                                      [References fadeIn:confirmDestructionButton];
-                                  }
-                              }
-                          }];
-//    NSString *randomURL = [References randomStringWithLength:16];
-//    compressedOutURL = [compressedOutURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.mov",randomURL]];
-//    [self convertVideoToLowQuailtyWithInputURL:url outputURL:compressedOutURL handler:^(AVAssetExportSession *exportSession)
-//     {
-//         if (exportSession.status == AVAssetExportSessionStatusCompleted)
-//
-//         else
-//         {
-//             NSLog(exportSession.error.localizedDescription);
-//
-//         }
-//     }];
-    
-}
-
--(void)saveScanData:(NSURL*)downloadURL{
+-(void)saveScanData:(NSString*)cam1URL andcam2:(NSString*)cam2URL{
     NSMutableArray *driveSerials = [[NSMutableArray alloc] init];
     NSMutableArray *driveTimes = [[NSMutableArray alloc] init];
     for (int a = 0; a < scannedDrives.count; a++) {
@@ -329,9 +346,15 @@
         [driveSerials addObject:drive.serial];
         [driveTimes addObject:drive.time];
     }
+    [jobListenerObject removeAllObservers];
+    FIRDatabaseReference *active = [[[FIRDatabase database] reference] child:@"activeJobs"];
+    [active removeValue];
+    FIRDatabaseReference *reference = [[[[FIRDatabase database] reference] child:@"upcomingJobs"]  child:[NSString stringWithFormat:@"%@",_job.code]];
+    [reference removeValue];
     NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"EEEE, MMMM d"];
     FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:_job.client];
+    
     [[ref child:_job.code] setValue:@{
                                     @"email" : _job.email,
                                     @"code" : _job.code,
@@ -343,28 +366,20 @@
                                     @"location-lon": [NSNumber numberWithDouble:_job.location.coordinate.longitude],
                                     @"driveTimes": driveTimes,
                                     @"driveSerials" : driveSerials,
-                                    @"videoURL" : downloadURL.absoluteString,
+                                    @"cam1URL" : cam1URL,
+                                    @"cam2URL" : cam2URL,
                                     @"signatureURL" : signatureURL.absoluteString
                                     } withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+                                        [self dismissViewControllerAnimated:YES completion:nil];
                                     }];
-    FIRDatabaseReference *reference = [[[[FIRDatabase database] reference] child:@"upcomingJobs"]  child:[NSString stringWithFormat:@"%@",_job.code]];
-    [reference removeValueWithCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
-        if (!error) {
-            saveProgress = saveProgress+1;
-            if (saveProgress == 2) {
-                    [References fadeIn:confirmDestructionButton];
-            }
-        } else {
-            NSLog(@"%@",error.localizedDescription);
-        }
-    }];
+
     
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
     driveObject *drive = [[driveObject alloc] initWithType:textField.text andTime:recorderTimeInt];
     [scannedDrives addObject:drive];
-    drivesScanned.text = [NSString stringWithFormat:@"%lu Drives Scanned",(unsigned long)scannedDrives.count];
+    drivesScanned.text = [NSString stringWithFormat:@"%lu\nDrives Scanned",(unsigned long)scannedDrives.count];
     [drivesCollectionView reloadData];
     [textField setText:@""];
     return YES;
@@ -441,11 +456,21 @@
 }
 
 - (IBAction)cancel:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    FIRDatabaseReference *reference = [[[[FIRDatabase database] reference] child:@"activeJobs"]  child:[NSString stringWithFormat:@"%@",_job.code]];
+    [reference removeValueWithCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+        if (!error) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            NSLog(@"%@",error.localizedDescription);
+        }
+    }];
 }
 
 - (IBAction)completeRecordingStep:(id)sender {
-    [self mergeAll];
+    FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:@"activeJobs"];
+    [jobDict setValue:@"upload" forKey:@"cameraStatus"];
+    [[ref child:_job.code] setValue:jobDict withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+    }];
 }
 
 -(void)mergeAll {
@@ -522,7 +547,6 @@
         [References moveUp:signatureCard yChange:34];
         signatureSub.hidden = YES;
         [signatureView setUserInteractionEnabled:NO];
-        [self uploadFile:fileURL withName:[NSString stringWithFormat:@"%@.mp4",jobName.text]];
         clientCode.text = _job.code;
         isRecording = FALSE;
         [recorderTime invalidate];
