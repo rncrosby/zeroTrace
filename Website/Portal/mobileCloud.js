@@ -138,7 +138,8 @@ function scheduleJob(form) {
 			var times = job['driveTimes'];
 			var date = job['dateText'];
 			var signatureURL = job['signatureURL'];
-			var videoURL = job['videoURL'];
+			var videoURL0 = job['camera-0'];
+			var videoURL1 = job['camera-1'];
 			var secMHeight = "0px";
 			document.getElementById("menuBarText").innerHTML = date;
 			document.getElementById("DRIVECOUNT").innerHTML = serials.length;
@@ -146,6 +147,7 @@ function scheduleJob(form) {
 			var signature = document.getElementById('signature');
 			signature.setAttribute('src', signatureURL)
 			var playerInstance = jwplayer("videoPlayer");
+			var playerInstance2 = jwplayer("videoPlayer2");
 			var widthNum = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 			var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 			if (width > 700) {
@@ -162,7 +164,15 @@ function scheduleJob(form) {
 			stringHeight = stringHeight + "px";
 			document.getElementById("drives").style.marginTop = stringHeight;
 			playerInstance.setup({
-			    file: videoURL,
+			    file: videoURL0,
+			    width: width,
+					height: height,
+					"skin": {
+						"name" : "myskin"
+					}
+			});
+			playerInstance2.setup({
+			    file: videoURL1,
 			    width: width,
 					height: height,
 					"skin": {
@@ -230,8 +240,10 @@ function scheduleJob(form) {
     return false;
   }
   function skimToTime(object) {
-    var playerInstance = jwplayer("videoPlayer");
-    playerInstance.seek(object.getAttribute("time"));
+		var playerInstance = jwplayer("videoPlayer");
+		var playerInstance2 = jwplayer("videoPlayer2");
+		playerInstance.seek(object.getAttribute("time"));
+		playerInstance2.seek(object.getAttribute("time"));
   }
 	function handleSignout() {
 		window.sessionStorage.setItem("signedIn", "false");

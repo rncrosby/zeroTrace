@@ -1,182 +1,189 @@
 <html>
-<head>
-  <script src="jquery.js"></script>
-  <script src="script.js"></script>
-  <title>ZER0trace</title>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-  <script>
-  if (screen.width < 600) {
-    window.location.href = 'mobile/index.html';
-  }
-  </script>
-</head>
-<body>
-  <img id="logo" onclick="window.location.href = 'index.html';" src="logo.png"/><a class="navBarLinks" href="data.html">Data Destruction</a><a class="navBarLinks" style="left:550px;" href="certification.html">Certification</a><a class="navBarLinks" style="left:680px;" href="logistics.html">Logistics</a><a class="navBarLinks" href="mobile.html" style="left:780px;">Mobile Suite</a><a class="navBarLinks" onclick="openPortal();" style="left:910px;">Client Portal</a>
+  <head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,300,400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
+    <script type="text/javascript">
+      var width = screen.width;
+      if (width < 1000) {
+        window.parent.location = "http://portal-zer0trace.com/mobile/index.html";
+      }
+    </script>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+  <body>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+<script type="text/javascript">
+function openVideo(){
+  document.getElementById('popupBackground').style.visibility= 'visible' ;
+  document.getElementById('popupDestroy').style.visibility= 'visible' ;
+  return false;
+} function closeVideo() {
+  document.getElementById('popupBackground').style.visibility= 'hidden' ;
+  document.getElementById('popupDestroy').style.visibility= 'hidden' ;
+  return false;
+}
+</script>
+<div class="popupBackground" id="popupBackground" onclick="closeVideo();"></div>
+<div class="popupDestroy" id="popupDestroy"><iframe src="https://streamable.com/s/55eu0/ffzjoa" frameborder="0" width="100%" height="100%" allowfullscreen></iframe></div>
 
-  <div class="container">
-    <div class="subPage" style="background-color: rgba(0,0,0,0.5);">
-      <p class="TitleText" id="titleText" style="padding-left:1%; color: white;">Find out which destruction<br>is right for you.</p><br><br><br>
-      <p class="subTitleText" style="padding-left:1%; margin-top:-120px; color: white; margin-right: 40%; line-height: 40px;">
-        Data destruction for your company shouldn't be a hassle. ZER0trace's data destruction is fine-tuned to your companies data destruction needs.
-        We offer a pre-selected assortment of data erasure needs as well as being able to cater to any special requests. Find out below which destruction method is right for you.
-        <br><br><br>
-        <a class="clients" onclick="document.getElementById('clear').scrollIntoView(false);" style="margin-left:0%;background: red;
-    background: -webkit-linear-gradient(left top, #82B1FF , #2979FF);
-    background: -o-linear-gradient(bottom right, #82B1FF, #2979FF);
-    background: -moz-linear-gradient(bottom right, #82B1FF, #2979FF);
-    background: linear-gradient(to bottom right, #82B1FF , #2979FF);
-      color: white;">Clear</a>
-    <a class="clients" onclick="document.getElementById('purge').scrollIntoView(false);"style="margin-left:32px;background: red;
-  background: -webkit-linear-gradient(left top, #FF1744 , #D50000);
-  background: -o-linear-gradient(bottom right, #FF1744, #D50000);
-  background: -moz-linear-gradient(bottom right, #FF1744, #D50000);
-  background: linear-gradient(to bottom right, #FF1744 , #D50000);
-  color: white;">Purge</a>
-  <a class="clients" onclick="document.getElementById('destroy').scrollIntoView(false);"style="margin-left:32px;background: red;
+    <nav>
+      <div class="nav-wrapper black" style="height:75px;padding-bottom:20px;">
+        <a href="index.html" class="brand-logo"><img src="images/logo.png" height="70px;" style="padding-left: 50px; padding-top:10px;"/></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down" style="padding-right: 50px;line-height:75px;">
+        <li><a href="data.html">Data Destruction</a></li>
+        <li><a href="assetManagement.html">Asset Management</a></li>
+        <li><a href="infrastructure.html">Infrastructure & Logistics</a></li>
+        <li><a href="consulting.html">Consulting Services</a></li>
+        <li><a href="assetValue.html">Asset Value Recovery</a></li>
+        <li><a href="http://www.portal-zer0trace.com/Portal/clientM.html">Client Portal</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div style="width:100%;
+              height:auto;
+              padding-top:25px;
+              padding-bottom:25px;">
+              <div class="container">
+              <center><p class="flow-text white-text"><h1 class="white-text" style="font-size:5vw;"><b>Leave No Data Behind</b></h1></p><br>
+                <h5 class="white-text" style="font-size:1.4vw;line-height:36px;">Protecting personally identifying information, financial records, health records, intellectual property and even National Security Information online via network firewalls and virus detection gets all the attention, however, perhaps the most dangerous source of sensitive information is remnant data contained on retired electronic storage media.  A loss can result more than a nasty lawsuit and a tarnished reputation; if information were to fall into the wrong hands; there are multiple Federal and State laws that mandate very serious penalties, per instance, if broken.<br><br>
+                  <b>Does your organization have a destruction policy in place?  If not, we can help you develop one that is fully compliant utilizing accepted best practices.</b>
+                </h5><br><h5 class="white-text" style="font-size:1.4vw;line-height:36px;">Already have a complaint policy in place?  ZER0trace offers the full array of sanitization and destruction services that comply with the Purge and Destroy methodology published by the National Institute for Standards in Technology, NIST Special Publication 800-88, Revision 1.   Additionally, we offer even more rigorous services that comply with the NSA/CSS Policy Manual 9-12 for physical destruction.  We operate state-of-the-art erasure, degaussing and shredding systems, both mobile and plant-based, to serve our customers on the West Coast. Additionally, we maintain close strategic partnerships with peer data destruction vendors throughout the U.S and internationally to provide a single point of contact to transparently manage all of your destruction needs, regardless of location.  We have a demonstrable record of success with projects ranging in size from a few drives up to entire data center decommissions.</h5>
+              </center><br><br><br>
+              <div style="height:2px;width150%;background-color:white;"></div><br><br>
+              <center><p class="flow-text white-text"><h1 class="white-text" style="font-size:3vw;"><b>Our Certification Speaks For Itself</b>
+<center><img src="images/logos.png" style="height: 300px;"/></center><br>
+     <div style="height:2px;width150%;background-color:white;"></div><br>
+     <center><p class="flow-text white-text"><h1 class="white-text" style="font-size:3vw;"><b>Learn About Our Processes</b>
+     </h1></p>
+  <a class="clients" style="background: red;
   background: -webkit-linear-gradient(left top, #424242 , #212121);
   background: -o-linear-gradient(bottom right, #424242, #212121);
   background: -moz-linear-gradient(bottom right, #424242, #212121);
   background: linear-gradient(to bottom right, #424242 , #212121);
-  color: white;">Destroy</a>
-        <br>
-
-    </div>
-    <div class="pageSeperator" style="background-color:#D50000;">
-      <a class="moreInfo"  onclick="document.getElementById('footer').scrollIntoView(false);"  style="padding-left:32px;">Want To Speak With Us? Get In Touch.</a>
-    </div>
-    <div class="subPage" id="clear" style="background-color: rgba(255,255,255,0.75);">
-      <p class="TitleText" style="padding-left:32px; color: black; margin-top: 25px;">Clear</p>
-      <p class="subTitleText" style="padding-left:32px; margin-top:-40px; color: black; margin-right: 40%; line-height: 40px;">
-        Applies logical techniques to sanitize data in all user-addressable storage locations for protection against simple noninvasive data recovery techniques.<br><br>
-        <b><i>When?</i></b><br><br>
-        Hardware remains relevant and in good condition; redeploy extending return on investment<br><br>
-        <b><i>How?</i></b><br><br>
-        Utilize standard Read/Write commands to rewrite with a new value or using a menu option to reset the device to the factory state (where rewriting is not supported).
-        <br><br><br></p>
-    </div>
-    <!-- <div class="pageSeperator" style="background-color:rgba(0, 0, 0, 0.9);">
-      <a class="moreInfo" href="mobile.html" style="padding-left:32px;">Learn About Our Mobile Technologies</a>
-    </div> -->
-    <div class="subPage" id="purge" style="background-color: rgba(0,0,0,0.4);">
-      <p class="TitleText" style="padding-left:32px; color: white;">Purge</p>
-      <p class="subTitleText" style="padding-left:32px; margin-top:-55px; color: white; margin-right: 40%; line-height: 40px;">
-        Applies physical or logical techniques that render target data recovery infeasible using state-of-the art laboratory techniques.<br><br>
-        <b><i>When?</i></b><br><br>
-        Hardware will be returned to lessor at end of lease OR Hardware has residual value and can be sold to offset replacement cost<br><br>
-        <b><i>How?</i></b><br><br>
-        Overwrite (aka wipe; erase) the storage media with new data utilizing specially developed and certified destruction software to perform 1 or more overwrite passes with various schemas.
-      </p><br>
-
-    </div>
-    <div class="subPage" id="destroy" style="background-color: rgba(0,0,0,0.6);">
-      <p class="TitleText" style="padding-left:32px; color: white;">Destroy</p>
-      <p class="subTitleText" style="padding-left:32px; margin-top:-55px; color: white; margin-right: 40%; line-height: 40px;">
-        Renders target data recovery (using state-of-the-art laboratory techniques) infeasible and results in the subsequent inability to use the media for storage of data.<br><br>
-        <b><i>When?</i></b><br><br>
-        Hardware is obsolete, has no further use or value or is damaged; recycle raw materials AND/OR contains extremely sensitive or classified information AND/OR is mandated by corporate/company/agency rule/policy<br><br>
-        <b><i>How?</i></b><br><br>
-        Degaussing with NSA EPL-D certified and calibrated equipment; shred demagnetized drives to 3/4"(19mm) particles.
-      </p><br>
-
-    </div>
-    <div class="pageSeperator" id="footer" style="background-color:rgba(255, 255, 255, 1);height: 90px;padding-top: 150px;padding-bottom: 150px;padding-left:0px;">
-      <div class="row" style="content: "";
-    display: table;
-    clear: both;">
-  <div class="column" style="float: left;
-    width: 25%;">
-    <div style="padding-left:102px;">
-    <img href="index.html" src="http://www.portal-zer0trace.com/smallLogo.png" style="max-width: 125px; height: auto;display: in-line; margin-top: -80;"/><br><br>
-    <p class="subTitleText" style="color: #757575;display: in-line; font-weight: 400; font-size: 16px;padding-left: 0px;margin-left:0px;line-height:20px;">ZER0trace LLC.<br>4062 Watts St.<br>Emeryville, CA 94608<br>(800) 992-4135</p>
+  color: white;">Purge</a>
+  <a class="clients" style="margin-left:32px;background: red;
+  background: -webkit-linear-gradient(left top, #424242 , #212121);
+  background: -o-linear-gradient(bottom right, #424242, #212121);
+  background: -moz-linear-gradient(bottom right, #424242, #212121);
+  background: linear-gradient(to bottom right, #424242 , #212121);
+  color: white;" onclick="openVideo(); return false;">Destroy</a>
+</center>
+  <br><br><center>
+  </center>
+</div>
   </div>
-  </div>
-  <div class="column" style="float: right;
-    width: auto;
-    padding-right:102px;">
-    <form style="margin-top: -125px;"action="https://formspree.io/rcros97@me.com"
-        method="POST">
+  <div class="pageSeperator" id="footer" style="background-color:rgba(255, 255, 255, 1);height: 90px;padding-top: 150px;padding-bottom: 300px;padding-left:0px;">
+    <div class="row" style="content: "";
+  display: table;
+  clear: both;">
+<div class="column" style="float: left;
+  width: 25%;">
+  <div style="padding-left:102px;">
+    <br>
+  <img href="index.html" src="images/smallLogo.png" style="max-width: 125px; height: auto;display: in-line; margin-top: -80;"/><br><br>
+  <p class="subTitleText" style="color: #757575;display: in-line; font-weight: 400; font-size: 16px;padding-left: 0px;margin-left:0px;line-height:20px;">ZER0trace LLC.<br>4062 Watts St.<br>Emeryville, CA 94608<br>(800) 992-4315</p>
+</div>
+</div>
+<div class="column" style="float: right;
+  width: auto;
+  padding-right:102px;">
+  <form style="margin-top: -125px;"action="https://formspree.io/rcros97@me.com"
+      method="POST">
+      <p style="
+      color: rgb(3,3,3);
+      font-family: 'Roboto', sans-serif;
+        font-weight: 100;
+        font-size: 25;
+        line-height:5px;
+        text-align: right;
+        margin-bottom:10px;">Reach Out</p>
         <p style="
-        color: rgb(3,3,3);
+        text-align: right;
+        color: rgb(100,100,100);
         font-family: 'Roboto', sans-serif;
-          font-weight: 100;
-          font-size: 25;
-          line-height:5px;
-          text-align: right;
-          margin-bottom:10px;">Reach Out</p>
-          <p style="
-          text-align: right;
-          color: rgb(100,100,100);
-          font-family: 'Roboto', sans-serif;
-            font-weight: 400;
-            font-size: 15;
-            line-height:15px;
-            margin-bottom:10px;">We'll get back to you as soon as possible</p>
-      <input style="
-      background-color:rgba(0,0,0,0.05);
-      border: 0;
-      width: 400px;
-      height:40px;
-      border-radius: 5px;
-      outline: none;
-      padding: 5px 10px 5px 10px;
-      font-family: 'Roboto', sans-serif;
-      font-weight: 300;
-      font-size: 20;
-      " placeholder="Name" type="text" name="name">
-      <input style="
-      margin-top: 10px;
-      background-color:rgba(0,0,0,0.05);
-      width: 400px;
-      border: 0;
-      height:40px;
-      border-radius: 5px;
-      outline: none;
-      padding: 5px 10px 5px 10px;
-      font-family: 'Roboto', sans-serif;
-      font-weight: 300;
-      font-size: 20;
-      "  placeholder="Email" type="email" name="_replyto"><br>
-      <textarea  style="
-      margin-top: 10px;
-      background-color:rgba(0,0,0,0.05);
-      width: 805px;
-      border: 0;
-      resize: none;
-      height:120px;
-      border-radius: 5px;
-      outline: none;
-      padding: 5px 10px 5px 10px;
-      font-family: 'Roboto', sans-serif;
-      font-weight: 300;
-      font-size: 20;
-      "  name="message" placeholder="Your message"></textarea><br>
-  <button class="sendEmail" style="
-  margin-left:405px;
-  margin-top: 10px;
-  background-color:rgba(0,0,0,0.05);
-  width: 400px;
-  border: 0;
-  resize: none;
-  height:40px;
-  border-radius: 5px;
-  outline: none;
-  padding: 5px 10px 5px 10px;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 300;
-  font-size: 20;
-  " type="submit">Send</button><input type="hidden" name="_next" value="http://www.portal-zer0trace.com/email.html" />
-  </form></div>
-
-    </div>
+          font-weight: 400;
+          font-size: 15;
+          line-height:15px;
+          margin-bottom:10px;">We'll get back to you as soon as possible</p>
+    <input style="
+    background-color:rgba(0,0,0,0.05);
+    border: 0;
+    width: 400px;
+    height:40px;
+    border-radius: 5px;
+    outline: none;
+    padding: 5px 10px 5px 10px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 20;
+    " placeholder="Name" type="text" name="name">
+    <input style="
+    margin-top: 10px;
+    background-color:rgba(0,0,0,0.05);
+    width: 400px;
+    border: 0;
+    height:40px;
+    border-radius: 5px;
+    outline: none;
+    padding: 5px 10px 5px 10px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 20;
+    "  placeholder="Email" type="email" name="_replyto"><br>
+    <textarea  style="
+    margin-top: 10px;
+    background-color:rgba(0,0,0,0.05);
+    width: 840px;
+    border: 0;
+    resize: none;
+    height:120px;
+    border-radius: 5px;
+    outline: none;
+    padding: 5px 10px 5px 10px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 20;
+    "  name="message" placeholder="Your message"></textarea><br>
+<button class="sendEmail" style="
+width:840px;
+margin-top: 10px;
+background-color:rgba(0,0,0,0.05);
+border: 0;
+resize: none;
+height:40px;
+border-radius: 5px;
+outline: none;
+padding: 5px 10px 5px 10px;
+font-family: 'Roboto', sans-serif;
+font-weight: 300;
+font-size: 20;
+" type="submit">Send</button><input type="hidden" name="_next" value="http://www.portal-zer0trace.com/email.html" />
+</form></div>
 
   </div>
+
+</div>
   <div class="fullscreen-bg">
-    <video loop muted autoplay poster="shred.jpg" class="fullscreen-bg__video">
-        <source src="shred.webm" type="video/webm">
-        <source src="shred.mp4" type="video/mp4">
+    <video loop muted autoplay poster="images/shred.jpg" class="fullscreen-bg__video">
+        <source src="images/shred.webm" type="video/webm">
+        <source src="images/shred.mp4" type="video/mp4">
     </video>
 </div>
-</body>
+<div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Modal Header</h4>
+      <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
+  </body>
 </html>

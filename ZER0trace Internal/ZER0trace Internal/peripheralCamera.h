@@ -15,17 +15,22 @@
 #import "References.h"
 
 @interface peripheralCamera : UIViewController {
-    bool uploading;
+    FIRDatabaseReference *reference,*camRef;
+    NSString *clientCode,*jobCode;
+    UIView *cameraView;
+    bool cameraReady,connected,recording,uploading;
     NSString *thisCameraStatus;
     NSURL *uploadURL;
     int thisCamera;
     NSDictionary *fixedInfo;
     int clipCount;
-    bool cameraReady;
     LLSimpleCamera *recorder;
     __weak IBOutlet UILabel *cameraNumber;
     __weak IBOutlet UILabel *cameraStatus;
     __weak IBOutlet UILabel *clipCountLabel;
+    __weak IBOutlet UIButton *connect;
+    __weak IBOutlet UILabel *connectNote;
 }
+- (IBAction)connect:(id)sender;
 
 @end

@@ -18,8 +18,29 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [FIRApp configure];
-    
+    UIStoryboard *storyboard = [self grabStoryboard];
+    // show the storyboard
+    self.window.rootViewController = [storyboard instantiateInitialViewController];
+    [self.window makeKeyAndVisible];
     return YES;
+}
+
+- (UIStoryboard *)grabStoryboard {
+    
+    UIStoryboard *storyboard;
+    
+    // detect the height of our screen
+    int width = [UIScreen mainScreen].bounds.size.width;
+    
+    if (width < 800) {
+        storyboard = [UIStoryboard storyboardWithName:@"Camera" bundle:nil];
+        // NSLog(@"Device has a 3.5inch Display.");
+    } else {
+        storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        // NSLog(@"Device has a 4inch Display.");
+    }
+    
+    return storyboard;
 }
 
 
@@ -44,8 +65,9 @@
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
-
 - (void)applicationWillTerminate:(UIApplication *)application {
+    FIRDatabaseReference *reference = [[[FIRDatabase database] reference] child:@"activeJobs"];
+    [reference removeValue];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 

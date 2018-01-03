@@ -21,8 +21,7 @@
                 @"code" : _job.code,
                 @"clientName" : _job.clientName,
                 @"clientCode": _job.client,
-                @"camera1": @"NOT CONNECTED",
-                @"camera2": @"NOT CONNECTED",
+                @"cameras" : [NSArray arrayWithObjects:@"NOT CONNECTED",@"NOT CONNECTED",@"NOT CONNECTED",@"NOT CONNECTED",@"NOT CONNECTED", nil],
                 @"cameraStatus" : @"prepare"
                 };
     FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:@"activeJobs"];
@@ -53,28 +52,21 @@
                     }];
                     isRecording = TRUE;
                     [References fadeButtonColor:recordButton color:[[UIColor whiteColor] colorWithAlphaComponent:0.6f]];
-                } else if ([[dictionary valueForKey:@"cameraStatus"] isEqualToString:@"paused"]) {
-                    isRecording = FALSE;
                 }
-                if ([[dictionary valueForKey:@"camera1Completion"] isEqualToString:@"complete"]) {
-                    if ([[dictionary valueForKey:@"camera2"] isEqualToString:@"NOT CONNECTED"]) {
-                        FIRDatabaseReference *reftwo = [[[FIRDatabase database] reference] child:@"activeJobs"];
-                        [jobDict setValue:@"completeAndComplete" forKey:@"camera1Completion"];
-                        [[reftwo child:_job.code] setValue:jobDict withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
-                        }];
-                        NSString *cam1URL = [dictionary valueForKey:@"camera1"];
-                        NSString *cam2URL = @"";
-                        [self saveScanData:cam1URL andcam2:cam2URL];
+                NSMutableArray *array = [dictionary objectForKey:@"cameras"];
+                int cameraCount = 0;
+                for (int a = 0; a < array.count; a++) {
+                    if ([array[a] isEqualToString:@"CONNECTED"]) {
+                        cameraCount++;
                     }
-                    
                 }
-                if ([(NSString*)[dictionary valueForKey:@"camera1"] length] > 20) {
-                    cam1Status.text = @"COMPLETE";
-                } else {
-                    cam1Status.text = [NSString stringWithFormat:@"%@",[dictionary valueForKey:@"camera1"]];
-                    cam2Status.text = [NSString stringWithFormat:@"%@",[dictionary valueForKey:@"camera2"]];
-                }
+                cam1Status.text = array[0];
+                cam2Status.text = array[1];
+                cam3Status.text = array[2];
+                cam4Status.text = array[3];
                 jobDict = dictionary;
+                //NSString *cam4Status = [dictionary objectForKey:@"camera3Status"];
+                
             }
         }
 
@@ -82,15 +74,11 @@
     }];
 }
 - (void)viewDidLoad {
+    finishRecording = false;
     firstRecord = true;
     [_job printObject];
     clipCount = 0;
     statusBar.backgroundColor = [UIColor clearColor];
-//    [References blurView:statusBar];
-//    [References cornerRadius:statusBar radius:24.0f];
-//    [References blurView:statusBarReal];
-//    [References blurView:drivesCollectionBlur];
-//    [References cornerRadius:drivesCollectionBlur radius:16.0f];
     clientCode.text = _job.code;
     code = _job.code;
     beforeRecording = true;
@@ -186,12 +174,6 @@
 }
 
 -(void)startRecording {
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//    NSString *documentsDirectory = [paths objectAtIndex:0];
-//    NSURL *documentsURL = [NSURL fileURLWithPath:documentsDirectory];
-//    outputURL = [[documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"asdfg_%i",clipCount]] URLByAppendingPathExtension:@"mov"];
-//    compressedOutURL = documentsURL;
-//    [recorder startRecordingWithOutputUrl:outputURL];
         [jobDict setValue:@"record" forKey:@"cameraStatus"];
         FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:@"activeJobs"];
         [[ref child:_job.code] setValue:jobDict withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
@@ -200,6 +182,7 @@
 
 
 - (IBAction)toggleRecording:(id)sender {
+    [References fadeOut:cancelAfterStart];
     if (isRecording == FALSE) {
         if (firstRecord == true) {
             [barcode becomeFirstResponder];
@@ -221,6 +204,7 @@
         [jobDict setValue:@"pause" forKey:@"cameraStatus"];
         FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:@"activeJobs"];
         [[ref child:_job.code] setValue:jobDict withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+            isRecording = FALSE;
         }];
 //            [self checkFiles];
 //        }];
@@ -338,7 +322,7 @@
     [drivesCollectionView reloadData];
 }
 
--(void)saveScanData:(NSString*)cam1URL andcam2:(NSString*)cam2URL{
+-(void)saveScanData{
     NSMutableArray *driveSerials = [[NSMutableArray alloc] init];
     NSMutableArray *driveTimes = [[NSMutableArray alloc] init];
     for (int a = 0; a < scannedDrives.count; a++) {
@@ -347,14 +331,11 @@
         [driveTimes addObject:drive.time];
     }
     [jobListenerObject removeAllObservers];
-    FIRDatabaseReference *active = [[[FIRDatabase database] reference] child:@"activeJobs"];
-    [active removeValue];
     FIRDatabaseReference *reference = [[[[FIRDatabase database] reference] child:@"upcomingJobs"]  child:[NSString stringWithFormat:@"%@",_job.code]];
     [reference removeValue];
     NSDateFormatter * formatter =  [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"EEEE, MMMM d"];
     FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:_job.client];
-    
     [[ref child:_job.code] setValue:@{
                                     @"email" : _job.email,
                                     @"code" : _job.code,
@@ -366,10 +347,10 @@
                                     @"location-lon": [NSNumber numberWithDouble:_job.location.coordinate.longitude],
                                     @"driveTimes": driveTimes,
                                     @"driveSerials" : driveSerials,
-                                    @"cam1URL" : cam1URL,
-                                    @"cam2URL" : cam2URL,
                                     @"signatureURL" : signatureURL.absoluteString
                                     } withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+                                        FIRDatabaseReference *active = [[[FIRDatabase database] reference] child:@"activeJobs"];
+                                        [active removeValue];
                                         [self dismissViewControllerAnimated:YES completion:nil];
                                     }];
 
@@ -470,6 +451,20 @@
     FIRDatabaseReference *ref = [[[FIRDatabase database] reference] child:@"activeJobs"];
     [jobDict setValue:@"upload" forKey:@"cameraStatus"];
     [[ref child:_job.code] setValue:jobDict withCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+        finishRecording = true;
+        [self saveScanData];
+    }];
+    
+}
+
+- (IBAction)cancelAfterStart:(id)sender {
+    FIRDatabaseReference *reference = [[[[FIRDatabase database] reference] child:@"activeJobs"]  child:[NSString stringWithFormat:@"%@",_job.code]];
+    [reference removeValueWithCompletionBlock:^void(NSError * _Nullable __strong error, FIRDatabaseReference * _Nonnull __strong ref){
+        if (!error) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            NSLog(@"%@",error.localizedDescription);
+        }
     }];
 }
 

@@ -1,20 +1,17 @@
 <html>
 <head>
-  <script src="jquery.js"></script>
-  <script src="script.js"></script>
   <title>ZER0trace</title>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-  <script>
-  if (screen.width < 600) {
-    window.location.href = 'mobile/index.html';
-  }
+  <script type="text/javascript">
+    var width = window.width;
+    if (width < 700) {
+      window.parent.location = "http://portal-zer0trace.com/mobile/index.html";
+    }
   </script>
 </head>
 <body>
-  <img id="logo" onclick="window.location.href = 'index.html';" src="logo.png"/><a class="navBarLinks" href="data.html">Data Destruction</a><a class="navBarLinks" style="left:550px;" href="certification.html">Certification</a><a class="navBarLinks" style="left:680px;" href="logistics.html">Logistics</a><a class="navBarLinks" href="mobile.html" style="left:780px;">Mobile Suite</a><a class="navBarLinks" onclick="openPortal();" style="left:910px;">Client Portal</a>
-
   <div class="container">
     <center><p style="font-family: 'Roboto', sans-serif;
       color: white;
@@ -33,8 +30,8 @@
       padding: 10px 20px 10px 20px;">Return Home</a></center>
 </div>
   <div class="fullscreen-bg">
-    <video loop muted autoplay poster="static.png" class="fullscreen-bg__video">
-        <source src="static.mp4" type="video/mp4">
+    <video loop muted autoplay poster="images/static.png" class="fullscreen-bg__video">
+        <source src="images/static.mp4" type="video/mp4">
     </video>
 </div>
 </body>

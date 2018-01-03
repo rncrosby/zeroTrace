@@ -3,6 +3,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="../css/materialize.min.css"  media="screen,projection"/>
     <script type="text/javascript" src="mobileCloud.js"></script>
     <script type="text/javascript" src="jquery.js"></script>
     <link rel="stylesheet" href="jobM.css">
@@ -36,10 +37,16 @@
       <a onclick="copyToClipboard();" id="share"><img id="shareIcon" src="share.png"/></a>
       <a onclick="handleJobClose();" id="menu"><img id="menuIcon" src="backChevron.png"/></a>
     </div>
-    <div class="player" id="player">
-      <div id="videoPlayer"></div>
-
+    <div style="position: fixed; top: 50px; left: 0; width: 100%;">
+      <div class="container">
+        <div class="row">
+        <div class="col s6"><div id="videoPlayer"></div></div>
+      <div class="col s6"><div id="videoPlayer2"></div></div>
     </div>
+        <!-- Page Content goes here -->
+      </div>
+
+  </div>
     <div id="driveContainer">
     <div class="drives" id="drives"></div>
   </div>

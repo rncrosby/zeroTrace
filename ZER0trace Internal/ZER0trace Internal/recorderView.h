@@ -21,6 +21,7 @@
 
 @interface recorderView : UIViewController <UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate> {
     NSDictionary *jobDict;
+    bool finishRecording;
     FIRDatabaseReference *jobListenerObject;
     NSURL *camera1,*camera2;
     bool useSimulator;
@@ -64,6 +65,10 @@
     __weak IBOutlet UIButton *comppleteRecordingStep;
     __weak IBOutlet UILabel *cam1Status;
     __weak IBOutlet UILabel *cam2Status;
+    __weak IBOutlet UILabel *cam3Status;
+    __weak IBOutlet UILabel *cam4Status;
+    __weak IBOutlet UIButton *cancelAfterStart;
+    
 }
 - (IBAction)toggleRecording:(id)sender;
 
@@ -74,6 +79,7 @@
 - (IBAction)confirmDestruction:(id)sender;
 - (IBAction)cancel:(id)sender;
 - (IBAction)completeRecordingStep:(id)sender;
+- (IBAction)cancelAfterStart:(id)sender;
 
 @end
 
