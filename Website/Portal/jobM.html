@@ -38,30 +38,25 @@
       <a onclick="copyToClipboard();" id="share"><img id="shareIcon" src="share.png"/></a>
       <a onclick="handleJobClose();" id="menu"><img id="menuIcon" src="backChevron.png"/></a>
     </div>
-      <div class="driveTable">
+      <div class="driveTable" style="box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);">
         <div id="driveContainer">
             <div class="drives" id="drives">
       </div></div>
       </div>
-      <div id="controls" onclick="playPause(); return false;"class="controls" style="position: fixed;z-index:10;top:50px;left:0;width:80vw;height:100%;background-color:rgba(255,255,255,0.5);">
-        <center><img id="control" style="width:100px;height:100px;margin-top:25%;translate: transform(0,-25%);" src="play.png"></img><br>
-        <p class="status" id="time"></p></center>
+      <div id="playerControls">
+        <a id="buttons" onclick="playPause(); return false;"><img id="playPause" src="pause.png" style="width:30px;height:30px;margin-left:10px;margin-top:10px;"></img></a>
+        <a id="buttons" onclick="movePlayer2toMain(); return false;"><img id="change" src="change.png" style="width:30px;height:30px;margin-left:5px;margin-top:10px;"></img></a>
+        <a id="buttons" onclick="changeSpeed(); return false;"><img id="speed" src="p1.png" style="width:30px;height:30px;margin-left:5px;margin-top:10px;margin-right:10px;"></img></a>
+
       </div>
-      <!-- <a onclick="showFooter();" id="info"><img id="info" src="info.png"/></a>
-      <a onclick="copyToClipboard();" id="share"><img id="shareIcon" src="share.png"/></a>
-      <a onclick="handleJobClose();" id="menu"><img id="menuIcon" src="backChevron.png"/></a> -->
-    <!-- </div> -->
-      <div class="fixedMainView" id="fixedMainView">
+      <div class="fixedMainView" id="fixedMainView" >
         <div class="videoPlayer" id="videoPlayer"></div>
       </div>
-      <div class="fixedAngleAView" id="fixedAngleAView" style="display: inline-block;margin-left:20vw;">
-        <div class="videoPlayer" id="videoPlayer2"></div>
+      <div class="fixedAngleAView" id="fixedAngleAView" style="display: inline-block;margin-left:20vw;margin-top:8px;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);">
+        <div class="videoPlayer" id="videoPlayer2" style=""></div>
       </div>
-      <div class="fixedAngleAView" id="fixedAngleAView" style="display: inline-block; margin-left:-5px;">
+      <div class="fixedAngleAView" id="fixedAngleBView" style="display: inline-block; margin-left:8px;margin-top:8px;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);">
         <div class="videoPlayer" id="videoPlayer3"></div>
-      </div>
-      <div class="fixedAngleAView" id="fixedAngleAView" style="display: inline-block; margin-left:-5px;background-color:rgba(0,0,0,0.0);">
-
       </div>
 
           <div class="footer" id="footer">

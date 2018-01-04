@@ -39,8 +39,8 @@ defaultDatabase = firebase.database();
     }
     </script>
     <center><div class="card">
-      <p id="cardHead">Client Name</p>
-      <p id="cardSubHead">Start with your company's name to get<br>access to all your destruction history.</p>
+      <p id="cardHead">Current Clients</p>
+      <p id="cardSubHead">Start with your email to get<br>access to all your destruction history.</p>
       <form onsubmit="checkClient(this); return false;" method="post" target="hiddenFrame">
         <input type="text" name="clientName" autocomplete="off" placeholder="ZER0trace" onfocus="this.placeholder = ''" onfocusout="this.placeholder = 'ZER0trace'"><br>
         <input type="password" name="password" autocomplete="off" placeholder="password" onfocus="this.placeholder = ''" onfocusout="this.password = 'password'"><br>

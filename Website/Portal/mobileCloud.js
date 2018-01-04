@@ -141,6 +141,9 @@ function scheduleJob(form) {
 			var videoURL0 = job['camera-0'];
 			var videoURL1 = job['camera-1'];
 			var videoURL2 = job['camera-2'];
+			if (videoURL2 === undefined) {
+				videoURL2 = videoURL1;
+			}
 			var secMHeight = "0px";
 			document.getElementById("menuBarText").innerHTML = date;
 			document.getElementById("DRIVECOUNT").innerHTML = serials.length;
@@ -231,6 +234,38 @@ function scheduleJob(form) {
 		}
     return false;
   }
+	function changeSpeed() {
+		var playerInstance = jwplayer("videoPlayer");
+		var playerInstance2 = jwplayer("videoPlayer2");
+		var playerInstance3 = jwplayer("videoPlayer3");
+		playerInstance2.seek(playerInstance.getPosition());
+		playerInstance3.seek(playerInstance.getPosition());
+		if (playerInstance.getPlaybackRate() == 1) {
+			playerInstance.setPlaybackRate(2);
+			playerInstance2.setPlaybackRate(2);
+			playerInstance3.setPlaybackRate(2);
+			document.getElementById("speed").src = "p2.png";
+		} else {
+			playerInstance.setPlaybackRate(1);
+			playerInstance2.setPlaybackRate(1);
+			playerInstance3.setPlaybackRate(1);
+			document.getElementById("speed").src = "p1.png";
+		}
+
+	}
+	function movePlayer2toMain() {
+		var mainView = document.getElementById("fixedMainView");
+		var mainPlayer = mainView.firstChild;
+		var secondView = document.getElementById("fixedAngleAView");
+		var secondPlayer = secondView.firstChild;
+		var thirdView = document.getElementById("fixedAngleBView");
+		var thirdPlayer = thirdView.firstChild;
+		mainView.appendChild(secondPlayer);
+		thirdView.appendChild(mainPlayer);
+		secondView.appendChild(thirdPlayer);
+
+	}
+
   function skimToTime(object) {
 		var playerInstance = jwplayer("videoPlayer");
 		var playerInstance2 = jwplayer("videoPlayer2");
@@ -238,9 +273,7 @@ function scheduleJob(form) {
 		playerInstance.seek(object.getAttribute("time"));
 		playerInstance2.seek(object.getAttribute("time"));
 		playerInstance3.seek(object.getAttribute("time"));
-		document.getElementById("control").src = "pause.png";
-		document.getElementById("control").style.opacity = "0.3";
-		document.getElementById("controls").style.backgroundColor = "rgba(255,255,255,0.1)";
+		document.getElementById("playPause").src = "pause.png";
   }
 
 	function playPause() {
@@ -252,18 +285,14 @@ function scheduleJob(form) {
 			playerInstance.pause();
 			playerInstance2.pause();
 			playerInstance3.pause();
-			document.getElementById("control").src = "play.png";
-			document.getElementById("control").style.opacity = "1";
-			document.getElementById("controls").style.backgroundColor = "rgba(255,255,255,0.4)";
+			document.getElementById("playPause").src = "play.png";
 		} else {
 			playerInstance.play();
 			playerInstance2.play();
 			playerInstance3.play();
 			playerInstance2.seek(playerInstance.getPosition());
 			playerInstance3.seek(playerInstance.getPosition());
-			document.getElementById("control").src = "pause.png";
-			document.getElementById("control").style.opacity = "0.3";
-			document.getElementById("controls").style.backgroundColor = "rgba(255,255,255,0.1)";
+			document.getElementById("playPause").src = "pause.png";
 		}
 		return false;
 	}
