@@ -140,6 +140,7 @@ function scheduleJob(form) {
 			var signatureURL = job['signatureURL'];
 			var videoURL0 = job['camera-0'];
 			var videoURL1 = job['camera-1'];
+			var videoURL2 = job['camera-2'];
 			var secMHeight = "0px";
 			document.getElementById("menuBarText").innerHTML = date;
 			document.getElementById("DRIVECOUNT").innerHTML = serials.length;
@@ -148,38 +149,29 @@ function scheduleJob(form) {
 			signature.setAttribute('src', signatureURL)
 			var playerInstance = jwplayer("videoPlayer");
 			var playerInstance2 = jwplayer("videoPlayer2");
-			var widthNum = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-			var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-			if (width > 700) {
-				width = 700;
-				widthNum = 700;
-			}
-			var heightNum = widthNum/1.8;
-			width = width.toString() + "px";
-			height = heightNum.toString() + "px";
-			newHeight = heightNum + 450;
-			secMHeight = newHeight +450+ "px";
+			var playerInstance3 = jwplayer("videoPlayer3");
 			document.getElementById("driveContainer").style.marginTop = secMHeight;
-			var stringHeight = -1 * newHeight;
-			stringHeight = stringHeight + "px";
-			document.getElementById("drives").style.marginTop = stringHeight;
+			// var stringHeight = -1 * newHeight;
+			// stringHeight = stringHeight + "px";
+			// document.getElementById("drives").style.marginTop = stringHeight;
 			playerInstance.setup({
 			    file: videoURL0,
-			    width: width,
-					height: height,
 					"skin": {
 						"name" : "myskin"
 					}
 			});
 			playerInstance2.setup({
 			    file: videoURL1,
-			    width: width,
-					height: height,
 					"skin": {
 						"name" : "myskin"
 					}
 			});
-
+			playerInstance3.setup({
+			    file: videoURL2,
+					"skin": {
+						"name" : "myskin"
+					}
+			});
 			for (var i = 0; i < serials.length; i++) {
         var drive = document.createElement("div");
         drive.id = "driveObject";
@@ -242,9 +234,39 @@ function scheduleJob(form) {
   function skimToTime(object) {
 		var playerInstance = jwplayer("videoPlayer");
 		var playerInstance2 = jwplayer("videoPlayer2");
+		var playerInstance3 = jwplayer("videoPlayer3");
 		playerInstance.seek(object.getAttribute("time"));
 		playerInstance2.seek(object.getAttribute("time"));
+		playerInstance3.seek(object.getAttribute("time"));
+		document.getElementById("control").src = "pause.png";
+		document.getElementById("control").style.opacity = "0.3";
+		document.getElementById("controls").style.backgroundColor = "rgba(255,255,255,0.1)";
   }
+
+	function playPause() {
+		var playerInstance = jwplayer("videoPlayer");
+		var playerInstance2 = jwplayer("videoPlayer2");
+		var playerInstance3 = jwplayer("videoPlayer3");
+		var status = playerInstance.getState();
+		if (status == "playing") {
+			playerInstance.pause();
+			playerInstance2.pause();
+			playerInstance3.pause();
+			document.getElementById("control").src = "play.png";
+			document.getElementById("control").style.opacity = "1";
+			document.getElementById("controls").style.backgroundColor = "rgba(255,255,255,0.4)";
+		} else {
+			playerInstance.play();
+			playerInstance2.play();
+			playerInstance3.play();
+			playerInstance2.seek(playerInstance.getPosition());
+			playerInstance3.seek(playerInstance.getPosition());
+			document.getElementById("control").src = "pause.png";
+			document.getElementById("control").style.opacity = "0.3";
+			document.getElementById("controls").style.backgroundColor = "rgba(255,255,255,0.1)";
+		}
+		return false;
+	}
 	function handleSignout() {
 		window.sessionStorage.setItem("signedIn", "false");
 		window.sessionStorage.setItem("clientCode", "");

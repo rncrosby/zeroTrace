@@ -29,27 +29,41 @@
     defaultDatabase = firebase.database();
     </script>
   </head>
-  <body>
+  <body style="">
     <script>getJob();</script>
+<!-- <div class="menuBar"> -->
 <div class="menuBar">
       <p id="menuBarText"></p>
       <a onclick="showFooter();" id="info"><img id="info" src="info.png"/></a>
       <a onclick="copyToClipboard();" id="share"><img id="shareIcon" src="share.png"/></a>
       <a onclick="handleJobClose();" id="menu"><img id="menuIcon" src="backChevron.png"/></a>
     </div>
-    <div style="position: fixed; top: 50px; left: 0; width: 100%;">
-      <div class="container">
-        <div class="row">
-        <div class="col s6"><div id="videoPlayer"></div></div>
-      <div class="col s6"><div id="videoPlayer2"></div></div>
-    </div>
-        <!-- Page Content goes here -->
+      <div class="driveTable">
+        <div id="driveContainer">
+            <div class="drives" id="drives">
+      </div></div>
+      </div>
+      <div id="controls" onclick="playPause(); return false;"class="controls" style="position: fixed;z-index:10;top:50px;left:0;width:80vw;height:100%;background-color:rgba(255,255,255,0.5);">
+        <center><img id="control" style="width:100px;height:100px;margin-top:25%;translate: transform(0,-25%);" src="play.png"></img><br>
+        <p class="status" id="time"></p></center>
+      </div>
+      <!-- <a onclick="showFooter();" id="info"><img id="info" src="info.png"/></a>
+      <a onclick="copyToClipboard();" id="share"><img id="shareIcon" src="share.png"/></a>
+      <a onclick="handleJobClose();" id="menu"><img id="menuIcon" src="backChevron.png"/></a> -->
+    <!-- </div> -->
+      <div class="fixedMainView" id="fixedMainView">
+        <div class="videoPlayer" id="videoPlayer"></div>
+      </div>
+      <div class="fixedAngleAView" id="fixedAngleAView" style="display: inline-block;margin-left:20vw;">
+        <div class="videoPlayer" id="videoPlayer2"></div>
+      </div>
+      <div class="fixedAngleAView" id="fixedAngleAView" style="display: inline-block; margin-left:-5px;">
+        <div class="videoPlayer" id="videoPlayer3"></div>
+      </div>
+      <div class="fixedAngleAView" id="fixedAngleAView" style="display: inline-block; margin-left:-5px;background-color:rgba(0,0,0,0.0);">
+
       </div>
 
-  </div>
-    <div id="driveContainer">
-    <div class="drives" id="drives"></div>
-  </div>
           <div class="footer" id="footer">
           <div class="bottomLeft">
             <p id="bottomTitle">Drive Count</p>
@@ -65,5 +79,6 @@
           </div>
           </div>
     <div id="snackbar">This Job Has Not Occured Yet.</div>
+
   </body>
 </html>

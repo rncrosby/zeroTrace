@@ -2,6 +2,43 @@ body {
   background-color: #F5F5F5;
 }
 
+p.status {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 25;
+  color: black;
+}
+
+.controls:hover {
+  cursor: pointer;
+}
+
+.fixedMainView {
+  margin-top: 50px;
+  z-index: -4;
+  top: 50px;
+  height: auto;
+  max-height: 95%;
+  background-color: black;
+  width: 80vw;
+}
+
+.fixedAngleAView {
+  background-color: black;
+  width: 20vw;
+}
+
+.driveTable {
+  padding-top: 50px;
+  position: fixed;
+  right: 0%;
+  height: 100%;
+  width: 20vw;
+  top: 0px;
+  background-color: #F5F5F5;
+  z-index: 1;
+  overflow: scroll;
+}
 
 .menuBar {
   z-index: 20;
@@ -16,31 +53,29 @@ body {
   border-bottom-color: #E0E0E0;
 }
 
+
+p#menuBarText {
+  margin-top: 0;
+  vertical-align: text-top;
+  text-align: left;
+  margin-left: 32px;
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  line-height: 50px;
+  font-size: 24;
+  -webkit-touch-callout: none; /* iOS Safari */
+   -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+      -moz-user-select: none; /* Firefox */
+       -ms-user-select: none; /* Internet Explorer/Edge */
+           user-select: none; /* Non-prefixed version, currently*/
+}
 #driveContainer {
 
   top:50px;
 }
 
-.player {
-  left: 20px;
-  top:50px;
-  width: 500px;
-  position: fixed;
-  background-color: #F5F5F5;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-bottom-color: #E0E0E0;
-}
-.player2 {
-  left: 520px;
-  top:50px;
-  width: 500px;
-  position: fixed;
-  background-color: #F5F5F5;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-bottom-color: #E0E0E0;
-}
 #footer {
   visibility: hidden;
   left: 0;
@@ -89,7 +124,7 @@ However, delay the fade out process for 2.5 seconds */
 .drives {
   z-index: -1;
   position: absolute;
-  background-color: white;
+  background-color: rgba(0,0,0,0.0);
   left: 50%;
     transform: translate(-50%, 0);
   width: 100%;
@@ -100,9 +135,6 @@ However, delay the fade out process for 2.5 seconds */
   -webkit-overflow-scrolling: touch;
 }
 
-.driveClass {
-
-}
 #driveObject {
   cursor: grab;
   z-index: 100;
@@ -114,7 +146,7 @@ However, delay the fade out process for 2.5 seconds */
   width: 100%;
   height: 90px;
   background-color: white;
-  color: #424242;
+  color: #212121;
   border-bottom-style: solid;
   border-bottom-width: 1px;
   border-bottom-color: #E0E0E0;
@@ -250,26 +282,6 @@ a#menu {
   left: 8px;
   width: 30px;
   height: 30px;
-}
-
-
-
-p#menuBarText {
-  margin-top: 0;
-  vertical-align: text-top;
-  text-align: left;
-  margin-left: 32px;
-  width: 100%;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 300;
-  line-height: 50px;
-  font-size: 24;
-  -webkit-touch-callout: none; /* iOS Safari */
-   -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-      -moz-user-select: none; /* Firefox */
-       -ms-user-select: none; /* Internet Explorer/Edge */
-           user-select: none; /* Non-prefixed version, currently*/
 }
 
 #snackbar {
